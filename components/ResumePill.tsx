@@ -1,11 +1,27 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useState, useEffect } from 'react'
+import { getPersonalInfo } from '@/lib/projects'
 
 export default function ResumePill() {
+  const [resumeUrl, setResumeUrl] = useState<string | null>(null)
+
+  useEffect(() => {
+    async function fetchResume() {
+      const info = await getPersonalInfo()
+      if (info) {
+        setResumeUrl(info.resumeUrl)
+      }
+    }
+    fetchResume()
+  }, [])
+
+  if (!resumeUrl) return null
+
   return (
     <motion.a
-      href="/resume.pdf"
+      href={resumeUrl}
       target="_blank"
       rel="noopener noreferrer"
       className="magnetic-button fixed bottom-8 right-8 z-40 flex items-center gap-2 rounded-full bg-purple-600 px-6 py-3 text-sm font-medium text-white shadow-lg transition-all hover:bg-purple-700 hover:shadow-xl"

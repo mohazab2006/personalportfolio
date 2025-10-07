@@ -8,36 +8,41 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\""
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
+    "migrate:data": "tsx scripts/migrate-to-supabase.ts",
+    "migrate:images": "tsx scripts/migrate-images.ts",
+    "migrate:all": "npm run migrate:data && npm run migrate:images"
   },
   "dependencies": {
+    "@react-three/drei": "^9.96.0",
+    "@react-three/fiber": "^8.15.0",
+    "@supabase/supabase-js": "^2.74.0",
+    "clsx": "^2.1.0",
+    "framer-motion": "^11.0.0",
+    "lenis": "^1.0.42",
     "next": "^14.2.0",
+    "next-themes": "^0.2.1",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
-    "framer-motion": "^11.0.0",
-    "@react-three/fiber": "^8.15.0",
-    "@react-three/drei": "^9.96.0",
-    "three": "^0.161.0",
-    "next-themes": "^0.2.1",
-    "lenis": "^1.0.42",
-    "clsx": "^2.1.0"
+    "three": "^0.161.0"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
     "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",
     "@types/three": "^0.161.0",
-    "typescript": "^5.3.3",
-    "tailwindcss": "^3.4.0",
-    "postcss": "^8.4.33",
     "autoprefixer": "^10.4.17",
+    "dotenv": "^17.2.3",
     "eslint": "^8.56.0",
     "eslint-config-next": "^14.2.0",
+    "postcss": "^8.4.33",
     "prettier": "^3.2.4",
-    "prettier-plugin-tailwindcss": "^0.5.11"
+    "prettier-plugin-tailwindcss": "^0.5.11",
+    "tailwindcss": "^3.4.0",
+    "tsx": "^4.20.6",
+    "typescript": "^5.3.3"
   },
   "engines": {
     "node": ">=18.17.0"
   }
 }
-

@@ -1,10 +1,11 @@
 'use client'
 
 import { notFound } from 'next/navigation'
-import { PROJECTS } from '@/lib/data'
+import { getProjectBySlug, getProjectImageUrl } from '@/lib/projects'
+import { Project } from '@/lib/data'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 
 type Props = {
@@ -13,12 +14,35 @@ type Props = {
 
 export default function ProjectPage({ params }: Props) {
   const [imageErrors, setImageErrors] = useState<{ [key: string]: boolean }>({})
+  const [project, setProject] = useState<Project | null>(null)
+  const [loading, setLoading] = useState(true)
 
   const handleImageError = (index: string) => {
     setImageErrors((prev) => ({ ...prev, [index]: true }))
   }
 
-  const project = PROJECTS.find((p) => p.slug === params.slug)
+  useEffect(() => {
+    async function fetchProject() {
+      try {
+        const data = await getProjectBySlug(params.slug)
+        setProject(data)
+      } catch (err) {
+        console.error('Error fetching project:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchProject()
+  }, [params.slug])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-dark-bg text-dark-text flex items-center justify-center">
+        <div className="h-12 w-12 animate-spin rounded-full border-4 border-purple-500 border-t-transparent"></div>
+      </div>
+    )
+  }
 
   if (!project) {
     notFound()
@@ -172,7 +196,7 @@ export default function ProjectPage({ params }: Props) {
                     <div className="relative aspect-video w-full">
                       {!imageErrors[imageKey] ? (
                         <Image
-                          src={`/projects/${project.slug}/${screenshot}`}
+                          src={getProjectImageUrl(project.slug, screenshot)}
                           alt={`${project.title} screenshot ${index + 1}`}
                           fill
                           className="object-cover"
@@ -184,7 +208,7 @@ export default function ProjectPage({ params }: Props) {
                             <div className="mb-4 text-6xl">🖼️</div>
                             <p className="text-dark-text/50">Screenshot placeholder</p>
                             <p className="mt-2 text-sm text-dark-text/30">
-                              Add images to /public/projects/{project.slug}/{screenshot}
+                              Image not available
                             </p>
                           </div>
                         </div>

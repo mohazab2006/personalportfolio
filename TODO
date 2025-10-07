@@ -1,72 +1,91 @@
-# Portfolio TODO - Future Features
+# Portfolio TODO List
 
-## 🚀 High Priority
-- [ ] Contact form with email integration
-- [ ] Supabase backend for contact submissions
-- [ ] Blog section for technical articles
-- [ ] Dark/light mode toggle improvements
-- [ ] Mobile responsiveness testing
+## Pre-Deployment Tasks
 
-## 📧 Contact & Communication
-- [ ] Contact form with validation
-- [ ] Email notifications for form submissions
-- [ ] Contact form success/error states
-- [ ] Social media integration
-- [ ] Newsletter signup (optional)
+### Contact Form
+- [ ] Create contact form component with form validation
+- [ ] Add email field, message field, subject field
+- [ ] Integrate email service (Resend, EmailJS, or Supabase Edge Functions)
+- [ ] Add success/error toast notifications
+- [ ] Add rate limiting to prevent spam
+- [ ] Test email delivery
 
-## 🗄️ Backend & Database
-- [ ] Supabase integration
-- [ ] Contact form submissions storage
-- [ ] Analytics tracking
-- [ ] Visitor counter
-- [ ] Project view tracking
+### SEO & Metadata
+- [ ] Add proper meta tags to all pages (title, description, OG tags)
+- [ ] Create sitemap.xml
+- [ ] Add robots.txt
+- [ ] Implement JSON-LD structured data for projects
+- [ ] Add canonical URLs
+- [ ] Optimize meta descriptions for each project page
+- [ ] Add Twitter card metadata
 
-## 🎨 UI/UX Enhancements
-- [ ] More 3D animations
-- [ ] Interactive project demos
-- [ ] Video backgrounds
-- [ ] Particle effects
-- [ ] Sound effects (optional)
-- [ ] Loading animations improvements
+### Performance & Optimization
+- [ ] Optimize all images (use Next.js Image component everywhere)
+- [ ] Add lazy loading for project images
+- [ ] Minimize bundle size (check with `npm run build`)
+- [ ] Add loading states for Supabase data fetching
+- [ ] Implement error boundaries
+- [ ] Add analytics (Google Analytics or Vercel Analytics)
 
-## 📱 Mobile & Performance
-- [ ] Mobile menu optimization
-- [ ] Touch gestures for mobile
-- [ ] Performance optimization
-- [ ] Image optimization
-- [ ] Lazy loading improvements
+### Accessibility
+- [ ] Add proper ARIA labels
+- [ ] Ensure keyboard navigation works throughout
+- [ ] Test with screen reader
+- [ ] Add focus indicators
+- [ ] Check color contrast ratios
 
-## 🔧 Technical Features
-- [ ] SEO optimization
-- [ ] Meta tags for social sharing
-- [ ] Sitemap generation
-- [ ] RSS feed for blog
-- [ ] API endpoints for projects
+### Content & Polish
+- [ ] Write better project descriptions
+- [ ] Add skills/tech stack section
+- [ ] Add about section with bio
+- [ ] Review all copy for typos
+- [ ] Add footer with social links
+- [ ] Add 404 page
 
-## 📊 Analytics & Tracking
-- [ ] Google Analytics
-- [ ] Heatmap tracking
-- [ ] User behavior analytics
-- [ ] Performance monitoring
-- [ ] Error tracking
+### Testing
+- [ ] Test all pages on mobile, tablet, desktop
+- [ ] Test in different browsers (Chrome, Firefox, Safari)
+- [ ] Test dark mode throughout site
+- [ ] Verify all links work
+- [ ] Test resume download functionality
 
-## 🌐 Deployment & Infrastructure
-- [ ] CI/CD pipeline
-- [ ] Automated testing
-- [ ] Staging environment
-- [ ] Domain setup
-- [ ] SSL certificate
-- [ ] CDN integration
+---
 
-## 📝 Content & Projects
-- [ ] More project screenshots
-- [ ] Project case studies
-- [ ] Technical blog posts
-- [ ] Resume download tracking
-- [ ] Project filtering/search
+## Deployment
 
-## 🎯 Nice to Have
-- [ ] Multi-language support
-- [ ] Accessibility improvements
-- [ ] Keyboard navigation
-- [ ] Voice navigation
+### Domain & Hosting
+- [ ] Purchase domain (mohamedazab.dev) from Namecheap or Cloudflare
+- [ ] Deploy to Vercel (import from GitHub)
+- [ ] Add Supabase environment variables to Vercel
+- [ ] Connect custom domain in Vercel settings
+- [ ] Configure DNS records (A record + CNAME for www) mohamedazab.dev
+- [ ] Verify SSL certificate
+
+### Post-Deployment
+- [ ] Test live site thoroughly
+- [ ] Run Lighthouse audit (aim for 90+ scores)
+- [ ] Submit sitemap to Google Search Console
+- [ ] Set up monitoring/uptime checks
+- [ ] Share portfolio link!!!!! 
+
+---
+
+## Future Enhancements
+
+### Self-Hosting (Optional)
+- [ ] Set up Ubuntu server (home server or VPS)
+- [ ] Install Node.js, nginx, PM2
+- [ ] Configure firewall and SSL
+- [ ] Deploy app with PM2
+- [ ] Set up nginx reverse proxy
+- [ ] Configure auto-deployment with GitHub webhooks
+- [ ] Set up monitoring and backups
+
+### Additional Features
+- [ ] Add blog section
+- [ ] Add project search/filter
+- [ ] Add animations (Framer Motion)
+- [ ] Add testimonials section
+- [ ] Create case studies for major projects
+- [ ] Add newsletter signup
+

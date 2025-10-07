@@ -1,15 +1,27 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import Image from 'next/image'
+import { getPersonalInfo } from '@/lib/projects'
 
 export default function HolographicCard() {
   const cardRef = useRef<HTMLDivElement>(null)
   const [isHovered, setIsHovered] = useState(false)
+  const [profileImage, setProfileImage] = useState<string | null>(null)
 
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
+
+  useEffect(() => {
+    async function fetchProfile() {
+      const info = await getPersonalInfo()
+      if (info) {
+        setProfileImage(info.profileImageUrl)
+      }
+    }
+    fetchProfile()
+  }, [])
 
   const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [15, -15]), {
     stiffness: 300,
@@ -191,13 +203,19 @@ export default function HolographicCard() {
                     repeat: Infinity,
                   }}
                 >
-                  <Image
-                    src="/profile.jpg"
-                    alt="Mohamed Azab"
-                    fill
-                    className="object-cover"
-                    priority
-                  />
+                  {profileImage ? (
+                    <Image
+                      src={profileImage}
+                      alt="Mohamed Azab"
+                      fill
+                      className="object-cover"
+                      priority
+                    />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-purple-500/20 to-purple-700/20">
+                      <div className="h-8 w-8 animate-spin rounded-full border-4 border-purple-500 border-t-transparent"></div>
+                    </div>
+                  )}
                   {/* Holographic overlay on photo */}
                   <motion.div
                     className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-transparent to-blue-500/20"

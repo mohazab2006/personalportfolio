@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { Project } from '@/lib/data'
+import { getProjectImageUrl } from '@/lib/projects'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useState } from 'react'
@@ -14,7 +15,7 @@ type ProjectCardProps = {
 export default function ProjectCard({ project, index }: ProjectCardProps) {
   const [imageError, setImageError] = useState(false)
   const firstScreenshot = project.screenshots[0]
-  const imagePath = `/projects/${project.slug}/${firstScreenshot}`
+  const imagePath = getProjectImageUrl(project.slug, firstScreenshot)
 
   return (
     <motion.div

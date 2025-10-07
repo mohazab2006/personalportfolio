@@ -1,11 +1,33 @@
 'use client'
 
-import { PROJECTS } from '@/lib/data'
+import { useState, useEffect } from 'react'
+import { getProjects } from '@/lib/projects'
+import { Project } from '@/lib/data'
 import Section from './Section'
 import ProjectCard from './ProjectCard'
 import TechChips from './TechChips'
 
 export default function Portfolio() {
+  const [projects, setProjects] = useState<Project[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    async function fetchProjects() {
+      try {
+        const data = await getProjects()
+        setProjects(data)
+      } catch (err) {
+        console.error('Error fetching projects:', err)
+        setError('Failed to load projects')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchProjects()
+  }, [])
+
   return (
     <Section
       id="portfolio"
@@ -16,7 +38,19 @@ export default function Portfolio() {
       <div className="space-y-20">
         {/* Projects Grid */}
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {PROJECTS.map((project, index) => (
+          {loading && (
+            <div className="col-span-full flex justify-center py-20">
+              <div className="h-12 w-12 animate-spin rounded-full border-4 border-purple-500 border-t-transparent"></div>
+            </div>
+          )}
+
+          {error && (
+            <div className="col-span-full text-center py-20">
+              <p className="text-red-500">{error}</p>
+            </div>
+          )}
+
+          {!loading && !error && projects.map((project, index) => (
             <ProjectCard key={project.slug} project={project} index={index} />
           ))}
         </div>
