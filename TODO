@@ -1,0 +1,72 @@
+# Portfolio TODO - Future Features
+
+## 🚀 High Priority
+- [ ] Contact form with email integration
+- [ ] Supabase backend for contact submissions
+- [ ] Blog section for technical articles
+- [ ] Dark/light mode toggle improvements
+- [ ] Mobile responsiveness testing
+
+## 📧 Contact & Communication
+- [ ] Contact form with validation
+- [ ] Email notifications for form submissions
+- [ ] Contact form success/error states
+- [ ] Social media integration
+- [ ] Newsletter signup (optional)
+
+## 🗄️ Backend & Database
+- [ ] Supabase integration
+- [ ] Contact form submissions storage
+- [ ] Analytics tracking
+- [ ] Visitor counter
+- [ ] Project view tracking
+
+## 🎨 UI/UX Enhancements
+- [ ] More 3D animations
+- [ ] Interactive project demos
+- [ ] Video backgrounds
+- [ ] Particle effects
+- [ ] Sound effects (optional)
+- [ ] Loading animations improvements
+
+## 📱 Mobile & Performance
+- [ ] Mobile menu optimization
+- [ ] Touch gestures for mobile
+- [ ] Performance optimization
+- [ ] Image optimization
+- [ ] Lazy loading improvements
+
+## 🔧 Technical Features
+- [ ] SEO optimization
+- [ ] Meta tags for social sharing
+- [ ] Sitemap generation
+- [ ] RSS feed for blog
+- [ ] API endpoints for projects
+
+## 📊 Analytics & Tracking
+- [ ] Google Analytics
+- [ ] Heatmap tracking
+- [ ] User behavior analytics
+- [ ] Performance monitoring
+- [ ] Error tracking
+
+## 🌐 Deployment & Infrastructure
+- [ ] CI/CD pipeline
+- [ ] Automated testing
+- [ ] Staging environment
+- [ ] Domain setup
+- [ ] SSL certificate
+- [ ] CDN integration
+
+## 📝 Content & Projects
+- [ ] More project screenshots
+- [ ] Project case studies
+- [ ] Technical blog posts
+- [ ] Resume download tracking
+- [ ] Project filtering/search
+
+## 🎯 Nice to Have
+- [ ] Multi-language support
+- [ ] Accessibility improvements
+- [ ] Keyboard navigation
+- [ ] Voice navigation

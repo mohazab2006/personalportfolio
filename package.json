@@ -1,0 +1,43 @@
+{
+  "name": "mohamed-azab-portfolio",
+  "version": "1.0.0",
+  "description": "Personal portfolio for Mohamed Azab - Computer Science student at Carleton University",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\""
+  },
+  "dependencies": {
+    "next": "^14.2.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "framer-motion": "^11.0.0",
+    "@react-three/fiber": "^8.15.0",
+    "@react-three/drei": "^9.96.0",
+    "three": "^0.161.0",
+    "next-themes": "^0.2.1",
+    "lenis": "^1.0.42",
+    "clsx": "^2.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/react": "^18.2.48",
+    "@types/react-dom": "^18.2.18",
+    "@types/three": "^0.161.0",
+    "typescript": "^5.3.3",
+    "tailwindcss": "^3.4.0",
+    "postcss": "^8.4.33",
+    "autoprefixer": "^10.4.17",
+    "eslint": "^8.56.0",
+    "eslint-config-next": "^14.2.0",
+    "prettier": "^3.2.4",
+    "prettier-plugin-tailwindcss": "^0.5.11"
+  },
+  "engines": {
+    "node": ">=18.17.0"
+  }
+}
+
