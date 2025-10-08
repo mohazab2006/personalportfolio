@@ -1,91 +1,150 @@
 # Portfolio TODO List
 
-## Pre-Deployment Tasks
+## 🚀 Deployment (Required)
+
+- [ ] Deploy to Vercel
+  - Go to [vercel.com](https://vercel.com)
+  - Import GitHub repository
+  - Add Supabase environment variables:
+    - `NEXT_PUBLIC_SUPABASE_URL`
+    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+  - Deploy!
+
+- [ ] Purchase domain (~$10/year)
+  - Buy `mohamedazab.dev`
+
+- [ ] Connect domain to Vercel
+  - Vercel → Settings → Domains
+  - Add domain and DNS records
+  - Wait for SSL (5-60 minutes)
+
+- [ ] Update domain in code
+  - Change `lib/seo.ts` line 8 to: `url: 'https://mohamedazab.dev'`
+  - Commit and push
+
+- [ ] Test live site
+  - Visit your domain
+  - Check images load from Supabase
+  - Share your link! 🎉
+
+**See `DEPLOYMENT.md` for detailed steps**
+
+---
+
+## ✏️ Content Review & Polish (HIGH PRIORITY)
+
+- [ ] **Review and fix all descriptions throughout the website**
+  - Check grammar and spelling across all sections
+  - Ensure proper wording and professional tone
+  - Tailor all content to accurately reflect your experience and personality
+  - Review sections:
+    - [ ] Hero section introduction
+    - [ ] About section description
+    - [ ] Experience descriptions
+    - [ ] Education descriptions
+    - [ ] Project descriptions and details
+    - [ ] Skills/Tech Stack descriptions (if any)
+    - [ ] Meta descriptions (SEO)
+
+**Files to review:**
+- `lib/data.ts` - All text content
+- `lib/seo.ts` - Meta descriptions and SEO text
+- Component files if they contain hardcoded text
+
+---
+
+## 🎨 Branding & Design Updates (HIGH PRIORITY)
+
+- [ ] **Update website logo**
+  - Design/create new logo
+  - Replace current logo files
+  - Update in Navbar component
+
+- [ ] **Redesign site title/name styling ("Mohamed Azab")**
+  - Experiment with different fonts
+  - Try different visual styles/treatments
+  - Update typography in Hero section
+  - Consider unique branding approach
+
+**Files to modify:**
+- `components/Navbar.tsx` - Logo and branding
+- `components/Hero.tsx` - Title styling
+- `public/` - Logo image files
+- `styles/globals.css` or component-specific styles
+
+---
+
+## 💡 Future Improvements (Optional)
 
 ### Contact Form
-- [ ] Create contact form component with form validation
-- [ ] Add email field, message field, subject field
-- [ ] Integrate email service (Resend, EmailJS, or Supabase Edge Functions)
-- [ ] Add success/error toast notifications
-- [ ] Add rate limiting to prevent spam
-- [ ] Test email delivery
+- [ ] Create contact form component with validation
+- [ ] Integrate email service (EmailJS or Resend)
+- [ ] Add to Contact section
 
-### SEO & Metadata
-- [ ] Add proper meta tags to all pages (title, description, OG tags)
-- [ ] Create sitemap.xml
-- [ ] Add robots.txt
-- [ ] Implement JSON-LD structured data for projects
-- [ ] Add canonical URLs
-- [ ] Optimize meta descriptions for each project page
-- [ ] Add Twitter card metadata
-
-### Performance & Optimization
-- [ ] Optimize all images (use Next.js Image component everywhere)
-- [ ] Add lazy loading for project images
-- [ ] Minimize bundle size (check with `npm run build`)
-- [ ] Add loading states for Supabase data fetching
-- [ ] Implement error boundaries
-- [ ] Add analytics (Google Analytics or Vercel Analytics)
-
-### Accessibility
-- [ ] Add proper ARIA labels
-- [ ] Ensure keyboard navigation works throughout
-- [ ] Test with screen reader
-- [ ] Add focus indicators
-- [ ] Check color contrast ratios
-
-### Content & Polish
-- [ ] Write better project descriptions
-- [ ] Add skills/tech stack section
-- [ ] Add about section with bio
-- [ ] Review all copy for typos
-- [ ] Add footer with social links
-- [ ] Add 404 page
-
-### Testing
-- [ ] Test all pages on mobile, tablet, desktop
-- [ ] Test in different browsers (Chrome, Firefox, Safari)
-- [ ] Test dark mode throughout site
-- [ ] Verify all links work
-- [ ] Test resume download functionality
+**Implementation ideas:**
+- Simple form with name, email, message
+- EmailJS for free email sending
+- Or just use a mailto link (easiest)
 
 ---
 
-## Deployment
+### Certificates Section
+- [ ] Decide on implementation approach
+- [ ] Add certificates data to `lib/data.ts`
+- [ ] Build UI component
+- [ ] Integrate into portfolio
 
-### Domain & Hosting
-- [ ] Purchase domain (mohamedazab.dev) from Namecheap or Cloudflare
-- [ ] Deploy to Vercel (import from GitHub)
-- [ ] Add Supabase environment variables to Vercel
-- [ ] Connect custom domain in Vercel settings
-- [ ] Configure DNS records (A record + CNAME for www) mohamedazab.dev
-- [ ] Verify SSL certificate
+**Implementation ideas:**
 
-### Post-Deployment
-- [ ] Test live site thoroughly
-- [ ] Run Lighthouse audit (aim for 90+ scores)
-- [ ] Submit sitemap to Google Search Console
-- [ ] Set up monitoring/uptime checks
-- [ ] Share portfolio link!!!!! 
+**Option A: Toggle with Experience section**
+- Add toggle button: "Experience" | "Certificates"
+- Reuse timeline/card layout
+- Shows one or the other
+
+**Option B: Toggle with Tech Stack section**
+- Button to switch: "Tech Stack" | "Certificates"  
+- Same section space, different content
+- Keeps page length shorter
+
+**Option C: Separate section**
+- New dedicated "Certificates & Awards" section
+- After Education or Experience
+- Most prominent, but adds page length
+
+**Recommendation:** Option B (toggle with tech stack) keeps the page concise while showcasing both skills and credentials.
 
 ---
 
-## Future Enhancements
+### Tech Stack Section Redesign
+- [ ] Redesign tech stack visual layout
 
-### Self-Hosting (Optional)
-- [ ] Set up Ubuntu server (home server or VPS)
-- [ ] Install Node.js, nginx, PM2
-- [ ] Configure firewall and SSL
-- [ ] Deploy app with PM2
-- [ ] Set up nginx reverse proxy
-- [ ] Configure auto-deployment with GitHub webhooks
-- [ ] Set up monitoring and backups
+**Current state:** Basic grid with percentage bars (in data.ts but not displayed?)
 
-### Additional Features
-- [ ] Add blog section
-- [ ] Add project search/filter
-- [ ] Add animations (Framer Motion)
-- [ ] Add testimonials section
-- [ ] Create case studies for major projects
-- [ ] Add newsletter signup
+**Ideas for improvement:**
+- Card-based layout with icons
+- Animated skill bars with hover effects
+- Tech logos instead of just text
+- Group by category with better visual hierarchy
+- Interactive hover states showing experience level
+- Badge/pill design instead of bars
 
+---
+
+### DevPost Integration
+- [ ] Add DevPost to PERSONAL data in `lib/data.ts`
+- [ ] Add DevPost to siteConfig links in `lib/seo.ts`
+- [ ] Update SocialRail component to display DevPost icon
+- [ ] Add DevPost to generatePersonSchema for SEO
+
+**Implementation:**
+- Add `devpost: 'https://devpost.com/yourhandle'` to PERSONAL object
+- Include in siteConfig.links
+- Use 🏆 or appropriate icon in SocialRail
+
+---
+
+## 📝 Notes
+
+- Deployment is the priority - get your portfolio live first!
+- Feature additions can come later after you're live
+- Test changes locally before deploying: `npm run dev`
