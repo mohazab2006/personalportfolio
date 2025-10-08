@@ -29,6 +29,7 @@ export function generateMetadata({
   const metaImage = image || siteConfig.ogImage
 
   return {
+    metadataBase: new URL(siteConfig.url),
     title: metaTitle,
     description: metaDescription,
     icons: {

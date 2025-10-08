@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import Loader from '@/components/Loader'
 import Navbar from '@/components/Navbar'
@@ -9,12 +9,21 @@ import ResumePill from '@/components/ResumePill'
 import SectionDots from '@/components/SectionDots'
 import Hero from '@/components/Hero'
 import About from '@/components/About'
-import Education from '@/components/Education'
-import Portfolio from '@/components/Portfolio'
-import SplitTimeline from '@/components/SplitTimeline'
-import Interests from '@/components/Interests'
-import Contact from '@/components/Contact'
-import CursorRipple from '@/components/CursorRipple'
+
+// Lazy load components below the fold for better performance
+const CursorRipple = lazy(() => import('@/components/CursorRipple'))
+const Education = lazy(() => import('@/components/Education'))
+const Portfolio = lazy(() => import('@/components/Portfolio'))
+const SplitTimeline = lazy(() => import('@/components/SplitTimeline'))
+const Interests = lazy(() => import('@/components/Interests'))
+const Contact = lazy(() => import('@/components/Contact'))
+
+// Loading fallback component
+const SectionLoader = () => (
+  <div className="flex min-h-[400px] items-center justify-center">
+    <div className="h-8 w-8 animate-spin rounded-full border-4 border-purple-500 border-t-transparent"></div>
+  </div>
+)
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true)
@@ -45,7 +54,9 @@ export default function Home() {
       {showContent && (
         <>
           {/* Cursor Ripple Effect */}
-          <CursorRipple />
+          <Suspense fallback={null}>
+            <CursorRipple />
+          </Suspense>
           
           {/* Navigation */}
           <Navbar />
@@ -59,11 +70,21 @@ export default function Home() {
           <main className="relative z-[1]">
             <Hero />
             <About />
-            <Education />
-            <Portfolio />
-            <SplitTimeline />
-            <Interests />
-            <Contact />
+            <Suspense fallback={<SectionLoader />}>
+              <Education />
+            </Suspense>
+            <Suspense fallback={<SectionLoader />}>
+              <Portfolio />
+            </Suspense>
+            <Suspense fallback={<SectionLoader />}>
+              <SplitTimeline />
+            </Suspense>
+            <Suspense fallback={<SectionLoader />}>
+              <Interests />
+            </Suspense>
+            <Suspense fallback={<SectionLoader />}>
+              <Contact />
+            </Suspense>
           </main>
 
           {/* Footer */}

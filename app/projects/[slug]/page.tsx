@@ -201,6 +201,10 @@ export default function ProjectPage({ params }: Props) {
                           fill
                           className="object-cover"
                           onError={() => handleImageError(imageKey)}
+                          loading="lazy"
+                          sizes="(max-width: 1280px) 100vw, 1280px"
+                          placeholder="blur"
+                          blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTI4MCIgaGVpZ2h0PSI3MjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEyODAiIGhlaWdodD0iNzIwIiBmaWxsPSIjMjkyNTNhIi8+PC9zdmc+"
                         />
                       ) : (
                         <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-purple-500/10 to-purple-700/10">

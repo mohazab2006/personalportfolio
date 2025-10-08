@@ -4,8 +4,10 @@ import { motion } from 'framer-motion'
 import { PERSONAL } from '@/lib/data'
 import { HERO_LAYOUT } from '@/lib/utils'
 import HolographicCard from './HolographicCard'
-import Image from 'next/image'
-import { useState } from 'react'
+import { lazy, Suspense } from 'react'
+
+// Lazy load Hero3D for better performance
+const Hero3D = lazy(() => import('./Hero3D'))
 
 const socialIcons = [
   {
@@ -38,7 +40,6 @@ const socialIcons = [
 ]
 
 export default function Hero() {
-  const [imageError, setImageError] = useState(false)
   const layout = HERO_LAYOUT || 'split'
 
   if (layout === 'center') {
@@ -46,7 +47,9 @@ export default function Hero() {
       <section className="relative min-h-screen overflow-hidden bg-transparent">
         {/* Background 3D */}
         <div className="absolute inset-0 opacity-30">
-          <Hero3D />
+          <Suspense fallback={<div className="h-full w-full" />}>
+            <Hero3D />
+          </Suspense>
         </div>
 
         {/* Content */}

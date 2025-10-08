@@ -210,6 +210,9 @@ export default function HolographicCard() {
                       fill
                       className="object-cover"
                       priority
+                      sizes="(max-width: 1024px) 192px, 256px"
+                      placeholder="blur"
+                      blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgZmlsbD0iIzI5MjUzYSIvPjwvc3ZnPg=="
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-purple-500/20 to-purple-700/20">

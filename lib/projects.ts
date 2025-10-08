@@ -1,9 +1,15 @@
 /**
  * Helper functions for fetching projects and personal files from Supabase
+ * Includes caching for better performance
  */
 
 import { supabase } from './supabase'
 import { Project } from './data'
+
+// Cache configuration
+const CACHE_DURATION = 60 * 60 * 1000 // 1 hour
+let projectsCache: { data: Project[]; timestamp: number } | null = null
+let personalInfoCache: { data: { resumeUrl: string; profileImageUrl: string }; timestamp: number } | null = null
 
 /**
  * Get the public URL for a project image
@@ -29,11 +35,17 @@ export function getPersonalFileUrl(fileName: string): string {
 
 /**
  * Fetch personal info (resume URL, profile image URL)
+ * Uses in-memory cache to reduce API calls
  */
 export async function getPersonalInfo(): Promise<{
   resumeUrl: string
   profileImageUrl: string
 } | null> {
+  // Check cache
+  if (personalInfoCache && Date.now() - personalInfoCache.timestamp < CACHE_DURATION) {
+    return personalInfoCache.data
+  }
+
   const { data, error } = await supabase
     .from('personal_info')
     .select('resume_url, profile_image_url')
@@ -42,6 +54,8 @@ export async function getPersonalInfo(): Promise<{
 
   if (error || !data) {
     console.error('Error fetching personal info:', error)
+    // Return cached data if available, even if expired
+    if (personalInfoCache) return personalInfoCache.data
     // Return defaults if database fetch fails
     return {
       resumeUrl: '/resume.pdf',
@@ -50,16 +64,30 @@ export async function getPersonalInfo(): Promise<{
   }
 
   // Convert storage file names to full URLs
-  return {
+  const info = {
     resumeUrl: getPersonalFileUrl(data.resume_url),
     profileImageUrl: getPersonalFileUrl(data.profile_image_url)
   }
+
+  // Update cache
+  personalInfoCache = {
+    data: info,
+    timestamp: Date.now(),
+  }
+
+  return info
 }
 
 /**
  * Fetch all projects from Supabase, ordered by order_index
+ * Uses in-memory cache to reduce API calls
  */
 export async function getProjects(): Promise<Project[]> {
+  // Check cache
+  if (projectsCache && Date.now() - projectsCache.timestamp < CACHE_DURATION) {
+    return projectsCache.data
+  }
+
   const { data, error } = await supabase
     .from('projects')
     .select('*')
@@ -67,11 +95,13 @@ export async function getProjects(): Promise<Project[]> {
 
   if (error) {
     console.error('Error fetching projects:', error)
+    // Return cached data if available, even if expired
+    if (projectsCache) return projectsCache.data
     throw new Error('Failed to fetch projects')
   }
 
   // Transform database rows to Project type
-  return (data || []).map((row) => ({
+  const projects = (data || []).map((row) => ({
     slug: row.slug,
     title: row.title,
     github: row.github,
@@ -80,6 +110,14 @@ export async function getProjects(): Promise<Project[]> {
     stack: row.stack,
     screenshots: row.screenshots,
   }))
+
+  // Update cache
+  projectsCache = {
+    data: projects,
+    timestamp: Date.now(),
+  }
+
+  return projects
 }
 
 /**

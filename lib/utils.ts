@@ -47,24 +47,35 @@ export function useHasHover(): boolean {
   return hasHover
 }
 
-// Intersection Observer Hook
+// Intersection Observer Hook with optional triggerOnce
 export function useIntersectionObserver(
   ref: React.RefObject<Element>,
-  options: IntersectionObserverInit = {}
+  options: IntersectionObserverInit & { triggerOnce?: boolean } = {}
 ): boolean {
   const [isIntersecting, setIsIntersecting] = useState(false)
+  const { triggerOnce, ...observerOptions } = options
 
   useEffect(() => {
     const element = ref.current
     if (!element) return
 
     const observer = new IntersectionObserver(([entry]) => {
-      setIsIntersecting(entry.isIntersecting)
-    }, options)
+      const isNowIntersecting = entry.isIntersecting
+      
+      // If triggerOnce is true and we've already triggered, don't update
+      if (triggerOnce && isIntersecting) return
+      
+      setIsIntersecting(isNowIntersecting)
+      
+      // If triggerOnce is true and we're now intersecting, disconnect
+      if (triggerOnce && isNowIntersecting) {
+        observer.disconnect()
+      }
+    }, observerOptions)
 
     observer.observe(element)
     return () => observer.disconnect()
-  }, [ref, options])
+  }, [ref, observerOptions, triggerOnce, isIntersecting])
 
   return isIntersecting
 }
@@ -93,7 +104,7 @@ export function formatDate(date: string): string {
 }
 
 // Debounce function
-export function debounce<T extends (...args: any[]) => any>(
+export function debounce<T extends (...args: unknown[]) => unknown>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {
@@ -118,7 +129,7 @@ export function isWebGLSupported(): boolean {
       window.WebGLRenderingContext &&
       (canvas.getContext('webgl') || canvas.getContext('experimental-webgl'))
     )
-  } catch (e) {
+  } catch {
     return false
   }
 }

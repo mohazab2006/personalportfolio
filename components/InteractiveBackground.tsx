@@ -36,8 +36,8 @@ export default function InteractiveBackground() {
       hue: number
 
       constructor() {
-        this.x = Math.random() * canvas.width
-        this.y = Math.random() * canvas.height
+        this.x = Math.random() * canvas!.width
+        this.y = Math.random() * canvas!.height
         this.vx = (Math.random() - 0.5) * 1.5
         this.vy = (Math.random() - 0.5) * 1.5
         this.size = Math.random() * 3 + 1.5
@@ -50,13 +50,13 @@ export default function InteractiveBackground() {
         this.y += this.vy
 
         // Bounce off edges with some randomness
-        if (this.x < 0 || this.x > canvas.width) {
+        if (this.x < 0 || this.x > canvas!.width) {
           this.vx *= -0.8
-          this.x = Math.max(0, Math.min(canvas.width, this.x))
+          this.x = Math.max(0, Math.min(canvas!.width, this.x))
         }
-        if (this.y < 0 || this.y > canvas.height) {
+        if (this.y < 0 || this.y > canvas!.height) {
           this.vy *= -0.8
-          this.y = Math.max(0, Math.min(canvas.height, this.y))
+          this.y = Math.max(0, Math.min(canvas!.height, this.y))
         }
 
         // Twinkle effect

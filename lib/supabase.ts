@@ -7,7 +7,18 @@ if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('Missing Supabase environment variables')
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+// Create optimized Supabase client with performance settings
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    persistSession: false, // Disable session persistence for better performance
+    autoRefreshToken: false,
+  },
+  global: {
+    headers: {
+      'x-client-info': 'personal-portfolio',
+    },
+  },
+})
 
 // Database types
 export type Database = {

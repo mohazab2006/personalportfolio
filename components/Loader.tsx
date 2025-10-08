@@ -11,8 +11,8 @@ export default function Loader({ onComplete }: { onComplete: () => void }) {
   const prefersReducedMotion = useReducedMotion()
 
   useEffect(() => {
-    // Simulate loading progress
-    const duration = prefersReducedMotion ? 800 : 2000
+    // Simulate loading progress - balanced speed for visibility
+    const duration = prefersReducedMotion ? 600 : 1500
     const interval = 20
     const steps = duration / interval
     const increment = 100 / steps
@@ -24,11 +24,11 @@ export default function Loader({ onComplete }: { onComplete: () => void }) {
         setProgress(100)
         clearInterval(timer)
 
-        // Show welcome message
+        // Show welcome message - keep it visible longer
         setTimeout(() => {
           setShowWelcome(true)
 
-          // Trigger portal reveal
+          // Trigger portal reveal - give time to read "WELCOME"
           setTimeout(() => {
             setShowPortal(true)
 
@@ -36,8 +36,8 @@ export default function Loader({ onComplete }: { onComplete: () => void }) {
             setTimeout(() => {
               onComplete()
             }, prefersReducedMotion ? 200 : 600)
-          }, prefersReducedMotion ? 150 : 400)
-        }, prefersReducedMotion ? 100 : 200)
+          }, prefersReducedMotion ? 300 : 800)
+        }, prefersReducedMotion ? 150 : 300)
       } else {
         setProgress(Math.min(current, 100))
       }

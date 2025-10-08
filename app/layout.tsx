@@ -1,9 +1,12 @@
 import type { Metadata } from 'next'
 import { generateMetadata as generateSEOMetadata, generatePersonSchema } from '@/lib/seo'
 import Providers from '@/components/Providers'
-import CustomCursor from '@/components/CustomCursor'
-import InteractiveBackground from '@/components/InteractiveBackground'
+import dynamic from 'next/dynamic'
 import '@/styles/globals.css'
+
+// Lazy load heavy visual components for better performance
+const CustomCursor = dynamic(() => import('@/components/CustomCursor'), { ssr: false })
+const InteractiveBackground = dynamic(() => import('@/components/InteractiveBackground'), { ssr: false })
 
 export const metadata: Metadata = generateSEOMetadata()
 
@@ -15,6 +18,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(generatePersonSchema()) }}
         />
+        {/* DNS prefetch for Supabase */}
+        <link rel="dns-prefetch" href="https://supabase.co" />
+        <link rel="preconnect" href="https://supabase.co" />
       </head>
       <body className="bg-dark-bg text-dark-text">
         <Providers>
