@@ -34,7 +34,7 @@ export default function Navbar() {
         animate={{ y: 0 }}
         transition={{ duration: 0.5, delay: 0.5 }}
       >
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-8">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           {/* Left: Logo/Name */}
           <motion.div
             className="text-xl font-bold text-dark-text dark:text-dark-text"
@@ -50,9 +50,17 @@ export default function Navbar() {
 
           {/* Center: Email (Desktop) */}
           <div className="hidden lg:block">
-            <a
+            <motion.a
               href={`mailto:${PERSONAL.email}`}
               className="group flex items-center gap-2 text-sm text-dark-text/70 transition-colors hover:text-purple-500 dark:text-dark-text/70"
+              animate={{
+                scale: [1, 1.05, 1],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
             >
               <span className="text-xs uppercase tracking-wider">connect</span>
               <span className="font-mono">{PERSONAL.email}</span>
@@ -70,7 +78,7 @@ export default function Navbar() {
                   d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
                 />
               </svg>
-            </a>
+            </motion.a>
           </div>
 
           {/* Right: Nav Links + Toggles (Desktop) */}
@@ -79,10 +87,16 @@ export default function Navbar() {
               <motion.button
                 key={link}
                 onClick={() => handleNavClick(link)}
-                className="text-sm font-medium text-dark-text/70 transition-colors hover:text-purple-500 dark:text-dark-text/70"
+                className="text-sm font-medium text-dark-text/70 transition-colors duration-200 hover:text-purple-500 dark:text-dark-text/70"
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: 0.6 + index * 0.05 }}
+                whileHover={{ 
+                  scale: 1.05, 
+                  y: -2,
+                  transition: { duration: 0.2, ease: "easeOut" }
+                }}
+                whileTap={{ scale: 0.95 }}
               >
                 {link.toUpperCase()}
               </motion.button>
@@ -93,25 +107,25 @@ export default function Navbar() {
           {/* Mobile Menu Button */}
           <motion.button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="magnetic-button relative h-9 w-9 rounded-lg bg-white/5 backdrop-blur-sm transition-colors hover:bg-white/10 lg:hidden"
+            className="magnetic-button relative h-10 w-10 rounded-lg bg-white/5 backdrop-blur-sm transition-colors hover:bg-white/10 lg:hidden"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             aria-label="Toggle mobile menu"
           >
-              <div className="flex h-full w-full flex-col items-center justify-center gap-1.5">
+              <div className="absolute inset-0 flex items-center justify-center">
                 <motion.span
-                  className="h-0.5 w-5 bg-current"
-                  animate={isMobileMenuOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
+                  className="absolute h-0.5 w-5 bg-current"
+                  animate={isMobileMenuOpen ? { rotate: 45, y: 0 } : { rotate: 0, y: -6 }}
                   transition={{ duration: 0.2 }}
                 />
                 <motion.span
-                  className="h-0.5 w-5 bg-current"
+                  className="absolute h-0.5 w-5 bg-current"
                   animate={isMobileMenuOpen ? { opacity: 0 } : { opacity: 1 }}
                   transition={{ duration: 0.2 }}
                 />
                 <motion.span
-                  className="h-0.5 w-5 bg-current"
-                  animate={isMobileMenuOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
+                  className="absolute h-0.5 w-5 bg-current"
+                  animate={isMobileMenuOpen ? { rotate: -45, y: 0 } : { rotate: 0, y: 6 }}
                   transition={{ duration: 0.2 }}
                 />
               </div>
@@ -148,10 +162,16 @@ export default function Navbar() {
                   <motion.button
                     key={link}
                     onClick={() => handleNavClick(link)}
-                    className="text-2xl font-medium text-dark-text transition-colors hover:text-purple-500"
+                    className="text-2xl font-medium text-dark-text transition-colors duration-200 hover:text-purple-500"
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.05 }}
+                    whileHover={{ 
+                      scale: 1.05, 
+                      x: 5,
+                      transition: { duration: 0.2, ease: "easeOut" }
+                    }}
+                    whileTap={{ scale: 0.95 }}
                   >
                     {link.toUpperCase()}
                   </motion.button>

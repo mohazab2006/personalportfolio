@@ -6,6 +6,7 @@ import Loader from '@/components/Loader'
 import Navbar from '@/components/Navbar'
 import SocialRail from '@/components/SocialRail'
 import ResumePill from '@/components/ResumePill'
+import ChatButton from '@/components/ChatButton'
 import SectionDots from '@/components/SectionDots'
 import Hero from '@/components/Hero'
 import About from '@/components/About'
@@ -64,10 +65,11 @@ export default function Home() {
           {/* Persistent UI Elements */}
           <SocialRail />
           <ResumePill />
+          <ChatButton />
           <SectionDots />
 
           {/* Page Sections */}
-          <main className="relative z-[1]">
+          <main className="relative z-[1] overflow-x-hidden">
             <Hero />
             <About />
             <Suspense fallback={<SectionLoader />}>

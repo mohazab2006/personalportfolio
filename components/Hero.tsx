@@ -72,7 +72,7 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.7 }}
           >
-            {PERSONAL.tagline}
+            I'm a Computer Science student at Carleton University (AI/ML & Security). A passionate learner who enjoys building secure, reliable software.
           </motion.p>
 
           <motion.div
@@ -134,8 +134,8 @@ export default function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.8 }}
             >
-              I'm a Computer Science student at Carleton University (AI & ML). A passionate learner
-              who enjoys building reliable, well-designed software.
+              I'm a Computer Science student at Carleton University (AI/ML & Security). A passionate learner
+              who enjoys building secure, reliable software.
             </motion.p>
           </div>
 

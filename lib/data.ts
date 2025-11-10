@@ -63,7 +63,7 @@ export const SERVICES: ServiceItem[] = [
     icon: '🌐',
     title: 'Web Development',
     description:
-      'Learned modern full-stack development with Next.js, TypeScript, and Tailwind CSS. Currently learning advanced performance optimization, microservices architecture, SEO optimization, and enterprise-level scalability patterns.',
+      'Learned to build modern full-stack applications to develop solutions for clients, businesses, and personal projects. Currently learning advanced performance optimization, microservices architecture, SEO optimization, and enterprise-level scalability patterns to deliver better experiences.',
   },
   {
     icon: '🤖',
@@ -75,14 +75,14 @@ export const SERVICES: ServiceItem[] = [
     icon: '🔒',
     title: 'Security & Infrastructure',
     description:
-      'Passionate about learning business security practices and AI-enhanced security, while building secure applications using Docker, DevOps methods, and infrastructure automation.',
+      'Passionate about building secure, resilient infrastructure using Docker, DevOps methods, and infrastructure automation. Learning cybersecurity practices, AI-enhanced security, and enterprise-level security patterns to protect applications and business assets.',
   },
 ]
 
 // Education
 export const EDUCATION: EducationItem[] = [
   {
-    degree: 'B.Comp (Honours), AI & Machine Learning + Cybersecurity',
+    degree: 'B.Comp (Honours), AI & Machine Learning + Cybersecurity, Minor in Business',
     school: 'Carleton University — Ottawa, ON',
     years: '2024 – 2028 (Expected)',
     gpa: 'GPA: 3.90 / 4.00',
@@ -137,8 +137,8 @@ export const PROJECTS: Project[] = [
     github: 'https://github.com/mohazab2006/personalportfolio',
     demo: '',
     description:
-      'A passion project built for fun and learning, showcasing my journey as a developer through an interactive portfolio experience. This was created purely out of curiosity to explore cutting-edge web technologies and push the boundaries of what\'s possible with modern web development. Features include a custom cursor system with magnetic effects, 3D animated orbs using React Three Fiber and Drei, smooth page transitions with Framer Motion, a sophisticated loader with progress animation, split timeline for experience/education, holographic cards, interactive background effects, and smooth scrolling with Lenis. The project demonstrates my love for creating engaging user experiences and experimenting with new technologies, built entirely for the joy of coding and continuous learning.',
-    stack: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion', '@react-three/fiber', '@react-three/drei', 'Three.js', 'next-themes', 'Lenis'],
+      'An interactive portfolio experience built to push the boundaries of modern web development, featuring Snaggy - a custom AI chatbot assistant powered by Groq\'s LLaMA 3.3 70B model. Snaggy acts as my personal AI representative, trained on my complete background, projects, skills, and experience, capable of answering questions about my journey from Egypt to Canada, coding origins through video games, basketball coaching experience, and technical expertise. The portfolio showcases cutting-edge web technologies including a custom cursor system with magnetic effects, 3D animated orbs using React Three Fiber, smooth page transitions with Framer Motion, real-time AI chat interface with fullscreen mode, sophisticated loader with progress animation, split timeline for experience/education, holographic cards, interactive particle background, and smooth scrolling with Lenis. The project demonstrates advanced full-stack development combining frontend animations, backend API integration, AI model implementation, and modern UX design patterns. Built as a passion project to explore the intersection of web development and artificial intelligence, showcasing both technical skills and creative problem-solving.',
+    stack: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion', '@react-three/fiber', '@react-three/drei', 'Three.js', 'Groq AI', 'LLaMA 3.3', 'next-themes', 'Lenis'],
     screenshots: ['hero.jpg'],
   },
   {
@@ -212,8 +212,8 @@ export const INTERESTS: InterestItem[] = [
   },
   {
     icon: '⚙️',
-    title: 'DevOps',
-    text: 'CI/CD, Docker, observability.',
+    title: 'DevOps & Infrastructure',
+    text: 'CI/CD, Docker, infrastructure automation.',
   },
   {
     icon: '🛜',
@@ -244,10 +244,10 @@ export const INTEREST_STORIES = {
     story: "Security isn't just about preventing attacks - it's about building trust and protecting valuable assets. Every website I develop has security as a core consideration from day one. I'm actively learning about business-related security practices, understanding how to protect sensitive data and maintain compliance. I'm also exploring AI-related security applications, learning how machine learning can enhance threat detection and response. From implementing proper authentication to securing APIs and databases, I believe that good security practices should be the foundation, not an afterthought.",
     highlights: ['Security-first development', 'Business security practices', 'AI-enhanced security', 'SSL & encryption expertise', 'Compliance & data protection']
   },
-  'DevOps': {
+  'DevOps & Infrastructure': {
     title: 'Automation & Reliability',
-    story: "I discovered DevOps through necessity - managing multiple websites and services manually became overwhelming. Learning Docker, CI/CD pipelines, and monitoring tools transformed how I approach development. I'm actively learning about container orchestration, infrastructure as code, and advanced deployment strategies. The ability to scale and maintain systems reliably is what makes modern web development truly powerful, and I'm constantly exploring new tools and methodologies to improve my workflow.",
-    highlights: ['Docker containerization', 'CI/CD pipeline expertise', 'Infrastructure as code', 'Automated deployments', 'Continuous learning']
+    story: "I discovered DevOps and infrastructure management through necessity - managing multiple websites and services manually became overwhelming. Learning Docker, CI/CD pipelines, infrastructure automation, and monitoring tools transformed how I approach development. I'm actively learning about container orchestration, infrastructure as code, server provisioning, and advanced deployment strategies. The ability to build, scale, and maintain systems reliably is what makes modern web development truly powerful, and I'm constantly exploring new tools and methodologies to improve my workflow.",
+    highlights: ['Docker containerization', 'CI/CD pipeline expertise', 'Infrastructure as code', 'Server automation', 'Continuous learning']
   },
   'Networking': {
     title: 'Connecting the Dots',
