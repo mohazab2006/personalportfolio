@@ -4,9 +4,9 @@ import { PERSONAL } from './data'
 export const siteConfig = {
   name: PERSONAL.name,
   description:
-    'Computer Science student at Carleton University specializing in AI & Machine Learning. Passionate about building modern web applications, machine learning, and cybersecurity.',
-  url: 'https://mohamedazab.com', // Update with your actual domain
-  ogImage: '/og-image.jpg', // Create this image
+    'Computer Science student at Carleton University specializing in AI & Machine Learning. Portfolio featuring Snaggy, an AI chatbot assistant. Passionate about building modern web applications, machine learning, and cybersecurity.',
+  url: 'https://mohamedazab.dev', // Your actual domain
+  ogImage: '/og-image.jpg',
   links: {
     github: PERSONAL.github,
     linkedin: PERSONAL.linkedin,
