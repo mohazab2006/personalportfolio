@@ -5,14 +5,15 @@ import { getProjectBySlug, getProjectImageUrl } from '@/lib/projects'
 import { Project } from '@/lib/data'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, use } from 'react'
 import { motion } from 'framer-motion'
 
 type Props = {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 export default function ProjectPage({ params }: Props) {
+  const { slug } = use(params)
   const [imageErrors, setImageErrors] = useState<{ [key: string]: boolean }>({})
   const [project, setProject] = useState<Project | null>(null)
   const [loading, setLoading] = useState(true)
@@ -24,7 +25,7 @@ export default function ProjectPage({ params }: Props) {
   useEffect(() => {
     async function fetchProject() {
       try {
-        const data = await getProjectBySlug(params.slug)
+        const data = await getProjectBySlug(slug)
         setProject(data)
       } catch (err) {
         console.error('Error fetching project:', err)
@@ -34,7 +35,7 @@ export default function ProjectPage({ params }: Props) {
     }
 
     fetchProject()
-  }, [params.slug])
+  }, [slug])
 
   if (loading) {
     return (
