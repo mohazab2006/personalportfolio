@@ -1,12 +1,8 @@
 import type { Metadata } from 'next'
 import { generateMetadata as generateSEOMetadata, generatePersonSchema } from '@/lib/seo'
 import Providers from '@/components/Providers'
-import dynamic from 'next/dynamic'
+import ClientLayout from '@/components/ClientLayout'
 import '@/styles/globals.css'
-
-// Lazy load heavy visual components for better performance
-const CustomCursor = dynamic(() => import('@/components/CustomCursor'), { ssr: false })
-const InteractiveBackground = dynamic(() => import('@/components/InteractiveBackground'), { ssr: false })
 
 export const metadata: Metadata = generateSEOMetadata()
 
@@ -24,10 +20,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="bg-dark-bg text-dark-text">
         <Providers>
-          <CustomCursor />
-          
-          {/* Interactive Particle Background */}
-          <InteractiveBackground />
+          {/* Client-side only components (cursor + background) */}
+          <ClientLayout />
           
           {/* Smooth Animated Background Orbs */}
           <div className="fixed inset-0 -z-20 overflow-hidden" aria-hidden="true">
