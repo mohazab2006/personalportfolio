@@ -3,7 +3,6 @@
 import { motion } from 'framer-motion'
 import { PERSONAL } from '@/lib/data'
 import { HERO_LAYOUT } from '@/lib/utils'
-import HolographicCard from './HolographicCard'
 import { lazy, Suspense } from 'react'
 
 // Lazy load Hero3D for better performance
@@ -54,32 +53,64 @@ export default function Hero() {
 
         {/* Content */}
         <div className="relative z-10 mx-auto flex min-h-screen max-w-4xl flex-col items-center justify-center px-6 text-center lg:px-8">
-          <motion.h1
-            className="mb-6 text-5xl font-bold text-light-text dark:text-dark-text md:text-7xl lg:text-8xl"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-          >
-            Hello, my name is{' '}
-            <span className="bg-gradient-to-r from-purple-500 to-purple-700 bg-clip-text text-transparent">
-              Mohamed Azab
-            </span>
-          </motion.h1>
+          <div className="mb-4">
+            <motion.p 
+              className="text-lg font-medium text-white/70 md:text-xl mb-2"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+            >
+              hi, my name is
+            </motion.p>
+            <h1 className="text-4xl md:text-6xl lg:text-[7rem] xl:text-[9rem] flex flex-wrap justify-center leading-[0.9]" style={{ fontFamily: 'var(--font-display)', letterSpacing: '0.02em' }}>
+              {"MOHAMED AZAB".split("").map((char, index) => (
+                <span 
+                  key={index} 
+                  className="inline-block overflow-hidden"
+                >
+                  <motion.span
+                    className="name-letter inline-block text-white cursor-default"
+                    initial={{ y: "100%", opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{
+                      duration: 0.8,
+                      ease: [0.16, 1, 0.3, 1],
+                      delay: 0.3 + index * 0.04,
+                    }}
+                  >
+                    {char === " " ? "\u00A0" : char}
+                  </motion.span>
+                </span>
+              ))}
+            </h1>
+          </div>
 
           <motion.p
-            className="mb-8 max-w-2xl text-lg text-light-text/70 dark:text-dark-text/70 md:text-xl"
-            initial={{ opacity: 0, y: 30 }}
+            className="mb-2 max-w-2xl text-lg text-white font-medium md:text-xl leading-relaxed"
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.7 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 1.5 }}
           >
-            I'm a Computer Science student at Carleton University (AI/ML & Security). A passionate learner who enjoys building secure, reliable software.
+            A <span className="text-purple-500 font-bold">Computer Science</span> student at{' '}
+            <span className="text-purple-500 font-bold">Carleton University</span> (AI/ML & Security).
+          </motion.p>
+
+          <motion.p
+            className="mb-8 max-w-2xl text-base text-white font-medium md:text-lg"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 1.7 }}
+          >
+            A passionate learner who enjoys building{' '}
+            <span className="text-purple-500 font-bold">secure</span>,{' '}
+            <span className="text-purple-500 font-bold">reliable</span> software.
           </motion.p>
 
           <motion.div
             className="flex flex-wrap items-center justify-center gap-4"
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.9 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 1.9 }}
           >
             {socialIcons.map((social, index) => (
               <motion.a
@@ -90,9 +121,128 @@ export default function Hero() {
                 className="magnetic-button group flex h-12 w-12 items-center justify-center rounded-full bg-purple-500/10 text-purple-500 transition-all hover:bg-purple-500 hover:text-white"
                 whileHover={{ scale: 1.1, rotate: 5 }}
                 whileTap={{ scale: 0.95 }}
-                initial={{ opacity: 0, scale: 0.5 }}
+                initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: 1.1 + index * 0.1 }}
+                transition={{ duration: 0.4, delay: 2.1 + index * 0.1 }}
+                aria-label={social.name}
+              >
+                <div className="h-5 w-5">{social.icon}</div>
+              </motion.a>
+            ))}
+          </motion.div>
+
+          {/* Scroll Indicator */}
+          <motion.div
+            className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 2.2, duration: 0.6 }}
+          >
+            <motion.div
+              className="relative flex items-center justify-center"
+              animate={{ y: [0, 8, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+            >
+              {/* Outer ring */}
+              <div className="absolute w-10 h-10 rounded-full border-2 border-white/30" />
+              {/* Chevron */}
+              <svg 
+                className="w-5 h-5 text-white/60" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2} 
+                  d="M19 9l-7 7-7-7" 
+                />
+              </svg>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+    )
+  }
+
+  // Split Layout (Default) - Now centered without holographic card
+  return (
+    <section className="relative min-h-screen overflow-hidden bg-transparent">
+      <div className="mx-auto flex min-h-screen max-w-7xl flex-col justify-center px-6 lg:px-8">
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <motion.p 
+              className="text-lg font-medium text-white/70 md:text-xl"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+            >
+              hi, my name is
+            </motion.p>
+            <h1 className="text-5xl md:text-7xl lg:text-[8rem] xl:text-[10rem] flex flex-wrap leading-[0.9]" style={{ fontFamily: 'var(--font-display)', letterSpacing: '0.02em' }}>
+              {"MOHAMED AZAB".split("").map((char, index) => (
+                <span 
+                  key={index} 
+                  className="inline-block overflow-hidden"
+                >
+                  <motion.span
+                    className="name-letter inline-block text-white cursor-default"
+                    initial={{ y: "100%", opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{
+                      duration: 0.8,
+                      ease: [0.16, 1, 0.3, 1],
+                      delay: 0.3 + index * 0.04,
+                    }}
+                  >
+                    {char === " " ? "\u00A0" : char}
+                  </motion.span>
+                </span>
+              ))}
+            </h1>
+          </div>
+
+          <motion.p
+            className="max-w-3xl text-xl text-white font-medium md:text-2xl leading-relaxed mt-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 1.5 }}
+          >
+            A <span className="text-purple-500 font-bold">Computer Science</span> student at{' '}
+            <span className="text-purple-500 font-bold">Carleton University</span> (AI/ML & Security).
+          </motion.p>
+
+          <motion.p
+            className="max-w-3xl text-lg text-white font-medium md:text-xl mt-2"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 1.7 }}
+          >
+            A passionate learner who enjoys building{' '}
+            <span className="text-purple-500 font-bold">secure</span>,{' '}
+            <span className="text-purple-500 font-bold">reliable</span> software.
+          </motion.p>
+
+          {/* Social Icons Row */}
+          <motion.div
+            className="flex flex-wrap items-center gap-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 1.9 }}
+          >
+            {socialIcons.map((social, index) => (
+              <motion.a
+                key={social.name}
+                href={social.url}
+                target={social.name !== 'Email' ? '_blank' : undefined}
+                rel={social.name !== 'Email' ? 'noopener noreferrer' : undefined}
+                className="magnetic-button group flex h-12 w-12 items-center justify-center rounded-full bg-purple-500/10 text-purple-500 transition-all hover:bg-purple-500 hover:text-white"
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                whileTap={{ scale: 0.95 }}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4, delay: 2.1 + index * 0.1 }}
                 aria-label={social.name}
               >
                 <div className="h-5 w-5">{social.icon}</div>
@@ -100,82 +250,38 @@ export default function Hero() {
             ))}
           </motion.div>
         </div>
-      </section>
-    )
-  }
-
-  // Split Layout (Default)
-  return (
-    <section className="relative min-h-screen overflow-hidden bg-transparent">
-      <div className="mx-auto grid min-h-screen max-w-7xl grid-cols-1 items-center gap-12 px-6 py-20 lg:grid-cols-2 lg:px-8">
-        {/* Left: Text Content */}
-        <motion.div
-          className="space-y-8"
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-        >
-          <div className="space-y-4">
-            <motion.h1
-              className="text-5xl font-bold text-light-text dark:text-dark-text md:text-6xl lg:text-7xl"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-            >
-              Hello, my name is{' '}
-              <span className="bg-gradient-to-r from-purple-500 to-purple-700 bg-clip-text text-transparent">
-                Mohamed Azab
-              </span>
-            </motion.h1>
-
-            <motion.p
-              className="text-lg text-light-text/70 dark:text-dark-text/70 md:text-xl"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.8 }}
-            >
-              I'm a Computer Science student at Carleton University (AI/ML & Security). A passionate learner
-              who enjoys building secure, reliable software.
-            </motion.p>
-          </div>
-
-          {/* Social Icons Row */}
-          <motion.div
-            className="flex flex-wrap items-center gap-4"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1 }}
-          >
-            {socialIcons.map((social, index) => (
-              <motion.a
-                key={social.name}
-                href={social.url}
-                target={social.name !== 'Email' ? '_blank' : undefined}
-                rel={social.name !== 'Email' ? 'noopener noreferrer' : undefined}
-                className="magnetic-button group flex h-12 w-12 items-center justify-center rounded-full bg-purple-500/10 text-purple-500 transition-all hover:bg-purple-500 hover:text-white"
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                whileTap={{ scale: 0.95 }}
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: 1.2 + index * 0.1 }}
-                aria-label={social.name}
-              >
-                <div className="h-5 w-5">{social.icon}</div>
-              </motion.a>
-            ))}
-          </motion.div>
-        </motion.div>
-
-        {/* Right: Holographic Card */}
-        <motion.div
-          className="relative flex h-[400px] items-center justify-center lg:h-[600px]"
-          initial={{ opacity: 0, x: 50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, delay: 0.7 }}
-        >
-          <HolographicCard />
-        </motion.div>
       </div>
+
+      {/* Scroll Indicator */}
+      <motion.div
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2.5, duration: 0.6 }}
+      >
+        <motion.div
+          className="relative flex items-center justify-center"
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+        >
+          {/* Outer ring */}
+          <div className="absolute w-10 h-10 rounded-full border-2 border-white/30" />
+          {/* Chevron */}
+          <svg 
+            className="w-5 h-5 text-white/60" 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+          >
+            <path 
+              strokeLinecap="round" 
+              strokeLinejoin="round" 
+              strokeWidth={2} 
+              d="M19 9l-7 7-7-7" 
+            />
+          </svg>
+        </motion.div>
+      </motion.div>
     </section>
   )
 }

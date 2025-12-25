@@ -33,7 +33,7 @@ export default function Section({ id, title, subtitle, children, className = '' 
           animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          <h2 className="mb-4 text-4xl font-bold text-light-text dark:text-dark-text md:text-5xl">
+          <h2 className="section-title mb-4 text-4xl font-bold text-light-text dark:text-dark-text md:text-5xl cursor-default">
             {title}
           </h2>
           {subtitle && (

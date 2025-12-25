@@ -63,19 +63,19 @@ export const SERVICES: ServiceItem[] = [
     icon: '🌐',
     title: 'Web Development',
     description:
-      'Learned to build modern full-stack applications to develop solutions for clients, businesses, and personal projects. Currently learning advanced performance optimization, microservices architecture, SEO optimization, and enterprise-level scalability patterns to deliver better experiences.',
+      'Full-stack apps with Next.js, React, and Tailwind. I\'ve built client sites, nonprofit platforms, and personal projects—handling frontend, backend, databases, and deployment.',
   },
   {
     icon: '🤖',
     title: 'AI & Machine Learning',
     description:
-      'Chose AI & ML as my university stream because I\'m fascinated by its potential. Eagerly exploring AI applications in cybersecurity and commerce, learning machine learning frameworks and building intelligent solutions.',
+      'AI is the future—I\'m learning how it transforms cybersecurity, automation, and everything in between. Love experimenting with models (like Snaggy on this site) and building tools that actually think.',
   },
   {
     icon: '🔒',
     title: 'Security & Infrastructure',
     description:
-      'Passionate about building secure, resilient infrastructure using Docker, DevOps methods, and infrastructure automation. Learning cybersecurity practices, AI-enhanced security, and enterprise-level security patterns to protect applications and business assets.',
+      'I believe in owning the stack—running my own server taught me more than any course could. Docker, Nginx, VPNs, the whole deal. Security is built into every project from day one, not an afterthought.',
   },
 ]
 
@@ -203,7 +203,7 @@ export const INTERESTS: InterestItem[] = [
   {
     icon: '🤖',
     title: 'AI & ML',
-    text: 'Applied ML and small RAG systems.',
+    text: 'The future is here—I\'m obsessed with it.',
   },
   {
     icon: '🔒',
@@ -235,9 +235,9 @@ export const INTEREST_STORIES = {
     highlights: ['Started with HTML/CSS/JS', 'Explored libraries & frameworks', 'Built personal home server', 'Continuous framework learning', 'Infrastructure ownership']
   },
   'AI & ML': {
-    title: 'Exploring AI Across Industries',
-    story: "My fascination with AI began during my studies at Carleton University, and I'm actively exploring its applications across different domains. I'm particularly interested in AI's role in cybersecurity - how machine learning can detect threats and protect systems. I'm also learning about AI in commerce, understanding how it can optimize business processes and customer experiences. The intersection of AI and web development is where I see the future, and I'm constantly learning new techniques through online courses, research papers, and hands-on projects to build smarter applications.",
-    highlights: ['AI in cybersecurity', 'AI in commerce', 'Machine learning applications', 'Continuous learning', 'Research & experimentation']
+    title: 'The Future Is Already Here',
+    story: "AI isn't just a trend—it's reshaping everything. I'm genuinely obsessed with understanding how it works and where it's going. I built Snaggy, the AI chatbot on this site, to prove to myself I could create something that actually thinks and responds intelligently. But that's just the start. I'm deep into learning how AI transforms cybersecurity—detecting threats, analyzing patterns, staying ahead of attackers. Every new model, every breakthrough, I'm there experimenting. This isn't just a career path for me; it's what I think about constantly.",
+    highlights: ['Built Snaggy (this site\'s AI)', 'AI in cybersecurity', 'Experimenting with new models', 'Genuinely obsessed', 'Always learning']
   },
   'Cybersecurity': {
     title: 'Protecting Digital Assets',

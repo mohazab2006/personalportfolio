@@ -77,43 +77,54 @@ export default function CustomCursor() {
 
   if (!hasHover || prefersReducedMotion || !isVisible) return null
 
-  const cursorSize = cursorState === 'link' || cursorState === 'magnetic' ? 40 : 20
+  const dotSize = 12
+  const ringSize = cursorState === 'link' || cursorState === 'magnetic' ? 60 : 44
 
   return (
-    <motion.div
-      className="custom-cursor pointer-events-none fixed left-0 top-0 z-[9999] mix-blend-difference"
-      style={{
-        x: cursorXSpring,
-        y: cursorYSpring,
-      }}
-    >
+    <>
+      {/* Inner dot - follows cursor exactly */}
       <motion.div
-        className="relative"
-        animate={{
-          width: cursorSize,
-          height: cursorSize,
-          x: -cursorSize / 2,
-          y: -cursorSize / 2,
-        }}
-        transition={{
-          type: 'spring',
-          stiffness: 500,
-          damping: 28,
+        className="pointer-events-none fixed left-0 top-0 z-[10000] mix-blend-difference"
+        style={{
+          x: cursorX,
+          y: cursorY,
         }}
       >
-        <div className="absolute inset-0 rounded-full bg-white" />
-        {(cursorState === 'link' || cursorState === 'magnetic') && (
-          <motion.div
-            className="absolute inset-0 rounded-full bg-white opacity-30"
-            initial={{ scale: 1 }}
-            animate={{ scale: 1.5 }}
-            transition={{
-              duration: 0.3,
-            }}
-          />
-        )}
+        <div 
+          className="rounded-full bg-white"
+          style={{
+            width: dotSize,
+            height: dotSize,
+            marginLeft: -dotSize / 2,
+            marginTop: -dotSize / 2,
+          }}
+        />
       </motion.div>
-    </motion.div>
+
+      {/* Outer ring - follows with spring delay */}
+      <motion.div
+        className="pointer-events-none fixed left-0 top-0 z-[9999] mix-blend-difference"
+        style={{
+          x: cursorXSpring,
+          y: cursorYSpring,
+        }}
+      >
+        <motion.div
+          className="rounded-full border-2 border-white"
+          animate={{
+            width: ringSize,
+            height: ringSize,
+            marginLeft: -ringSize / 2,
+            marginTop: -ringSize / 2,
+          }}
+          transition={{
+            type: 'spring',
+            stiffness: 400,
+            damping: 25,
+          }}
+        />
+      </motion.div>
+    </>
   )
 }
 
