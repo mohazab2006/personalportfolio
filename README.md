@@ -40,7 +40,7 @@
 - Progressive Web App (PWA) ready
 
 ### ⚡ **Performance Optimized**
-- Server-side rendering (SSR) with Next.js 14
+- Server-side rendering (SSR) with Next.js 16
 - Image optimization with Next.js Image component
 - Lazy loading for below-the-fold content
 - Code splitting and bundle optimization
