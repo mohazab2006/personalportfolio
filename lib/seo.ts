@@ -6,7 +6,7 @@ export const siteConfig = {
   description:
     'Computer Science student at Carleton University specializing in AI & Machine Learning. Portfolio featuring Snaggy, an AI chatbot assistant. Passionate about building modern web applications, machine learning, and cybersecurity.',
   url: 'https://mohamedazab.dev', // Your actual domain
-  ogImage: '/og-image.jpg',
+  ogImage: '/og-image.jpg?v=2',
   links: {
     github: PERSONAL.github,
     linkedin: PERSONAL.linkedin,
