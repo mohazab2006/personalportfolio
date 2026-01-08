@@ -166,15 +166,16 @@ export const PROJECTS: Project[] = [
 // Work Experience
 export const EXPERIENCE: ExperienceItem[] = [
   {
-    role: 'Freelance Web Developer',
-    org: 'Ottawa, Ontario',
-    dates: 'Oct 2023 – Present',
+    role: 'Software Developer (Web Applications)',
+    org: 'Independent Projects',
+    dates: 'October 2023 – Present',
     bullets: [
-      'Built and deployed full-stack sites (MILK Inc., Empower Orphans, HT Clean) with Next.js + Supabase + Docker.',
-      'Managed self-hosted infra via Nginx + Let\'s Encrypt, improving reliability and security.',
-      'Integrated booking/donations/events APIs and admin dashboards to streamline operations.',
+      'Designed, built, and deployed production-ready web applications for small businesses and non-profits including HT Clean, Salam Society, Milk Inc., Empower Orphans, and others.',
+      'Delivered real-world features such as booking and donation flows, admin dashboards, authentication, role-based access control, API-driven integrations, and lightweight AI-powered user assistance features.',
+      'Real-world, internship-level experience building and deploying full-stack web applications for real users, including feature development, basic AI integration, deployment, and security-aware design.',
+      'Managed self-hosted infrastructure via Nginx reverse proxy and Let\'s Encrypt SSL/TLS certificates, ensuring secure HTTPS access and reliable uptime for client websites.',
     ],
-    tags: ['Next.js', 'Supabase', 'Docker', 'Nginx', 'SSL'],
+    tags: ['Next.js', 'TypeScript', 'Supabase', 'Docker', 'Nginx', 'SSL', 'AI Integration', 'RBAC'],
   },
 ]
 
