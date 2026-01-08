@@ -170,12 +170,12 @@ export const EXPERIENCE: ExperienceItem[] = [
     org: 'Independent Projects',
     dates: 'October 2023 – Present',
     bullets: [
-      'Designed, built, and deployed production-ready web applications for small businesses and non-profits including HT Clean, Salam Society, Milk Inc., Empower Orphans, and others.',
-      'Delivered real-world features such as booking and donation flows, admin dashboards, authentication, role-based access control, API-driven integrations, and lightweight AI-powered user assistance features.',
-      'Real-world, internship-level experience building and deploying full-stack web applications for real users, including feature development, basic AI integration, deployment, and security-aware design.',
-      'Managed self-hosted infrastructure via Nginx reverse proxy and Let\'s Encrypt SSL/TLS certificates, ensuring secure HTTPS access and reliable uptime for client websites.',
+      'Built and deployed production-ready web applications for small businesses and non-profits (HT Clean, Salam Society, Milk Inc., Empower Orphans).',
+      'Delivered real-world features: booking flows, admin dashboards, authentication, RBAC, API integrations, and AI-powered assistance.',
+      'Full-stack development with feature development, AI integration, deployment, and security-aware design.',
+      'Managed self-hosted infrastructure with Nginx reverse proxy and Let\'s Encrypt SSL/TLS certificates.',
     ],
-    tags: ['Next.js', 'TypeScript', 'Supabase', 'Docker', 'Nginx', 'SSL', 'AI Integration', 'RBAC'],
+    tags: ['Next.js', 'TypeScript', 'Supabase', 'Docker', 'Nginx', 'SSL', 'AI Integration', 'RBAC', 'Full-Stack'],
   },
 ]
 
