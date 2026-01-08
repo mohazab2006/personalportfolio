@@ -85,7 +85,7 @@ export const EDUCATION: EducationItem[] = [
     degree: 'B.Comp (Honours), AI & Machine Learning + Cybersecurity, Minor in Business',
     school: 'Carleton University — Ottawa, ON',
     years: '2024 – 2028 (Expected)',
-    gpa: 'GPA: 3.90 / 4.00',
+    gpa: 'GPA: 10.80 / 12.00',
     courses: [
       'Data Structures',
       'Systems Programming (C)',
@@ -95,6 +95,7 @@ export const EDUCATION: EducationItem[] = [
       'Discrete Structures',
       'Calculus',
       'Probability Models',
+      'Algorithms',
     ],
   },
 ]
