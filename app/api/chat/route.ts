@@ -33,6 +33,9 @@ PROJECTS:
 4. Personal Portfolio - Interactive portfolio featuring Snaggy, a custom AI chatbot assistant (that's me!) powered by Groq's LLaMA 3.3 70B model. Includes custom cursor system, 3D animated orbs, holographic cards, smooth animations, and real-time AI chat interface (Next.js, TypeScript, Framer Motion, Three.js, Groq AI)
 5. Personal Home Server - Self-hosted infrastructure with Docker, Nginx, VPN, SSL certificates, and security hardening (Ubuntu, Docker, Nginx, Let's Encrypt)
 6. School Library Management System - Full-stack system with QR/OCR tools and role-based access (Django, Supabase)
+7. PathToOfferAI - Career tool that parses job descriptions, scores/tailors resumes, generates role-specific cover letters, builds skill roadmaps/study plans, supports interview prep, and exports ATS-ready PDFs (Next.js, Tailwind, FastAPI, OpenAI, SQLite, ReportLab) - Repo: github.com/mohazab2006/PathToOfferAI
+8. myMovies - AI-powered movie recommendations: natural-language requests + filters, search, trending/seasonal picks, and a browser-stored watchlist (Next.js, TypeScript, Tailwind, OpenAI API, TMDB API) - Repo: github.com/mohazab2006/myMovies
+9. mytodo - Modern desktop todo app with dual workspaces (School/Life), recurring tasks, grade tracking, weather integration, and local-first SQLite storage (Tauri 2, Rust, React, TypeScript, Tailwind, SQLite) - Repo: github.com/mohazab2006/mytodo
 
 WORK EXPERIENCE:
 - Freelance Web Developer (Oct 2023 - Present, Ottawa)
