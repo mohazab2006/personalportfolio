@@ -19,7 +19,7 @@ const containerVars = {
     opacity: 0,
     scale: 1.5,
     filter: "blur(20px)",
-    transition: { duration: 0.8, ease: "easeInOut" }
+    transition: { duration: 1.2, ease: "easeInOut" }
   }
 }
 
@@ -62,8 +62,8 @@ export default function Loader({ onComplete }: { onComplete: () => void }) {
             setShowPortal(true)
             setTimeout(() => {
               onComplete()
-            }, prefersReducedMotion ? 300 : 1000)
-          }, prefersReducedMotion ? 500 : 2000) // Keep WELCOME visible longer
+            }, prefersReducedMotion ? 350 : 1300)
+          }, prefersReducedMotion ? 600 : 2600) // Keep WELCOME visible a bit longer
         }, 500)
       } else {
         setProgress(Math.min(current, 100))
@@ -195,9 +195,11 @@ export default function Loader({ onComplete }: { onComplete: () => void }) {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 1.2, duration: 0.8 }}
-                  className="text-xs md:text-sm uppercase tracking-[0.8em] text-cyan-500/60 font-medium"
+                  className="px-6 text-center text-[10px] font-medium uppercase tracking-[0.35em] text-cyan-500/60 md:px-0 md:text-sm md:tracking-[0.8em]"
                 >
-                  MOHAMED AZAB • PORTFOLIO 2026
+                  <span className="block md:inline md:whitespace-nowrap">MOHAMED AZAB</span>
+                  <span className="hidden md:inline">&nbsp;•&nbsp;</span>
+                  <span className="mt-2 block md:mt-0 md:inline md:whitespace-nowrap">PORTFOLIO 2026</span>
                 </motion.p>
               </motion.div>
             )}
