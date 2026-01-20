@@ -7,7 +7,7 @@ export default function AvatarPlaceholder() {
     <div className="relative flex items-center justify-center">
       {/* Background glow */}
       <motion.div
-        className="absolute inset-0 rounded-full bg-purple-500/20 blur-3xl"
+        className="absolute inset-0 rounded-full bg-dark-accent/10 blur-3xl"
         animate={{
           scale: [1, 1.2, 1],
           opacity: [0.3, 0.5, 0.3],
@@ -125,7 +125,7 @@ export default function AvatarPlaceholder() {
         {/* Shoulders/Shirt */}
         <path
           d="M 70 145 Q 100 155, 130 145 L 130 200 L 70 200 Z"
-          fill="#6D28D9"
+          fill="#2DD4BF"
         />
       </motion.svg>
 
@@ -133,7 +133,7 @@ export default function AvatarPlaceholder() {
       {[...Array(8)].map((_, i) => (
         <motion.div
           key={i}
-          className="absolute h-2 w-2 rounded-full bg-purple-400/30"
+          className="absolute h-2 w-2 rounded-full bg-dark-accent/20"
           style={{
             left: `${20 + i * 10}%`,
             top: `${30 + (i % 3) * 20}%`,

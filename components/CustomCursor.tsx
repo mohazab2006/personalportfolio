@@ -84,14 +84,14 @@ export default function CustomCursor() {
     <>
       {/* Inner dot - follows cursor exactly */}
       <motion.div
-        className="pointer-events-none fixed left-0 top-0 z-[10000] mix-blend-difference"
+        className="pointer-events-none fixed left-0 top-0 z-[11000] mix-blend-difference"
         style={{
           x: cursorX,
           y: cursorY,
         }}
       >
-        <div 
-          className="rounded-full bg-white"
+          <div
+            className="rounded-full bg-white shadow-[0_0_18px_rgba(45,212,191,0.8)]"
           style={{
             width: dotSize,
             height: dotSize,
@@ -103,14 +103,14 @@ export default function CustomCursor() {
 
       {/* Outer ring - follows with spring delay */}
       <motion.div
-        className="pointer-events-none fixed left-0 top-0 z-[9999] mix-blend-difference"
+        className="pointer-events-none fixed left-0 top-0 z-[10999] mix-blend-difference"
         style={{
           x: cursorXSpring,
           y: cursorYSpring,
         }}
       >
         <motion.div
-          className="rounded-full border-2 border-white"
+          className="rounded-full border-2 border-dark-accent/90 shadow-[0_0_22px_rgba(45,212,191,0.4)]"
           animate={{
             width: ringSize,
             height: ringSize,

@@ -61,7 +61,7 @@ export default function HolographicCard() {
     <div className="relative flex items-center justify-center p-8">
       {/* Glow effect */}
       <motion.div
-        className="absolute inset-0 rounded-3xl bg-gradient-to-br from-purple-500/30 via-pink-500/20 to-blue-500/30 blur-3xl"
+        className="absolute inset-0 rounded-3xl bg-gradient-to-br from-dark-accent/20 via-cyan-500/10 to-blue-500/20 blur-3xl"
         animate={{
           scale: isHovered ? [1, 1.2, 1] : 1,
           opacity: isHovered ? [0.3, 0.6, 0.3] : 0.3,
@@ -89,11 +89,13 @@ export default function HolographicCard() {
       >
         {/* Card Container */}
         <motion.div
-          className="relative h-full w-full overflow-hidden rounded-3xl border border-purple-500/30 bg-gradient-to-br from-dark-bg via-purple-950/50 to-dark-bg shadow-2xl"
+          className="relative h-full w-full overflow-hidden rounded-3xl border border-white/12 bg-gradient-to-br from-dark-bg via-dark-accent/5 to-dark-bg shadow-2xl sweep-hover light-highlight"
           style={{
             transformStyle: 'preserve-3d',
           }}
         >
+          {/* Top highlight */}
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
           {/* Holographic shimmer overlay */}
           <motion.div
             className="absolute inset-0 opacity-40"
@@ -101,10 +103,10 @@ export default function HolographicCard() {
               background: `
                 radial-gradient(
                   circle at ${glowX.get()} ${glowY.get()},
-                  rgba(139, 92, 246, 0.4) 0%,
-                  rgba(236, 72, 153, 0.3) 25%,
-                  rgba(59, 130, 246, 0.3) 50%,
-                  rgba(16, 185, 129, 0.2) 75%,
+                  rgba(45, 212, 191, 0.22) 0%,
+                  rgba(45, 212, 191, 0.12) 35%,
+                  rgba(6, 182, 212, 0.10) 55%,
+                  rgba(45, 212, 191, 0.06) 75%,
                   transparent 100%
                 )
               `,
@@ -125,10 +127,10 @@ export default function HolographicCard() {
               background: `
                 linear-gradient(
                   135deg,
-                  rgba(139, 92, 246, 0.3),
-                  rgba(236, 72, 153, 0.3),
-                  rgba(59, 130, 246, 0.3),
-                  rgba(16, 185, 129, 0.3)
+                  rgba(45, 212, 191, 0.10),
+                  rgba(45, 212, 191, 0.06),
+                  rgba(6, 182, 212, 0.08),
+                  rgba(45, 212, 191, 0.08)
                 )
               `,
             }}
@@ -149,7 +151,7 @@ export default function HolographicCard() {
               background: `
                 repeating-linear-gradient(
                   0deg,
-                  rgba(139, 92, 246, 0.1) 0px,
+                  rgba(45, 212, 191, 0.06) 0px,
                   transparent 2px,
                   transparent 4px
                 )
@@ -175,15 +177,15 @@ export default function HolographicCard() {
             {/* Your Photo */}
             <div className="relative mb-8 h-48 w-48 lg:h-64 lg:w-64">
               <motion.div
-                className="absolute inset-0 rounded-full bg-gradient-to-br from-purple-400 via-purple-500 to-purple-600"
+                className="absolute inset-0 rounded-full bg-gradient-to-br from-dark-accent via-cyan-500 to-cyan-600"
                 animate={{
                   boxShadow: isHovered
                     ? [
-                        '0 0 20px rgba(139, 92, 246, 0.5)',
-                        '0 0 40px rgba(139, 92, 246, 0.8)',
-                        '0 0 20px rgba(139, 92, 246, 0.5)',
+                        '0 0 18px rgba(45, 212, 191, 0.25)',
+                        '0 0 36px rgba(45, 212, 191, 0.45)',
+                        '0 0 18px rgba(45, 212, 191, 0.25)',
                       ]
-                    : '0 0 20px rgba(139, 92, 246, 0.3)',
+                    : '0 0 18px rgba(45, 212, 191, 0.15)',
                 }}
                 transition={{
                   duration: 2,
@@ -215,13 +217,13 @@ export default function HolographicCard() {
                       blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgZmlsbD0iIzI5MjUzYSIvPjwvc3ZnPg=="
                     />
                   ) : (
-                    <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-purple-500/20 to-purple-700/20">
-                      <div className="h-8 w-8 animate-spin rounded-full border-4 border-purple-500 border-t-transparent"></div>
+                    <div className="flex h-full w-full items-center justify-center bg-white/5">
+                      <div className="h-8 w-8 animate-spin rounded-full border-4 border-dark-accent/40 border-t-dark-accent"></div>
                     </div>
                   )}
                   {/* Holographic overlay on photo */}
                   <motion.div
-                    className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-transparent to-blue-500/20"
+                    className="absolute inset-0 bg-gradient-to-br from-dark-accent/10 via-transparent to-blue-500/10"
                     animate={{
                       opacity: isHovered ? [0.2, 0.4, 0.2] : 0.2,
                     }}
@@ -235,7 +237,7 @@ export default function HolographicCard() {
 
               {/* Rotating ring */}
               <motion.div
-                className="absolute -inset-4 rounded-full border-2 border-purple-400/30"
+                className="absolute -inset-4 rounded-full border-2 border-white/15 shadow-[0_0_20px_rgba(255,255,255,0.05)]"
                 animate={{
                   rotate: 360,
                   scale: isHovered ? [1, 1.1, 1] : 1,
@@ -255,7 +257,7 @@ export default function HolographicCard() {
               }}
             >
               <motion.h3
-                className="mb-2 bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-3xl font-bold text-transparent lg:text-4xl"
+                className="mb-2 bg-gradient-to-r from-white via-dark-accent to-white bg-clip-text text-3xl font-bold text-transparent lg:text-4xl"
                 animate={{
                   backgroundPosition: isHovered ? ['0%', '100%', '0%'] : '0%',
                 }}
@@ -270,7 +272,7 @@ export default function HolographicCard() {
                 Mohamed Azab
               </motion.h3>
               <motion.p
-                className="text-sm text-purple-300 lg:text-base"
+                className="text-sm text-dark-accent/80 lg:text-base"
                 animate={{
                   opacity: isHovered ? [0.7, 1, 0.7] : 0.7,
                 }}
@@ -284,10 +286,10 @@ export default function HolographicCard() {
             </motion.div>
 
             {/* Decorative corners */}
-            <div className="absolute left-4 top-4 h-8 w-8 border-l-2 border-t-2 border-purple-400/50" />
-            <div className="absolute right-4 top-4 h-8 w-8 border-r-2 border-t-2 border-purple-400/50" />
-            <div className="absolute bottom-4 left-4 h-8 w-8 border-b-2 border-l-2 border-purple-400/50" />
-            <div className="absolute bottom-4 right-4 h-8 w-8 border-b-2 border-r-2 border-purple-400/50" />
+            <div className="absolute left-4 top-4 h-8 w-8 border-l-2 border-t-2 border-dark-accent/30" />
+            <div className="absolute right-4 top-4 h-8 w-8 border-r-2 border-t-2 border-dark-accent/30" />
+            <div className="absolute bottom-4 left-4 h-8 w-8 border-b-2 border-l-2 border-dark-accent/30" />
+            <div className="absolute bottom-4 right-4 h-8 w-8 border-b-2 border-r-2 border-dark-accent/30" />
           </motion.div>
 
           {/* Glowing edge */}
@@ -295,17 +297,17 @@ export default function HolographicCard() {
             className="absolute inset-0 rounded-3xl"
             style={{
               boxShadow: isHovered
-                ? '0 0 40px rgba(139, 92, 246, 0.6), inset 0 0 40px rgba(139, 92, 246, 0.2)'
-                : '0 0 20px rgba(139, 92, 246, 0.3)',
+                ? '0 0 40px rgba(45, 212, 191, 0.22), inset 0 0 40px rgba(45, 212, 191, 0.08)'
+                : '0 0 20px rgba(45, 212, 191, 0.12)',
             }}
             animate={{
               boxShadow: isHovered
                 ? [
-                    '0 0 40px rgba(139, 92, 246, 0.6), inset 0 0 40px rgba(139, 92, 246, 0.2)',
-                    '0 0 60px rgba(139, 92, 246, 0.8), inset 0 0 60px rgba(139, 92, 246, 0.3)',
-                    '0 0 40px rgba(139, 92, 246, 0.6), inset 0 0 40px rgba(139, 92, 246, 0.2)',
+                    '0 0 40px rgba(45, 212, 191, 0.22), inset 0 0 40px rgba(45, 212, 191, 0.08)',
+                    '0 0 60px rgba(45, 212, 191, 0.32), inset 0 0 60px rgba(45, 212, 191, 0.12)',
+                    '0 0 40px rgba(45, 212, 191, 0.22), inset 0 0 40px rgba(45, 212, 191, 0.08)',
                   ]
-                : '0 0 20px rgba(139, 92, 246, 0.3)',
+                : '0 0 20px rgba(45, 212, 191, 0.12)',
             }}
             transition={{
               duration: 2,
@@ -318,7 +320,7 @@ export default function HolographicCard() {
         {[...Array(8)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute h-2 w-2 rounded-full bg-purple-400/60"
+            className="absolute h-2 w-2 rounded-full bg-dark-accent/40"
             style={{
               left: `${10 + i * 12}%`,
               top: `${20 + (i % 3) * 25}%`,
@@ -339,7 +341,7 @@ export default function HolographicCard() {
 
       {/* Interaction hint */}
       <motion.p
-        className="absolute -bottom-8 text-center text-xs text-purple-400/60"
+        className="absolute -bottom-8 text-center text-xs text-dark-accent/50"
         initial={{ opacity: 0 }}
         animate={{ opacity: [0.5, 1, 0.5] }}
         transition={{ delay: 1, duration: 2, repeat: Infinity }}

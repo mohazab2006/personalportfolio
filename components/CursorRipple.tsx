@@ -38,7 +38,7 @@ export default function CursorRipple() {
         {ripples.map((ripple) => (
           <motion.div
             key={ripple.id}
-            className="absolute h-8 w-8 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-purple-400 shadow-lg shadow-purple-400/50"
+            className="absolute h-8 w-8 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-white/70 shadow-lg shadow-white/20"
             style={{
               left: ripple.x,
               top: ripple.y,

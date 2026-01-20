@@ -16,7 +16,7 @@ export default function About() {
       id="about"
       title="About Me"
       subtitle="Get to know me and what I'm passionate about"
-      className="bg-light-bg dark:bg-dark-bg"
+      className="bg-light-bg dark:bg-transparent"
     >
       <div className="space-y-16">
         {/* Hero-style About */}
@@ -29,14 +29,14 @@ export default function About() {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6 }}
           >
-            <h3 className="text-3xl font-bold text-white md:text-4xl leading-tight">
+            <h3 className="text-3xl font-bold text-white md:text-4xl leading-tight drop-shadow-[0_0_10px_rgba(255,255,255,0.1)]">
               Curious by nature,{' '}
-              <span className="text-purple-500">driven by code</span>.
+              <span className="text-dark-accent text-neon">driven by code</span>.
             </h3>
             <p className="text-lg text-white/70 leading-relaxed">
-              Computer Science student at <span className="text-purple-500 font-semibold">Carleton University</span> specializing 
-              in <span className="text-purple-500 font-semibold">AI & Machine Learning</span> with a focus on{' '}
-              <span className="text-purple-500 font-semibold">Cybersecurity</span>.
+              Computer Science student at <span className="text-dark-accent font-semibold">Carleton University</span> specializing 
+              in <span className="text-dark-accent font-semibold">AI & Machine Learning</span> with a focus on{' '}
+              <span className="text-dark-accent font-semibold">Cybersecurity</span>.
             </p>
             <p className="text-lg text-white/60 leading-relaxed">
               I enjoy tackling complex problems and creating solutions that make a real impact—whether 
@@ -55,15 +55,15 @@ export default function About() {
             {highlights.map((item, index) => (
               <motion.div
                 key={item.label}
-                className="rounded-xl bg-white/5 border border-white/10 p-6 text-center lg:text-left"
+                className="group relative overflow-hidden rounded-xl bg-[#0F0F12]/80 backdrop-blur-xl border border-white/5 p-6 text-center lg:text-left transition-all duration-500 hover:border-dark-accent/40 hover:shadow-[0_0_20px_rgba(45,212,191,0.1)] light-highlight"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.3 + index * 0.1 }}
-                whileHover={{ scale: 1.02, borderColor: 'rgba(139, 92, 246, 0.3)' }}
+                whileHover={{ scale: 1.02, borderColor: 'rgba(45, 212, 191, 0.3)' }}
               >
                 <p className="text-sm text-white/50 uppercase tracking-wider mb-1">{item.label}</p>
-                <p className="text-xl font-bold text-purple-500">{item.value}</p>
+                <p className="text-xl font-bold text-dark-accent text-neon">{item.value}</p>
               </motion.div>
             ))}
           </motion.div>
@@ -83,7 +83,7 @@ export default function About() {
             {SERVICES.map((service, index) => (
               <motion.div
                 key={service.title}
-                className="group relative rounded-2xl bg-white/5 border border-white/10 p-8 transition-all hover:border-purple-500/30"
+                className="group relative rounded-2xl bg-[#0F0F12]/80 backdrop-blur-xl border border-white/5 p-8 transition-all duration-500 hover:border-dark-accent/40 hover:shadow-[0_0_30px_rgba(45,212,191,0.1)] light-highlight sweep-hover"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.3 }}

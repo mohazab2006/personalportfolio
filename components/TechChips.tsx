@@ -22,8 +22,8 @@ export default function TechChips() {
             onClick={() => setActiveCategory(category)}
             className={`rounded-full px-6 py-2 text-sm font-medium transition-all ${
               activeCategory === category
-                ? 'bg-purple-500 text-white shadow-lg'
-                : 'bg-light-bg-secondary text-light-text hover:bg-purple-500/10 dark:bg-dark-bg-secondary dark:text-dark-text'
+                ? 'bg-white text-black shadow-lg shadow-white/10'
+                : 'bg-white/5 text-white/80 hover:bg-dark-accent/10 hover:text-dark-accent active:bg-white/10 active:text-white dark:bg-white/5'
             }`}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -111,13 +111,13 @@ function TechBar({
     >
       <div className="flex items-center justify-between mb-2">
         <span className="font-medium text-light-text dark:text-dark-text">{tech}</span>
-        <span className="text-sm text-purple-500">{proficiency}%</span>
+        <span className="text-sm text-dark-accent/80 group-hover:text-dark-accent">{proficiency}%</span>
       </div>
 
       {/* Progress Bar */}
       <div className="relative h-3 overflow-hidden rounded-full bg-light-bg-secondary dark:bg-dark-bg-secondary">
         <motion.div
-          className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-purple-500 to-purple-600"
+          className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-dark-accent via-cyan-400 to-white shadow-[0_0_15px_rgba(45,212,191,0.6)]"
           initial={{ width: 0 }}
           animate={{ width: `${proficiency}%` }}
           transition={{ duration: 1, delay: index * 0.1 + 0.2, ease: 'easeOut' }}
@@ -125,7 +125,7 @@ function TechBar({
 
         {/* Glow effect */}
         <motion.div
-          className="absolute inset-y-0 left-0 rounded-full bg-purple-400/50 blur-sm"
+          className="absolute inset-y-0 left-0 rounded-full bg-dark-accent/60 blur-[6px]"
           initial={{ width: 0 }}
           animate={{ width: `${proficiency}%` }}
           transition={{ duration: 1, delay: index * 0.1 + 0.2, ease: 'easeOut' }}

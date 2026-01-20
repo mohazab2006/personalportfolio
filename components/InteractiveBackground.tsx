@@ -1,12 +1,13 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { useReducedMotion } from '@/lib/utils'
 
 export default function InteractiveBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const prefersReducedMotion = useReducedMotion()
+  const [isMobileLikeRender, setIsMobileLikeRender] = useState(false)
 
   useEffect(() => {
     if (prefersReducedMotion) return
@@ -25,6 +26,20 @@ export default function InteractiveBackground() {
     resizeCanvas()
     window.addEventListener('resize', resizeCanvas)
 
+    const isCoarsePointer =
+      typeof window !== 'undefined' &&
+      window.matchMedia &&
+      window.matchMedia('(hover: none) and (pointer: coarse)').matches
+    const isSmallScreen = typeof window !== 'undefined' ? window.innerWidth < 768 : false
+    const isMobileLike = isCoarsePointer || isSmallScreen
+
+    // Expose mobile detection to render (no window usage during SSR render)
+    setIsMobileLikeRender(isMobileLike)
+
+    const particleCount = isMobileLike ? 45 : 100
+    const connectionDistance = isMobileLike ? 120 : 150
+    const mouseRadius = isMobileLike ? 140 : 200
+
     // Particle class
     class Particle {
       x: number
@@ -33,16 +48,17 @@ export default function InteractiveBackground() {
       vy: number
       size: number
       opacity: number
-      hue: number
+      brightness: number
 
       constructor() {
         this.x = Math.random() * canvas!.width
         this.y = Math.random() * canvas!.height
         this.vx = (Math.random() - 0.5) * 1.5
         this.vy = (Math.random() - 0.5) * 1.5
-        this.size = Math.random() * 3 + 1.5
-        this.opacity = Math.random() * 0.4 + 0.5
-        this.hue = Math.random() * 40 + 260 // Purple range
+        this.size = Math.random() * 3 + 2
+        // Slightly brighter particles for a more "alive" feel
+        this.opacity = Math.random() * 0.25 + 0.2
+        this.brightness = Math.random() * 20 + 90
       }
 
       update() {
@@ -59,9 +75,9 @@ export default function InteractiveBackground() {
           this.y = Math.max(0, Math.min(canvas!.height, this.y))
         }
 
-        // Twinkle effect
-        this.opacity += (Math.random() - 0.5) * 0.03
-        this.opacity = Math.max(0.3, Math.min(1, this.opacity))
+        // Twinkle effect - smoother and slightly more visible
+        this.opacity += (Math.random() - 0.5) * 0.02
+        this.opacity = Math.max(0.15, Math.min(0.4, this.opacity))
       }
 
       draw() {
@@ -70,29 +86,29 @@ export default function InteractiveBackground() {
         // Outer glow
         ctx.beginPath()
         const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size * 4)
-        gradient.addColorStop(0, `hsla(${this.hue}, 90%, 70%, ${this.opacity * 0.8})`)
-        gradient.addColorStop(0.5, `hsla(${this.hue}, 90%, 65%, ${this.opacity * 0.4})`)
-        gradient.addColorStop(1, `hsla(${this.hue}, 90%, 60%, 0)`)
+        gradient.addColorStop(0, `rgba(255, 255, 255, ${this.opacity * 0.6})`)
+        gradient.addColorStop(0.5, `rgba(255, 255, 255, ${this.opacity * 0.25})`)
+        gradient.addColorStop(1, `rgba(255, 255, 255, 0)`)
         ctx.fillStyle = gradient
         ctx.arc(this.x, this.y, this.size * 4, 0, Math.PI * 2)
         ctx.fill()
 
         // Core
         ctx.beginPath()
-        ctx.fillStyle = `hsla(${this.hue}, 100%, 85%, ${this.opacity})`
+        ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2)
         ctx.fill()
 
         // Bright center
         ctx.beginPath()
-        ctx.fillStyle = `hsla(${this.hue}, 100%, 95%, ${this.opacity * 0.8})`
+        ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity * 0.8})`
         ctx.arc(this.x, this.y, this.size * 0.4, 0, Math.PI * 2)
         ctx.fill()
       }
     }
 
     // Mouse tracking
-    const mouse = { x: canvas.width / 2, y: canvas.height / 2, radius: 200 }
+    const mouse = { x: canvas.width / 2, y: canvas.height / 2, radius: mouseRadius }
     const handleMouseMove = (e: MouseEvent) => {
       mouse.x = e.clientX
       mouse.y = e.clientY
@@ -101,7 +117,6 @@ export default function InteractiveBackground() {
     window.addEventListener('mousemove', handleMouseMove)
 
     // Create particles
-    const particleCount = 100
     const particles: Particle[] = []
     for (let i = 0; i < particleCount; i++) {
       particles.push(new Particle())
@@ -146,10 +161,10 @@ export default function InteractiveBackground() {
           const dy = p1.y - p2.y
           const distance = Math.sqrt(dx * dx + dy * dy)
 
-          if (distance < 150) {
+          if (distance < connectionDistance) {
             ctx.beginPath()
-            const opacity = (1 - distance / 150) * 0.3
-            ctx.strokeStyle = `hsla(270, 90%, 75%, ${opacity})`
+            const opacity = (1 - distance / connectionDistance) * 0.35
+            ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`
             ctx.lineWidth = 1
             ctx.moveTo(p1.x, p1.y)
             ctx.lineTo(p2.x, p2.y)
@@ -158,14 +173,24 @@ export default function InteractiveBackground() {
         })
       })
 
-      // Draw mouse cursor effect
+      // Draw mouse cursor effect (High-light flashlight feel)
       if (mouse.x !== canvas.width / 2 || mouse.y !== canvas.height / 2) {
         ctx.beginPath()
-        const mouseGradient = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, mouse.radius)
-        mouseGradient.addColorStop(0, 'hsla(270, 90%, 70%, 0.1)')
-        mouseGradient.addColorStop(1, 'hsla(270, 90%, 70%, 0)')
+        const mouseGradient = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, mouse.radius * 1.5)
+        mouseGradient.addColorStop(0, 'rgba(45, 212, 191, 0.08)')
+        mouseGradient.addColorStop(0.4, 'rgba(45, 212, 191, 0.03)')
+        mouseGradient.addColorStop(1, 'rgba(45, 212, 191, 0)')
         ctx.fillStyle = mouseGradient
-        ctx.arc(mouse.x, mouse.y, mouse.radius, 0, Math.PI * 2)
+        ctx.arc(mouse.x, mouse.y, mouse.radius * 1.5, 0, Math.PI * 2)
+        ctx.fill()
+        
+        // Specular flare point
+        ctx.beginPath()
+        const flareGradient = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 20)
+        flareGradient.addColorStop(0, 'rgba(255, 255, 255, 0.15)')
+        flareGradient.addColorStop(1, 'rgba(255, 255, 255, 0)')
+        ctx.fillStyle = flareGradient
+        ctx.arc(mouse.x, mouse.y, 20, 0, Math.PI * 2)
         ctx.fill()
       }
 
@@ -186,20 +211,23 @@ export default function InteractiveBackground() {
     return null
   }
 
+  const sparklesCount = isMobileLikeRender ? 10 : 20
+  const shootingStarsCount = isMobileLikeRender ? 1 : 3
+
   return (
     <>
       <canvas
         ref={canvasRef}
-        className="fixed inset-0 z-[5]"
+        className="fixed inset-0 -z-10 opacity-80 sm:opacity-100"
         style={{ pointerEvents: 'none' }}
       />
 
       {/* Additional floating sparkles */}
-      <div className="fixed inset-0 z-[5] pointer-events-none overflow-hidden">
-        {[...Array(20)].map((_, i) => (
+      <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
+        {[...Array(sparklesCount)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute h-1 w-1 rounded-full bg-purple-400/60"
+            className="absolute h-1 w-1 rounded-full bg-white/60 shadow-[0_0_10px_rgba(255,255,255,0.4)]"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
@@ -220,11 +248,11 @@ export default function InteractiveBackground() {
       </div>
 
       {/* Shooting stars */}
-      <div className="fixed inset-0 z-[5] pointer-events-none overflow-hidden">
-        {[...Array(3)].map((_, i) => (
+      <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
+        {[...Array(shootingStarsCount)].map((_, i) => (
           <motion.div
             key={`star-${i}`}
-            className="absolute h-0.5 w-12 bg-gradient-to-r from-transparent via-purple-300 to-transparent"
+            className="absolute h-0.5 w-16 bg-gradient-to-r from-transparent via-white/90 to-transparent shadow-[0_0_15px_rgba(255,255,255,0.5)]"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 50}%`,

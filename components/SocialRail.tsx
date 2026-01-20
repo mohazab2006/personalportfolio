@@ -63,20 +63,20 @@ export default function SocialRail() {
       transition={{ duration: 0.5, delay: 1 }}
     >
       {socialLinks.map((link, index) => (
-        <motion.a
-          key={link.name}
-          href={link.url}
-          target={link.name !== 'Email' ? '_blank' : undefined}
-          rel={link.name !== 'Email' ? 'noopener noreferrer' : undefined}
-          className="magnetic-button group relative text-dark-text transition-colors hover:text-purple-500"
-          whileHover={{ scale: 1.2, y: -4 }}
-          whileTap={{ scale: 0.95 }}
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.3, delay: 1.2 + index * 0.1 }}
-          aria-label={link.name}
-        >
-          <div className="scale-125">{link.icon}</div>
+          <motion.a
+            key={link.name}
+            href={link.url}
+            target={link.name !== 'Email' ? '_blank' : undefined}
+            rel={link.name !== 'Email' ? 'noopener noreferrer' : undefined}
+            className="liquid-glass magnetic-button group relative flex h-12 w-12 items-center justify-center rounded-xl text-dark-text active:text-white"
+            whileHover={{ scale: 1.2, y: -4 }}
+            whileTap={{ scale: 0.95 }}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.3, delay: 1.2 + index * 0.1 }}
+            aria-label={link.name}
+          >
+            <div className="scale-110">{link.icon}</div>
 
           {/* Tooltip */}
           <span className="absolute left-full ml-4 whitespace-nowrap rounded-md bg-dark-bg-secondary px-3 py-2 text-sm font-medium text-dark-text opacity-0 transition-opacity group-hover:opacity-100">
@@ -87,7 +87,7 @@ export default function SocialRail() {
 
       {/* Vertical Line */}
       <motion.div
-        className="h-32 w-px bg-gradient-to-b from-purple-500/50 to-transparent"
+        className="h-32 w-px bg-gradient-to-b from-dark-accent/50 to-transparent"
         initial={{ scaleY: 0 }}
         animate={{ scaleY: 1 }}
         transition={{ duration: 0.5, delay: 1.5 }}

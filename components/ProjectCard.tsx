@@ -19,21 +19,25 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
 
   return (
     <motion.div
-      className="group relative overflow-hidden rounded-2xl bg-light-bg-secondary shadow-lg transition-all hover:shadow-2xl dark:bg-dark-bg-secondary"
+      className="group relative overflow-hidden rounded-2xl bg-[#0F0F12]/80 backdrop-blur-xl transition-all duration-500 hover:shadow-[0_0_40px_rgba(45,212,191,0.15)] dark:bg-dark-bg-secondary/80 dark:backdrop-blur-lg border border-white/5 hover:border-dark-accent/40 sweep-hover light-highlight"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      whileHover={{ y: -8, scale: 1.02 }}
+      whileHover={{ y: -8, scale: 1.01 }}
     >
+      {/* Glossy Reflection Overlay */}
+      <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-transparent via-white/[0.02] to-white/[0.05] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+      
       {/* Image */}
-      <div className="relative aspect-video w-full overflow-hidden bg-gradient-to-br from-purple-500/10 to-purple-700/10">
+      <div className="relative aspect-video w-full overflow-hidden">
+        <div className="absolute inset-0 z-10 bg-gradient-to-b from-transparent via-transparent to-[#0F0F12]" />
         {!imageError ? (
           <Image
             src={imagePath}
             alt={project.title}
             fill
-            className="object-cover transition-transform duration-500 group-hover:scale-110"
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
             onError={() => setImageError(true)}
             loading="lazy"
             sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -41,7 +45,7 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
             blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgZmlsbD0iIzI5MjUzYSIvPjwvc3ZnPg=="
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center">
+          <div className="flex h-full w-full items-center justify-center bg-white/5">
             <div className="text-center">
               <div className="mb-2 text-4xl">🖼️</div>
               <p className="text-sm text-light-text/50 dark:text-dark-text/50">
@@ -51,17 +55,17 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
           </div>
         )}
 
-        {/* Overlay on hover */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+        {/* Top edge highlight */}
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
       </div>
 
       {/* Content */}
-      <div className="p-6">
-        <h3 className="mb-2 text-xl font-bold text-light-text dark:text-dark-text">
+      <div className="relative z-20 p-6">
+        <h3 className="mb-2 text-xl font-bold text-white group-hover:text-dark-accent transition-colors duration-300">
           {project.title}
         </h3>
 
-        <p className="mb-4 line-clamp-2 text-sm text-light-text/70 dark:text-dark-text/70">
+        <p className="mb-4 line-clamp-2 text-sm text-white/60 leading-relaxed group-hover:text-white/80 transition-colors">
           {project.description.split('.')[0]}.
         </p>
 
@@ -70,16 +74,11 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
           {project.stack.slice(0, 4).map((tech) => (
             <span
               key={tech}
-              className="rounded-full bg-purple-500/10 px-3 py-1 text-xs font-medium text-purple-600 dark:text-purple-400"
+              className="rounded-full bg-white/5 border border-white/10 px-3 py-1 text-xs font-medium text-white/70 backdrop-blur-sm group-hover:border-dark-accent/20 group-hover:bg-dark-accent/5 transition-all"
             >
               {tech}
             </span>
           ))}
-          {project.stack.length > 4 && (
-            <span className="rounded-full bg-purple-500/10 px-3 py-1 text-xs font-medium text-purple-600 dark:text-purple-400">
-              +{project.stack.length - 4}
-            </span>
-          )}
         </div>
 
         {/* Links */}
@@ -89,7 +88,7 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
               href={project.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="magnetic-button flex items-center gap-2 rounded-lg bg-light-bg px-4 py-2 text-sm font-medium text-light-text transition-all hover:bg-purple-500 hover:text-white dark:bg-dark-bg dark:text-dark-text"
+              className="magnetic-button flex items-center gap-2 rounded-lg bg-white/5 border border-white/10 px-4 py-2 text-sm font-medium text-white transition-all hover:bg-white/10 hover:border-white/30 active:scale-95"
               onClick={(e) => e.stopPropagation()}
             >
               <svg
@@ -109,7 +108,7 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
               href={project.demo}
               target="_blank"
               rel="noopener noreferrer"
-              className="magnetic-button flex items-center gap-2 rounded-lg bg-purple-500 px-4 py-2 text-sm font-medium text-white transition-all hover:bg-purple-600"
+              className="magnetic-button flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-medium text-black transition-all hover:bg-dark-accent hover:shadow-[0_0_20px_rgba(45,212,191,0.4)] active:scale-95"
               onClick={(e) => e.stopPropagation()}
             >
               <svg
@@ -132,16 +131,16 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
 
           <Link
             href={`/projects/${project.slug}`}
-            className="magnetic-button ml-auto flex items-center gap-2 text-sm font-medium text-purple-500 transition-all hover:gap-3"
+            className="magnetic-button ml-auto flex items-center gap-2 text-sm font-medium text-white/60 transition-all hover:text-dark-accent active:text-white"
           >
-            View Details
+            Details
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth={2}
               stroke="currentColor"
-              className="h-4 w-4"
+              className="h-4 w-4 transition-transform group-hover:translate-x-1"
             >
               <path
                 strokeLinecap="round"
@@ -153,8 +152,8 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
         </div>
       </div>
 
-      {/* Glow effect */}
-      <div className="absolute inset-0 -z-10 rounded-2xl bg-purple-500/0 opacity-0 blur-xl transition-all group-hover:bg-purple-500/20 group-hover:opacity-100" />
+      {/* Dynamic Glow background */}
+      <div className="absolute inset-0 -z-10 rounded-2xl bg-dark-accent/0 opacity-0 blur-2xl transition-all duration-500 group-hover:bg-dark-accent/5 group-hover:opacity-100" />
     </motion.div>
   )
 }

@@ -13,7 +13,7 @@ export default function Interests() {
       id="interests"
       title="Interests"
       subtitle="What I'm passionate about and continuously learning"
-      className="bg-light-bg-secondary dark:bg-dark-bg-secondary"
+      className="bg-light-bg-secondary dark:bg-transparent"
     >
       {/* Instruction text */}
       <motion.div
@@ -33,7 +33,7 @@ export default function Interests() {
           <motion.button
             key={interest.title}
             onClick={() => setSelectedInterest(selectedInterest === interest.title ? null : interest.title)}
-            className="group relative overflow-hidden rounded-2xl bg-light-bg p-6 text-left transition-all hover:shadow-xl dark:bg-dark-bg"
+            className="group relative overflow-hidden rounded-2xl bg-light-bg p-6 text-left transition-all hover:shadow-xl dark:bg-dark-bg-secondary/80 dark:backdrop-blur-lg border border-transparent dark:border-white/10 hover:border-dark-accent/30"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
@@ -53,12 +53,12 @@ export default function Interests() {
             <p className="text-light-text/70 dark:text-dark-text/70">{interest.text}</p>
 
             {/* Click indicator */}
-            <div className="mt-3 text-xs text-purple-500 opacity-0 transition-opacity group-hover:opacity-100">
+            <div className="mt-3 text-xs text-dark-accent/80 opacity-0 transition-opacity group-hover:opacity-100">
               Click to learn more →
             </div>
 
             {/* Hover glow effect */}
-            <div className="absolute inset-0 -z-10 bg-gradient-to-br from-purple-500/0 to-purple-600/0 opacity-0 transition-all group-hover:from-purple-500/5 group-hover:to-purple-600/5 group-hover:opacity-100" />
+            <div className="absolute inset-0 -z-10 bg-gradient-to-br from-white/0 to-white/0 opacity-0 transition-all group-hover:from-dark-accent/10 group-hover:to-dark-accent/5 group-hover:opacity-100" />
           </motion.button>
         ))}
       </div>
@@ -68,19 +68,19 @@ export default function Interests() {
         {selectedInterest && (
           <motion.div
             key={selectedInterest}
-            className="mt-12 rounded-2xl bg-light-bg p-8 shadow-lg dark:bg-dark-bg"
+            className="mt-12 rounded-2xl bg-dark-bg-secondary/80 backdrop-blur-xl border border-white/10 p-8 shadow-2xl"
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.95 }}
             transition={{ duration: 0.4 }}
           >
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-2xl font-bold text-light-text dark:text-dark-text">
+              <h3 className="text-2xl font-bold text-white">
                 {INTEREST_STORIES[selectedInterest as keyof typeof INTEREST_STORIES].title}
               </h3>
               <button
                 onClick={() => setSelectedInterest(null)}
-                className="text-light-text/50 hover:text-light-text dark:text-dark-text/50 dark:hover:text-dark-text"
+                className="text-white/50 hover:text-white transition-colors"
               >
                 <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -88,7 +88,7 @@ export default function Interests() {
               </button>
             </div>
 
-            <p className="mb-6 text-lg leading-relaxed text-light-text/80 dark:text-dark-text/80">
+            <p className="mb-6 text-lg leading-relaxed text-white/80">
               {INTEREST_STORIES[selectedInterest as keyof typeof INTEREST_STORIES].story}
             </p>
 
@@ -96,7 +96,7 @@ export default function Interests() {
               {INTEREST_STORIES[selectedInterest as keyof typeof INTEREST_STORIES].highlights.map((highlight, index) => (
                 <span
                   key={index}
-                  className="rounded-full bg-purple-500/10 px-3 py-1 text-sm text-purple-600 dark:text-purple-400"
+                  className="rounded-full bg-white/5 border border-white/10 px-3 py-1 text-sm text-white/70"
                 >
                   {highlight}
                 </span>

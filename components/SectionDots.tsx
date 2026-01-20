@@ -44,10 +44,10 @@ export default function SectionDots() {
             aria-label={`Navigate to ${link}`}
           >
             <motion.div
-              className={`h-2 w-2 rounded-full transition-all ${
+              className={`h-2.5 w-2.5 rounded-full transition-all duration-500 ${
                 isActive
-                  ? 'bg-purple-500'
-                  : 'bg-dark-text/20 group-hover:bg-dark-text/40 dark:bg-dark-text/20'
+                  ? 'bg-dark-accent shadow-[0_0_15px_rgba(45,212,191,0.8)] scale-125'
+                  : 'bg-white/20 group-hover:bg-dark-accent/70 dark:bg-white/20'
               }`}
               animate={{
                 scale: isActive ? 1.5 : 1,

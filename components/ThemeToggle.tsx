@@ -23,7 +23,7 @@ export default function ThemeToggle() {
   return (
     <motion.button
       onClick={() => setTheme(isDark ? 'light' : 'dark')}
-      className="magnetic-button relative h-9 w-9 rounded-lg bg-white/5 backdrop-blur-sm transition-colors hover:bg-white/10"
+      className="magnetic-button relative h-9 w-9 rounded-lg bg-white/5 backdrop-blur-sm transition-all hover:bg-dark-accent/10 hover:shadow-[0_0_15px_rgba(45,212,191,0.3)] border border-white/5 hover:border-dark-accent/30"
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       aria-label="Toggle theme"
@@ -59,7 +59,7 @@ export default function ThemeToggle() {
           viewBox="0 0 24 24"
           strokeWidth={2}
           stroke="currentColor"
-          className="absolute h-5 w-5 text-purple-400"
+          className="absolute h-5 w-5 text-white/70"
           initial={false}
           animate={{
             opacity: isDark ? 0 : 1,

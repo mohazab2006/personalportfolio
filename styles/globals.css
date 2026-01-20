@@ -50,6 +50,46 @@ body {
   max-width: 100vw;
 }
 
+/* Ambient animated background layer (more light-filled) */
+.ambient-gradient {
+  opacity: 0.25;
+  background:
+    radial-gradient(1200px circle at 10% 10%, rgba(45, 212, 191, 0.2) 0%, transparent 50%),
+    radial-gradient(1400px circle at 90% 80%, rgba(6, 182, 212, 0.15) 0%, transparent 50%),
+    radial-gradient(1000px circle at 50% 50%, rgba(45, 212, 191, 0.08) 0%, transparent 60%);
+  animation: ambientShift 20s ease-in-out infinite alternate;
+  filter: blur(60px);
+}
+
+@keyframes ambientShift {
+  0% { transform: translate3d(-2%, -2%, 0) rotate(0deg); }
+  50% { transform: translate3d(2%, 1%, 0) rotate(2deg); }
+  100% { transform: translate3d(-1%, 2%, 0) rotate(-1deg); }
+}
+
+/* Liquid Glass Effect */
+.liquid-glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 
+    inset 0 1px 2px rgba(255, 255, 255, 0.15),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.2),
+    0 10px 40px -10px rgba(0, 0, 0, 0.5);
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.liquid-glass:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(45, 212, 191, 0.4);
+  box-shadow: 
+    inset 0 1px 4px rgba(255, 255, 255, 0.2),
+    0 0 25px rgba(45, 212, 191, 0.2),
+    0 15px 50px -10px rgba(0, 0, 0, 0.6);
+  transform: translateY(-2px);
+}
+
 /* Hide default cursor on desktop */
 @media (hover: hover) and (pointer: fine) {
   * {
@@ -67,38 +107,7 @@ body {
   mix-blend-mode: difference;
 }
 
-/* Grain Overlay */
-.grain-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 9998;
-  opacity: 0.06;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-  animation: grain 8s steps(10) infinite;
-}
-
-@keyframes grain {
-  0%, 100% { transform: translate(0, 0); }
-  10% { transform: translate(-5%, -10%); }
-  20% { transform: translate(-15%, 5%); }
-  30% { transform: translate(7%, -25%); }
-  40% { transform: translate(-5%, 25%); }
-  50% { transform: translate(-15%, 10%); }
-  60% { transform: translate(15%, 0%); }
-  70% { transform: translate(0%, 15%); }
-  80% { transform: translate(3%, 35%); }
-  90% { transform: translate(-10%, 10%); }
-}
-
 /* High Contrast Mode */
-.high-contrast .grain-overlay {
-  display: none;
-}
-
 .high-contrast {
   --contrast-boost: 1.2;
 }
@@ -107,17 +116,95 @@ body {
   filter: contrast(var(--contrast-boost));
 }
 
-/* Glass Effect */
+/* Glass Effect (Enhanced for high-light feel) */
 .glass {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    inset 0 1px 1px rgba(255, 255, 255, 0.1),
+    0 4px 24px rgba(0, 0, 0, 0.4);
 }
 
 .dark .glass {
-  background: rgba(22, 22, 29, 0.7);
-  border: 1px solid rgba(139, 92, 246, 0.1);
+  background: rgba(15, 15, 18, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.05),
+    0 8px 32px 0 rgba(0, 0, 0, 0.8);
+}
+
+/* Light Sweep Animation */
+@keyframes sweep {
+  0% { transform: translateX(-100%) skewX(-15deg); }
+  100% { transform: translateX(200%) skewX(-15deg); }
+}
+
+.sweep-hover {
+  position: relative;
+  overflow: hidden;
+}
+
+.sweep-hover::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.05),
+    transparent
+  );
+  transform: translateX(-100%) skewX(-15deg);
+  pointer-events: none;
+}
+
+.sweep-hover:hover::after {
+  animation: sweep 1.5s ease-in-out;
+}
+
+/* Specular Light Highlight */
+.light-highlight {
+  position: relative;
+}
+
+.light-highlight::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 20% 0%,
+    rgba(45, 212, 191, 0.15) 0%,
+    transparent 40%
+  );
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* Neon Text Glow */
+.text-neon {
+  text-shadow: 
+    0 0 5px rgba(45, 212, 191, 0.2),
+    0 0 10px rgba(45, 212, 191, 0.1);
+}
+
+/* Background "Lens Flare" or Light Leak */
+.light-leak {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: -5;
+  background: 
+    radial-gradient(circle at 80% 20%, rgba(45, 212, 191, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 10% 80%, rgba(6, 182, 212, 0.05) 0%, transparent 35%);
+  filter: blur(60px);
 }
 
 .light .glass {
@@ -126,23 +213,23 @@ body {
 }
 
 /* Glow Effects */
-.glow-purple {
-  box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+.glow-cyan {
+  box-shadow: 0 0 20px rgba(45, 212, 191, 0.3);
 }
 
-.glow-purple-strong {
-  box-shadow: 0 0 30px rgba(139, 92, 246, 0.5), 0 0 60px rgba(139, 92, 246, 0.3);
+.glow-cyan-strong {
+  box-shadow: 0 0 30px rgba(45, 212, 191, 0.5), 0 0 60px rgba(45, 212, 191, 0.3);
 }
 
 /* Selection */
 ::selection {
-  background-color: rgba(139, 92, 246, 0.3);
+  background-color: rgba(45, 212, 191, 0.3);
   color: inherit;
 }
 
 /* Focus Visible */
 *:focus-visible {
-  outline: 2px solid #8B5CF6;
+  outline: 2px solid #2DD4BF;
   outline-offset: 2px;
 }
 
@@ -177,7 +264,7 @@ body {
 }
 
 .prose a {
-  @apply text-purple-500 hover:text-purple-400 underline;
+  @apply text-white underline decoration-white/30 underline-offset-4 hover:text-cyan-400 hover:decoration-cyan-400/60;
 }
 
 /* Remove cursor for touch devices */
@@ -198,7 +285,8 @@ html {
 }
 
 .name-letter:hover {
-  color: #8B5CF6 !important;
+  color: #2DD4BF !important;
+  text-shadow: 0 0 15px rgba(45, 212, 191, 0.6);
 }
 
 /* Section title hover effect */
@@ -207,6 +295,6 @@ html {
 }
 
 .section-title:hover {
-  color: #8B5CF6 !important;
+  color: #2DD4BF !important;
 }
 

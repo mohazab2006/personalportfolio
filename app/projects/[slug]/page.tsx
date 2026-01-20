@@ -40,7 +40,7 @@ export default function ProjectPage({ params }: Props) {
   if (loading) {
     return (
       <div className="min-h-screen bg-dark-bg text-dark-text flex items-center justify-center">
-        <div className="h-12 w-12 animate-spin rounded-full border-4 border-purple-500 border-t-transparent"></div>
+        <div className="h-12 w-12 animate-spin rounded-full border-4 border-dark-accent/40 border-t-dark-accent"></div>
       </div>
     )
   }
@@ -62,7 +62,7 @@ export default function ProjectPage({ params }: Props) {
           {/* Back Button */}
           <Link
             href="/#portfolio"
-            className="group mb-8 inline-flex items-center gap-2 text-purple-500 transition-all hover:gap-3"
+            className="group mb-8 inline-flex items-center gap-2 text-dark-accent transition-all hover:gap-3 hover:text-dark-accent active:text-white"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -92,7 +92,7 @@ export default function ProjectPage({ params }: Props) {
             {project.stack.map((tech) => (
               <span
                 key={tech}
-                className="rounded-full bg-purple-500/10 px-4 py-2 text-sm font-medium text-purple-600 dark:text-purple-400"
+                className="rounded-full bg-white/5 border border-white/10 px-4 py-2 text-sm font-medium text-white/80 hover:bg-dark-accent/10 hover:text-dark-accent"
               >
                 {tech}
               </span>
@@ -106,7 +106,7 @@ export default function ProjectPage({ params }: Props) {
                 href={project.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="magnetic-button flex items-center gap-2 rounded-lg bg-light-bg px-6 py-3 font-medium text-light-text transition-all hover:bg-purple-500 hover:text-white dark:bg-dark-bg dark:text-dark-text"
+                className="magnetic-button flex items-center gap-2 rounded-lg bg-white/5 border border-white/15 px-6 py-3 font-medium text-white transition-all hover:bg-dark-accent/10 hover:border-dark-accent/40 active:bg-white/10"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -125,7 +125,7 @@ export default function ProjectPage({ params }: Props) {
                 href={project.demo}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="magnetic-button flex items-center gap-2 rounded-lg bg-purple-500 px-6 py-3 font-medium text-white transition-all hover:bg-purple-600"
+                className="magnetic-button flex items-center gap-2 rounded-lg bg-white px-6 py-3 font-medium text-black transition-all hover:bg-dark-accent hover:text-black active:bg-white active:text-black"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -208,7 +208,7 @@ export default function ProjectPage({ params }: Props) {
                           blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTI4MCIgaGVpZ2h0PSI3MjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEyODAiIGhlaWdodD0iNzIwIiBmaWxsPSIjMjkyNTNhIi8+PC9zdmc+"
                         />
                       ) : (
-                        <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-purple-500/10 to-purple-700/10">
+                        <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-white/6 to-white/2">
                           <div className="text-center">
                             <div className="mb-4 text-6xl">🖼️</div>
                             <p className="text-dark-text/50">Screenshot placeholder</p>

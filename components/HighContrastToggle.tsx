@@ -31,7 +31,7 @@ export default function HighContrastToggle() {
   return (
     <motion.button
       onClick={toggleHighContrast}
-      className="magnetic-button relative h-9 w-9 rounded-lg bg-white/5 backdrop-blur-sm transition-colors hover:bg-white/10"
+      className="magnetic-button relative h-9 w-9 rounded-lg bg-white/5 backdrop-blur-sm transition-all hover:bg-dark-accent/10 hover:shadow-[0_0_15px_rgba(45,212,191,0.3)] border border-white/5 hover:border-dark-accent/30"
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       aria-label="Toggle high contrast"
@@ -46,7 +46,7 @@ export default function HighContrastToggle() {
           stroke="currentColor"
           className="h-5 w-5"
           animate={{
-            color: isHighContrast ? '#a78bfa' : 'currentColor',
+            color: isHighContrast ? 'rgba(255, 255, 255, 0.95)' : 'currentColor',
           }}
         >
           <path
@@ -60,7 +60,7 @@ export default function HighContrastToggle() {
         {/* Indicator dot */}
         {isHighContrast && (
           <motion.div
-            className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-purple-400"
+            className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-white"
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             exit={{ scale: 0 }}

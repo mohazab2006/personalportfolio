@@ -13,14 +13,14 @@ export default function SplitTimeline() {
       id="experience"
       title="Experience"
       subtitle="My professional journey, education, and leadership"
-      className="bg-light-bg dark:bg-dark-bg"
+      className="bg-light-bg dark:bg-transparent"
     >
       <div className="space-y-8">
         {/* Toggle Button */}
         <div className="flex justify-center">
           <motion.button
             onClick={() => setIsSingleColumn(!isSingleColumn)}
-            className="magnetic-button flex items-center gap-2 rounded-full bg-purple-500/10 px-6 py-3 text-sm font-medium text-purple-600 transition-all hover:bg-purple-500/20 dark:text-purple-400"
+            className="magnetic-button flex items-center gap-2 rounded-full bg-white/5 border border-white/15 px-6 py-3 text-sm font-medium text-white/80 transition-all hover:bg-dark-accent/10 hover:border-dark-accent/40 hover:text-dark-accent active:bg-white/10 active:text-white"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -82,7 +82,7 @@ function DoubleColumnTimeline() {
         {/* Center Line - Hidden on mobile, visible on lg+ */}
         <div className="relative hidden w-1 lg:block">
           <motion.div
-            className="h-full w-full bg-gradient-to-b from-purple-500 via-purple-600 to-purple-700"
+            className="h-full w-full bg-gradient-to-b from-dark-accent/60 via-dark-accent/30 to-dark-accent/10"
             initial={{ scaleY: 0 }}
             animate={{ scaleY: 1 }}
             transition={{ duration: 1, delay: 0.3 }}
@@ -117,7 +117,7 @@ function SingleColumnTimeline() {
       transition={{ duration: 0.3 }}
     >
       {/* Vertical Line */}
-      <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-purple-500 via-purple-600 to-purple-700 md:left-8" />
+      <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-dark-accent/60 via-dark-accent/30 to-dark-accent/10 md:left-8" />
 
       <div className="space-y-12 pl-8 md:pl-20">
         {allItems.map((item, index) => (
@@ -151,7 +151,7 @@ function TimelineCard({ item, index, side }: TimelineCardProps) {
       {/* Connector Dot - Hidden on mobile for split view, visible on lg+ */}
       {side !== 'single' && (
         <motion.div
-          className={`absolute top-8 hidden h-3 w-3 rounded-full bg-purple-400 shadow-lg shadow-purple-500/50 lg:block ${
+          className={`absolute top-8 hidden h-3 w-3 rounded-full bg-white shadow-lg shadow-white/15 lg:block ${
             side === 'left' ? '-right-[1.35rem]' : '-left-[1.35rem]'
           }`}
           initial={{ scale: 0 }}
@@ -163,7 +163,7 @@ function TimelineCard({ item, index, side }: TimelineCardProps) {
 
       {side === 'single' && (
         <motion.div
-          className="absolute -left-8 top-8 h-3 w-3 rounded-full bg-purple-400 shadow-lg shadow-purple-500/50 md:-left-[4.5rem]"
+          className="absolute -left-8 top-8 h-3 w-3 rounded-full bg-white shadow-lg shadow-white/15 md:-left-[4.5rem]"
           initial={{ scale: 0 }}
           whileInView={{ scale: 1 }}
           viewport={{ once: true }}
@@ -173,7 +173,7 @@ function TimelineCard({ item, index, side }: TimelineCardProps) {
 
       {/* Card */}
       <motion.div
-        className="group rounded-2xl bg-light-bg-secondary p-6 shadow-lg transition-all hover:shadow-xl dark:bg-dark-bg-secondary"
+        className="group rounded-2xl bg-light-bg-secondary p-6 shadow-lg transition-all hover:shadow-xl dark:bg-dark-bg-secondary/80 dark:backdrop-blur-lg border border-transparent dark:border-white/10 hover:border-dark-accent/30"
         whileHover={{ y: -5, scale: 1.02 }}
       >
         {/* Type Badge */}
@@ -184,7 +184,7 @@ function TimelineCard({ item, index, side }: TimelineCardProps) {
                 ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400'
                 : item.type === 'leadership'
                   ? 'bg-green-500/10 text-green-600 dark:text-green-400'
-                  : 'bg-purple-500/10 text-purple-600 dark:text-purple-400'
+                  : 'bg-white/10 text-white/80'
             }`}
           >
             {item.type === 'education'
@@ -197,12 +197,12 @@ function TimelineCard({ item, index, side }: TimelineCardProps) {
 
         {/* Header */}
         <h3 className="mb-2 text-xl font-bold text-light-text dark:text-dark-text">{title}</h3>
-        <p className="mb-1 text-purple-500">{subtitle}</p>
+        <p className="mb-1 text-dark-accent">{subtitle}</p>
         <p className="mb-4 text-sm text-light-text/60 dark:text-dark-text/60">{dates}</p>
 
         {/* GPA for Education */}
         {isEducation && item.gpa && (
-          <p className="mb-3 text-sm font-semibold text-purple-500">{item.gpa}</p>
+          <p className="mb-3 text-sm font-semibold text-dark-accent">{item.gpa}</p>
         )}
 
         {/* Bullets or Courses */}
@@ -245,7 +245,7 @@ function TimelineCard({ item, index, side }: TimelineCardProps) {
             {item.tags.map((tag, i) => (
               <span
                 key={i}
-                className="rounded-full bg-purple-500/10 px-3 py-1 text-xs text-purple-600 dark:text-purple-400"
+                className="rounded-full bg-white/5 border border-white/10 px-3 py-1 text-xs text-white/70"
               >
                 {tag}
               </span>
@@ -254,7 +254,7 @@ function TimelineCard({ item, index, side }: TimelineCardProps) {
         )}
 
         {/* Glow effect */}
-        <div className="absolute inset-0 -z-10 rounded-2xl bg-purple-500/0 opacity-0 blur-xl transition-all group-hover:bg-purple-500/10 group-hover:opacity-100" />
+        <div className="absolute inset-0 -z-10 rounded-2xl bg-white/0 opacity-0 blur-xl transition-all group-hover:bg-white/8 group-hover:opacity-100" />
       </motion.div>
     </motion.div>
   )

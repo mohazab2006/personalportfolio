@@ -22,7 +22,7 @@ const Contact = lazy(() => import('@/components/Contact'))
 // Loading fallback component
 const SectionLoader = () => (
   <div className="flex min-h-[400px] items-center justify-center">
-    <div className="h-8 w-8 animate-spin rounded-full border-4 border-purple-500 border-t-transparent"></div>
+    <div className="h-8 w-8 animate-spin rounded-full border-4 border-white/40 border-t-white"></div>
   </div>
 )
 
@@ -90,14 +90,20 @@ export default function Home() {
           </main>
 
           {/* Footer */}
-          <footer className="bg-light-bg-secondary py-8 text-center dark:bg-dark-bg-secondary">
+          <footer className="relative bg-dark-bg/40 py-12 text-center backdrop-blur-xl border-t border-white/5">
+            {/* Top light edge */}
+            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-dark-accent/30 to-transparent" />
+            
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
-              <p className="text-sm text-light-text/60 dark:text-dark-text/60">
-                © 2025 Mohamed Azab
-              </p>
-              <p className="mt-2 text-sm text-light-text/60 dark:text-dark-text/60">
-                Designed and developed with passion 💜
-              </p>
+              <div className="flex flex-col items-center justify-center gap-4">
+                <p className="text-sm font-medium text-white/40 uppercase tracking-[0.2em]">
+                  © 2026 Mohamed Azab
+                </p>
+                <div className="h-px w-8 bg-white/10" />
+                <p className="text-sm text-white/60">
+                  Built with <span className="text-dark-accent drop-shadow-[0_0_8px_rgba(45,212,191,0.4)]">Next.js</span> & <span className="text-dark-accent drop-shadow-[0_0_8px_rgba(45,212,191,0.4)]">Framer Motion</span>
+                </p>
+              </div>
             </div>
           </footer>
         </>

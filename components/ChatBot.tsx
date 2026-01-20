@@ -62,30 +62,30 @@ export default function ChatBot({ isOpen, onClose }: { isOpen: boolean; onClose:
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className={`fixed ${isFullScreen ? 'inset-4 sm:inset-8' : 'bottom-4 right-4 sm:bottom-24 sm:right-4'} z-50 flex flex-col overflow-hidden rounded-2xl bg-white/95 shadow-2xl backdrop-blur-lg dark:bg-dark-bg/95 ${isFullScreen ? 'h-auto' : 'h-[500px] w-[350px] sm:w-[400px]'}`}
+          className={`fixed ${isFullScreen ? 'inset-4 sm:inset-8' : 'bottom-4 right-4 sm:bottom-24 sm:right-4'} z-50 flex flex-col overflow-hidden rounded-2xl bg-dark-bg/95 shadow-2xl backdrop-blur-lg border border-white/10 ${isFullScreen ? 'h-auto' : 'h-[500px] w-[350px] sm:w-[400px]'}`}
           initial={{ opacity: 0, scale: 0.8, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.8, y: 20 }}
           transition={{ duration: 0.3 }}
         >
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-purple-500/20 bg-gradient-to-r from-purple-500/10 to-purple-600/10 p-4">
+          <div className="flex items-center justify-between border-b border-white/10 bg-white/5 p-4">
             <div className="flex items-center gap-3">
               <div className="relative">
-                <div className="h-10 w-10 rounded-full bg-gradient-to-br from-purple-500 to-purple-700 flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                <div className="h-10 w-10 rounded-full bg-white/10 border border-white/15 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-white/10">
                   S
                 </div>
                 <div className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-500 border-2 border-white dark:border-dark-bg animate-pulse"></div>
               </div>
               <div>
-                <h3 className="font-bold text-dark-text dark:text-dark-text">Snaggy</h3>
-                <p className="text-xs text-dark-text/60">Mohamed's AI Assistant</p>
+                <h3 className="font-bold text-white">Snaggy</h3>
+                <p className="text-xs text-white/60">Mohamed's AI Assistant</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setIsFullScreen(!isFullScreen)}
-                className="rounded-lg p-2 transition-colors hover:bg-purple-500/10"
+                className="rounded-lg p-2 transition-colors hover:bg-dark-accent/10 active:bg-white/10"
                 aria-label={isFullScreen ? 'Exit fullscreen' : 'Fullscreen'}
               >
                 {isFullScreen ? (
@@ -100,7 +100,7 @@ export default function ChatBot({ isOpen, onClose }: { isOpen: boolean; onClose:
               </button>
               <button
                 onClick={onClose}
-                className="rounded-lg p-2 transition-colors hover:bg-purple-500/10"
+                className="rounded-lg p-2 transition-colors hover:bg-dark-accent/10 active:bg-white/10"
                 aria-label="Close chat"
               >
                 <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -120,8 +120,8 @@ export default function ChatBot({ isOpen, onClose }: { isOpen: boolean; onClose:
                 <div
                   className={`max-w-[80%] rounded-2xl px-4 py-2 ${
                     message.role === 'user'
-                      ? 'bg-purple-500 text-white'
-                      : 'bg-light-bg-secondary dark:bg-dark-bg-secondary text-dark-text'
+                      ? 'bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.2)]'
+                      : 'bg-white/5 text-white border border-white/10'
                   }`}
                 >
                   <p className="text-sm whitespace-pre-wrap">{message.content}</p>
@@ -130,11 +130,11 @@ export default function ChatBot({ isOpen, onClose }: { isOpen: boolean; onClose:
             ))}
             {isLoading && (
               <div className="flex justify-start">
-                <div className="max-w-[80%] rounded-2xl bg-light-bg-secondary dark:bg-dark-bg-secondary px-4 py-2">
+                <div className="max-w-[80%] rounded-2xl bg-white/5 border border-white/10 px-4 py-2">
                   <div className="flex gap-1">
-                    <div className="h-2 w-2 animate-bounce rounded-full bg-purple-500" style={{ animationDelay: '0ms' }}></div>
-                    <div className="h-2 w-2 animate-bounce rounded-full bg-purple-500" style={{ animationDelay: '150ms' }}></div>
-                    <div className="h-2 w-2 animate-bounce rounded-full bg-purple-500" style={{ animationDelay: '300ms' }}></div>
+                    <div className="h-2 w-2 animate-bounce rounded-full bg-white" style={{ animationDelay: '0ms' }}></div>
+                    <div className="h-2 w-2 animate-bounce rounded-full bg-white" style={{ animationDelay: '150ms' }}></div>
+                    <div className="h-2 w-2 animate-bounce rounded-full bg-white" style={{ animationDelay: '300ms' }}></div>
                   </div>
                 </div>
               </div>
@@ -143,20 +143,20 @@ export default function ChatBot({ isOpen, onClose }: { isOpen: boolean; onClose:
           </div>
 
           {/* Input */}
-          <form onSubmit={handleSubmit} className="border-t border-purple-500/20 p-4">
+          <form onSubmit={handleSubmit} className="border-t border-white/10 p-4">
             <div className="flex gap-2">
               <input
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Ask me anything about Mohamed..."
-                className="flex-1 rounded-lg bg-light-bg px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-purple-500 dark:bg-dark-bg-secondary dark:text-dark-text"
+                className="flex-1 rounded-lg bg-white/5 border border-white/10 px-4 py-2 text-sm text-white outline-none placeholder:text-white/40 focus:ring-2 focus:ring-white/60 focus:border-white/25"
                 disabled={isLoading}
               />
               <button
                 type="submit"
                 disabled={isLoading || !input.trim()}
-                className="rounded-lg bg-purple-500 px-4 py-2 text-white transition-colors hover:bg-purple-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="rounded-lg bg-white/10 border border-white/15 px-4 py-2 text-white transition-all hover:bg-dark-accent hover:text-black hover:border-dark-accent/40 active:bg-white active:text-black disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />

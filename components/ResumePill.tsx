@@ -24,7 +24,7 @@ export default function ResumePill() {
       href={resumeUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="magnetic-button fixed bottom-4 right-4 sm:bottom-8 sm:right-8 z-40 flex items-center gap-2 rounded-full bg-purple-600 px-4 sm:px-6 py-3 text-sm font-medium text-white shadow-lg transition-all hover:bg-purple-700 hover:shadow-xl"
+      className="magnetic-button fixed bottom-4 right-4 sm:bottom-8 sm:right-8 z-40 flex items-center gap-2 rounded-full bg-white px-4 py-3 text-sm font-medium text-black shadow-lg shadow-white/10 transition-all hover:bg-dark-accent hover:text-black hover:shadow-[0_0_25px_rgba(45,212,191,0.5)] active:bg-white active:text-black sm:px-6"
       initial={{ opacity: 0, scale: 0.8, y: 20 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 1 }}

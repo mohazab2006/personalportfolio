@@ -10,12 +10,12 @@ module.exports = {
     extend: {
       colors: {
         dark: {
-          bg: '#0B0B0F',
-          'bg-secondary': '#16161D',
+          bg: '#050505', // Deeper black
+          'bg-secondary': '#0F0F12',
           text: '#F5F7FB',
-          accent: '#8B5CF6',
-          'accent-hover': '#6D28D9',
-          'accent-light': '#C4B5FD',
+          accent: '#2DD4BF', // Electric Cyan
+          'accent-hover': '#06B6D4',
+          'accent-light': '#99F6E4',
         },
         light: {
           bg: '#FFFFFF',

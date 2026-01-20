@@ -67,7 +67,7 @@ export default function Contact() {
       id="contact"
       title="Get In Touch"
       subtitle="Let's connect and discuss opportunities"
-      className="bg-light-bg-secondary dark:bg-dark-bg-secondary"
+      className="bg-light-bg-secondary dark:bg-transparent"
     >
       <div className="mx-auto max-w-4xl">
         {/* Contact Methods */}
@@ -78,15 +78,18 @@ export default function Contact() {
               href={method.href}
               target={method.name !== 'Email' ? '_blank' : undefined}
               rel={method.name !== 'Email' ? 'noopener noreferrer' : undefined}
-              className="magnetic-button group relative overflow-hidden rounded-2xl bg-light-bg p-8 text-center transition-all hover:shadow-xl dark:bg-dark-bg"
+              className="magnetic-button group relative overflow-hidden rounded-2xl bg-[#0F0F12]/80 backdrop-blur-xl p-8 text-center border border-white/5 transition-all duration-500 hover:border-dark-accent/40 hover:shadow-[0_0_30px_rgba(45,212,191,0.1)] light-highlight"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               whileHover={{ y: -8, scale: 1.05 }}
             >
+              {/* Glossy sweep */}
+              <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-transparent via-white/[0.01] to-white/[0.03] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+              
               <div className="relative z-10">
-                <div className="mb-4 flex justify-center text-purple-500 transition-transform group-hover:scale-110">
+                <div className="mb-4 flex justify-center text-white transition-transform group-hover:scale-110 group-hover:text-dark-accent group-active:text-white">
                   {method.icon}
                 </div>
                 <h3 className="mb-2 text-xl font-bold text-light-text dark:text-dark-text">
@@ -95,11 +98,11 @@ export default function Contact() {
                 <p className="mb-2 text-sm text-light-text/60 dark:text-dark-text/60">
                   {method.description}
                 </p>
-                <p className="font-mono text-sm text-purple-500">{method.value}</p>
+                <p className="font-mono text-sm text-white/70 group-hover:text-dark-accent">{method.value}</p>
               </div>
 
               {/* Glow effect */}
-              <div className="absolute inset-0 -z-10 bg-gradient-to-br from-purple-500/0 to-purple-600/0 opacity-0 transition-all group-hover:from-purple-500/10 group-hover:to-purple-600/10 group-hover:opacity-100" />
+              <div className="absolute inset-0 -z-10 bg-gradient-to-br from-white/0 to-white/0 opacity-0 transition-all group-hover:from-dark-accent/10 group-hover:to-dark-accent/5 group-hover:opacity-100" />
             </motion.a>
           ))}
         </div>
@@ -149,7 +152,7 @@ export default function Contact() {
             </div>
             <button
               type="submit"
-              className="magnetic-button w-full rounded-lg bg-purple-500 px-6 py-3 font-medium text-white transition-all hover:bg-purple-600"
+              className="magnetic-button w-full rounded-lg bg-dark-accent px-6 py-3 font-medium text-black transition-all hover:bg-dark-accent/90"
             >
               Send Message
             </button>
@@ -174,7 +177,7 @@ export default function Contact() {
           </p>
           <motion.a
             href={`mailto:${PERSONAL.email}`}
-            className="magnetic-button inline-flex items-center gap-2 rounded-full bg-purple-500 px-8 py-4 font-semibold text-white shadow-lg transition-all hover:bg-purple-600 hover:shadow-xl"
+            className="magnetic-button inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 font-semibold text-black shadow-lg shadow-white/10 transition-all hover:bg-dark-accent hover:text-black hover:shadow-dark-accent/20 active:bg-white active:text-black"
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.95 }}
           >

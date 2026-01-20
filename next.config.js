@@ -15,7 +15,7 @@ const nextConfig = {
     minimumCacheTTL: 60 * 60 * 24 * 7, // 7 days
   },
   experimental: {
-    optimizePackageImports: ['framer-motion', '@react-three/fiber', '@react-three/drei'],
+    optimizePackageImports: ['framer-motion'],
   },
   // Enable compiler optimizations
   compiler: {

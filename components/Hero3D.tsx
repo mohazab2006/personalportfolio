@@ -1,85 +1,61 @@
 'use client'
 
-import { useRef, Suspense } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
-import { MeshDistortMaterial, Sphere, Environment } from '@react-three/drei'
-import * as THREE from 'three'
-import { useReducedMotion, isWebGLSupported } from '@/lib/utils'
+import { motion } from 'framer-motion'
+import { useReducedMotion } from '@/lib/utils'
 
-function AnimatedOrb() {
-  const meshRef = useRef<THREE.Mesh>(null!)
-  const prefersReducedMotion = useReducedMotion()
-
-  useFrame((state) => {
-    if (prefersReducedMotion) return
-
-    const time = state.clock.getElapsedTime()
-
-    // Slow rotation
-    meshRef.current.rotation.x = time * 0.1
-    meshRef.current.rotation.y = time * 0.15
-
-    // Subtle floating
-    meshRef.current.position.y = Math.sin(time * 0.5) * 0.1
-  })
-
-  return (
-    <Sphere ref={meshRef} args={[1, 100, 100]} scale={2.2}>
-      <MeshDistortMaterial
-        color="#8B5CF6"
-        attach="material"
-        distort={0.4}
-        speed={2}
-        roughness={0.2}
-        metalness={0.8}
-      />
-    </Sphere>
-  )
-}
-
+/**
+ * CSS-only “plasma orb” replacement for react-three-fiber.
+ * Fixes runtime crashes like `ReactCurrentOwner` by avoiding R3F internals.
+ */
 export default function Hero3D() {
   const prefersReducedMotion = useReducedMotion()
-  const webGLSupported = typeof window !== 'undefined' ? isWebGLSupported() : true
-
-  if (!webGLSupported || prefersReducedMotion) {
-    // Fallback: CSS gradient blob
-    return (
-      <div className="relative h-full w-full">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="relative h-64 w-64 md:h-96 md:w-96">
-            <div className="absolute inset-0 animate-pulse-glow rounded-full bg-gradient-to-br from-purple-500 via-purple-600 to-purple-700 opacity-60 blur-3xl" />
-            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-purple-400 via-purple-500 to-purple-600 opacity-80 blur-2xl" />
-          </div>
-        </div>
-      </div>
-    )
-  }
 
   return (
     <div className="relative h-full w-full">
-      <Canvas
-        camera={{ position: [0, 0, 5], fov: 45 }}
-        style={{ background: 'transparent' }}
-        dpr={[1, 2]}
-      >
-        <Suspense fallback={null}>
-          {/* Lighting */}
-          <ambientLight intensity={0.5} />
-          <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} />
-          <spotLight position={[-10, -10, -10]} angle={0.15} penumbra={1} intensity={0.5} />
-          <pointLight position={[0, 0, 5]} intensity={1} color="#8B5CF6" />
+      <div className="absolute inset-0 flex items-center justify-center">
+        {/* Outer glow */}
+        <motion.div
+          className="absolute h-[520px] w-[520px] rounded-full bg-dark-accent/20 blur-[140px]"
+          animate={prefersReducedMotion ? undefined : { opacity: [0.35, 0.55, 0.35], scale: [1, 1.05, 1] }}
+          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+        />
 
-          {/* Animated Orb */}
-          <AnimatedOrb />
+        {/* Mid glow */}
+        <motion.div
+          className="absolute h-[420px] w-[420px] rounded-full bg-cyan-400/10 blur-[80px]"
+          animate={prefersReducedMotion ? undefined : { opacity: [0.25, 0.45, 0.25], scale: [1, 1.08, 1] }}
+          transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+        />
 
-          {/* Environment for reflections */}
-          <Environment preset="city" />
-        </Suspense>
-      </Canvas>
+        {/* Orb body */}
+        <motion.div
+          className="relative h-[340px] w-[340px] overflow-hidden rounded-full border border-white/10 bg-gradient-to-br from-dark-accent/35 via-cyan-400/10 to-white/5 shadow-[0_0_40px_rgba(45,212,191,0.18)]"
+          animate={prefersReducedMotion ? undefined : { rotate: 360 }}
+          transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
+        >
+          {/* Specular highlight */}
+          <div className="absolute -left-10 -top-16 h-56 w-56 rounded-full bg-white/10 blur-2xl" />
 
-      {/* Background gradient glow */}
-      <div className="absolute inset-0 -z-10 flex items-center justify-center">
-        <div className="h-96 w-96 rounded-full bg-purple-500/20 blur-3xl" />
+          {/* Inner plasma swirl */}
+          <motion.div
+            className="absolute inset-0 opacity-60"
+            style={{
+              background:
+                'conic-gradient(from 180deg at 50% 50%, rgba(45,212,191,0.22), rgba(6,182,212,0.10), rgba(255,255,255,0.06), rgba(45,212,191,0.22))',
+            }}
+            animate={prefersReducedMotion ? undefined : { rotate: -360 }}
+            transition={{ duration: 18, repeat: Infinity, ease: 'linear' }}
+          />
+
+          {/* Subtle scan lines */}
+          <div
+            className="absolute inset-0 opacity-25"
+            style={{
+              background:
+                'repeating-linear-gradient(0deg, rgba(255,255,255,0.06) 0px, transparent 2px, transparent 6px)',
+            }}
+          />
+        </motion.div>
       </div>
     </div>
   )

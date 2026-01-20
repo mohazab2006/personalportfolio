@@ -3,10 +3,10 @@
 import { motion } from 'framer-motion'
 import { PERSONAL } from '@/lib/data'
 import { HERO_LAYOUT } from '@/lib/utils'
-import { lazy, Suspense } from 'react'
+import dynamic from 'next/dynamic'
 
-// Lazy load Hero3D for better performance
-const Hero3D = lazy(() => import('./Hero3D'))
+// Client-only to avoid runtime crashes
+const Hero3D = dynamic(() => import('./Hero3D'), { ssr: false, loading: () => <div className="h-full w-full" /> })
 
 const socialIcons = [
   {
@@ -44,11 +44,9 @@ export default function Hero() {
   if (layout === 'center') {
     return (
       <section className="relative min-h-screen overflow-hidden bg-transparent">
-        {/* Background 3D */}
+        {/* Background orb */}
         <div className="absolute inset-0 opacity-30">
-          <Suspense fallback={<div className="h-full w-full" />}>
-            <Hero3D />
-          </Suspense>
+          <Hero3D />
         </div>
 
         {/* Content */}
@@ -62,7 +60,7 @@ export default function Hero() {
             >
               hi, my name is
             </motion.p>
-            <h1 className="text-4xl md:text-6xl lg:text-[7rem] xl:text-[9rem] flex flex-wrap justify-center leading-[0.9]" style={{ fontFamily: 'var(--font-display)', letterSpacing: '0.02em' }}>
+            <h1 className="text-4xl md:text-6xl lg:text-[7rem] xl:text-[9rem] flex flex-wrap justify-center leading-[0.9] text-neon" style={{ fontFamily: 'var(--font-display)', letterSpacing: '0.02em' }}>
               {"MOHAMED AZAB".split("").map((char, index) => (
                 <span 
                   key={index} 
@@ -91,8 +89,8 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 1.5 }}
           >
-            A <span className="text-purple-500 font-bold">Computer Science</span> student at{' '}
-            <span className="text-purple-500 font-bold">Carleton University</span> (AI/ML & Security).
+            A <span className="text-dark-accent font-bold">Computer Science</span> student at{' '}
+            <span className="text-dark-accent font-bold">Carleton University</span> (AI/ML & Security).
           </motion.p>
 
           <motion.p
@@ -102,8 +100,8 @@ export default function Hero() {
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 1.7 }}
           >
             A passionate learner who enjoys building{' '}
-            <span className="text-purple-500 font-bold">secure</span>,{' '}
-            <span className="text-purple-500 font-bold">reliable</span> software.
+            <span className="text-dark-accent font-bold">secure</span>,{' '}
+            <span className="text-dark-accent font-bold">reliable</span> software.
           </motion.p>
 
           <motion.div
@@ -118,7 +116,7 @@ export default function Hero() {
                 href={social.url}
                 target={social.name !== 'Email' ? '_blank' : undefined}
                 rel={social.name !== 'Email' ? 'noopener noreferrer' : undefined}
-                className="magnetic-button group flex h-12 w-12 items-center justify-center rounded-full bg-purple-500/10 text-purple-500 transition-all hover:bg-purple-500 hover:text-white"
+                className="liquid-glass magnetic-button group flex h-14 w-14 items-center justify-center rounded-2xl text-white transition-all active:scale-95"
                 whileHover={{ scale: 1.1, rotate: 5 }}
                 whileTap={{ scale: 0.95 }}
                 initial={{ opacity: 0, scale: 0.8 }}
@@ -126,7 +124,7 @@ export default function Hero() {
                 transition={{ duration: 0.4, delay: 2.1 + index * 0.1 }}
                 aria-label={social.name}
               >
-                <div className="h-5 w-5">{social.icon}</div>
+                <div className="h-6 w-6">{social.icon}</div>
               </motion.a>
             ))}
           </motion.div>
@@ -180,7 +178,7 @@ export default function Hero() {
             >
               hi, my name is
             </motion.p>
-            <h1 className="text-5xl md:text-7xl lg:text-[8rem] xl:text-[10rem] flex flex-wrap leading-[0.9]" style={{ fontFamily: 'var(--font-display)', letterSpacing: '0.02em' }}>
+            <h1 className="text-5xl md:text-7xl lg:text-[8rem] xl:text-[10rem] flex flex-wrap leading-[0.9] text-neon" style={{ fontFamily: 'var(--font-display)', letterSpacing: '0.02em' }}>
               {"MOHAMED AZAB".split("").map((char, index) => (
                 <span 
                   key={index} 
@@ -209,8 +207,8 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 1.5 }}
           >
-            A <span className="text-purple-500 font-bold">Computer Science</span> student at{' '}
-            <span className="text-purple-500 font-bold">Carleton University</span> (AI/ML & Security).
+            A <span className="text-dark-accent font-bold drop-shadow-[0_0_8px_rgba(45,212,191,0.4)]">Computer Science</span> student at{' '}
+            <span className="text-dark-accent font-bold drop-shadow-[0_0_8px_rgba(45,212,191,0.4)]">Carleton University</span> (AI/ML & Security).
           </motion.p>
 
           <motion.p
@@ -220,8 +218,8 @@ export default function Hero() {
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 1.7 }}
           >
             A passionate learner who enjoys building{' '}
-            <span className="text-purple-500 font-bold">secure</span>,{' '}
-            <span className="text-purple-500 font-bold">reliable</span> software.
+            <span className="text-dark-accent font-bold">secure</span>,{' '}
+            <span className="text-dark-accent font-bold">reliable</span> software.
           </motion.p>
 
           {/* Social Icons Row */}
@@ -237,7 +235,7 @@ export default function Hero() {
                 href={social.url}
                 target={social.name !== 'Email' ? '_blank' : undefined}
                 rel={social.name !== 'Email' ? 'noopener noreferrer' : undefined}
-                className="magnetic-button group flex h-12 w-12 items-center justify-center rounded-full bg-purple-500/10 text-purple-500 transition-all hover:bg-purple-500 hover:text-white"
+                className="liquid-glass magnetic-button group flex h-14 w-14 items-center justify-center rounded-2xl text-white transition-all active:scale-95"
                 whileHover={{ scale: 1.1, rotate: 5 }}
                 whileTap={{ scale: 0.95 }}
                 initial={{ opacity: 0, scale: 0.8 }}
@@ -245,7 +243,7 @@ export default function Hero() {
                 transition={{ duration: 0.4, delay: 2.1 + index * 0.1 }}
                 aria-label={social.name}
               >
-                <div className="h-5 w-5">{social.icon}</div>
+                <div className="h-6 w-6">{social.icon}</div>
               </motion.a>
             ))}
           </motion.div>

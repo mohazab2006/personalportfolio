@@ -4,7 +4,7 @@ export default function NotFound() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-light-bg dark:bg-dark-bg">
       <div className="text-center">
-        <h1 className="mb-4 text-6xl font-bold text-purple-500">404</h1>
+        <h1 className="mb-4 text-6xl font-bold text-white">404</h1>
         <h2 className="mb-4 text-3xl font-bold text-light-text dark:text-dark-text">
           Page Not Found
         </h2>
@@ -13,7 +13,7 @@ export default function NotFound() {
         </p>
         <Link
           href="/"
-          className="inline-flex items-center gap-2 rounded-full bg-purple-500 px-6 py-3 font-medium text-white transition-all hover:bg-purple-600"
+          className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 font-medium text-black transition-all hover:bg-dark-accent hover:text-black active:bg-white active:text-black"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

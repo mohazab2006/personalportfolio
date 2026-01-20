@@ -11,28 +11,24 @@ export default function ChatButton() {
     <>
       <motion.button
         onClick={() => setIsChatOpen(true)}
-        className="magnetic-button fixed bottom-[68px] right-4 sm:bottom-[84px] sm:right-8 z-40 group rounded-full"
+        className="liquid-glass magnetic-button fixed bottom-[68px] right-4 sm:bottom-[84px] sm:right-8 z-40 group rounded-full border-white/20 shadow-[0_0_30px_rgba(0,0,0,0.4)]"
         initial={{ opacity: 0, scale: 0.8, y: 20 }}
-        animate={{ 
-          opacity: 1, 
-          scale: [1, 1.05, 1],
-          y: 0 
-        }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ 
           opacity: { duration: 0.5, delay: 1.2 },
-          scale: { duration: 2, repeat: Infinity, ease: "easeInOut" },
+          scale: { duration: 0.5, delay: 1.2, ease: "easeOut" },
           y: { duration: 0.5, delay: 1.2 }
         }}
         whileHover={{ 
           scale: 1.1, 
           y: -4,
-          boxShadow: "0 0 40px rgba(168, 85, 247, 0.8)"
+          boxShadow: "0 0 40px rgba(45, 212, 191, 0.45)"
         }}
         whileTap={{ scale: 0.95 }}
         aria-label="Chat with Snaggy"
       >
         {/* Main button container */}
-        <div className="relative flex items-center gap-2 rounded-full bg-gradient-to-r from-purple-500 to-purple-600 px-3 sm:px-5 py-2.5">
+        <div className="relative flex items-center gap-2 rounded-full px-3 py-2.5 sm:px-5">
           {/* Snaggy Logo - Animated S */}
           <motion.div
             className="relative flex h-8 w-8 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm"
@@ -72,18 +68,8 @@ export default function ChatButton() {
             <span className="text-base font-black text-white drop-shadow-md leading-none">Snaggy</span>
           </div>
 
-          {/* Pulse indicator */}
-          <motion.div
-            className="absolute -right-1 -top-1 h-3.5 w-3.5 rounded-full bg-green-400 border-2 border-white shadow-lg z-10"
-            animate={{
-              scale: [1, 1.2, 1],
-            }}
-            transition={{
-              duration: 1.5,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
+          {/* Status indicator */}
+          <div className="absolute -right-1 -top-1 h-3.5 w-3.5 rounded-full bg-dark-accent border-2 border-white shadow-lg z-10" />
         </div>
       </motion.button>
 

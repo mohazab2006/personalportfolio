@@ -33,14 +33,14 @@ export default function Portfolio() {
       id="portfolio"
       title="Portfolio"
       subtitle="Featured projects showcasing my work and skills"
-      className="bg-light-bg dark:bg-dark-bg"
+      className="bg-light-bg dark:bg-transparent"
     >
       <div className="space-y-20">
         {/* Projects Grid */}
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           {loading && (
             <div className="col-span-full flex justify-center py-20">
-              <div className="h-12 w-12 animate-spin rounded-full border-4 border-purple-500 border-t-transparent"></div>
+              <div className="h-12 w-12 animate-spin rounded-full border-4 border-white/40 border-t-white"></div>
             </div>
           )}
 

@@ -4,6 +4,39 @@ import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useReducedMotion } from '@/lib/utils'
 
+const welcomeWords = "WELCOME".split("")
+
+const containerVars = {
+  initial: { opacity: 0 },
+  animate: { 
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.3,
+    }
+  },
+  exit: { 
+    opacity: 0,
+    scale: 1.5,
+    filter: "blur(20px)",
+    transition: { duration: 0.8, ease: "easeInOut" }
+  }
+}
+
+const letterVars = {
+  initial: { y: 100, opacity: 0, rotateX: -90 },
+  animate: { 
+    y: 0, 
+    opacity: 1, 
+    rotateX: 0,
+    transition: {
+      type: "spring",
+      damping: 12,
+      stiffness: 100
+    }
+  }
+}
+
 export default function Loader({ onComplete }: { onComplete: () => void }) {
   const [progress, setProgress] = useState(0)
   const [showWelcome, setShowWelcome] = useState(false)
@@ -11,8 +44,7 @@ export default function Loader({ onComplete }: { onComplete: () => void }) {
   const prefersReducedMotion = useReducedMotion()
 
   useEffect(() => {
-    // Simulate loading progress - balanced speed for visibility
-    const duration = prefersReducedMotion ? 600 : 1500
+    const duration = prefersReducedMotion ? 800 : 2500 // Slightly longer
     const interval = 20
     const steps = duration / interval
     const increment = 100 / steps
@@ -24,20 +56,15 @@ export default function Loader({ onComplete }: { onComplete: () => void }) {
         setProgress(100)
         clearInterval(timer)
 
-        // Show welcome message - keep it visible longer
         setTimeout(() => {
           setShowWelcome(true)
-
-          // Trigger portal reveal - give time to read "WELCOME"
           setTimeout(() => {
             setShowPortal(true)
-
-            // Complete loading
             setTimeout(() => {
               onComplete()
-            }, prefersReducedMotion ? 200 : 600)
-          }, prefersReducedMotion ? 300 : 800)
-        }, prefersReducedMotion ? 150 : 300)
+            }, prefersReducedMotion ? 300 : 1000)
+          }, prefersReducedMotion ? 500 : 2000) // Keep WELCOME visible longer
+        }, 500)
       } else {
         setProgress(Math.min(current, 100))
       }
@@ -49,227 +76,146 @@ export default function Loader({ onComplete }: { onComplete: () => void }) {
   return (
     <AnimatePresence>
       <motion.div
-        className="fixed inset-0 z-[10000] flex items-center justify-center overflow-hidden bg-gradient-to-br from-dark-bg via-purple-950/20 to-dark-bg"
+        className="fixed inset-0 z-[10000] flex items-center justify-center overflow-hidden bg-transparent"
         initial={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        transition={{ duration: prefersReducedMotion ? 0.1 : 0.3 }}
+        transition={{ duration: 0.8 }}
       >
-        {/* Animated Background Orbs */}
-        {!showPortal && (
-          <>
-            <motion.div
-              className="absolute -left-20 -top-20 h-96 w-96 rounded-full bg-purple-600/20 blur-3xl"
-              animate={{
-                scale: [1, 1.2, 1],
-                opacity: [0.3, 0.5, 0.3],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: 'easeInOut',
-              }}
-            />
-            <motion.div
-              className="absolute -bottom-20 -right-20 h-96 w-96 rounded-full bg-purple-500/20 blur-3xl"
-              animate={{
-                scale: [1.2, 1, 1.2],
-                opacity: [0.3, 0.5, 0.3],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: 'easeInOut',
-                delay: 1.5,
-              }}
-            />
-          </>
-        )}
-        {/* Portal/Hyperdrive Effect */}
+        {/* Semi-transparent backdrop that doesn't block siblings in RootLayout */}
+        <div className="absolute inset-0 bg-dark-bg/40 backdrop-blur-[2px] -z-10" />
+
+        {/* Animated Background Gradients */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <motion.div
+            className="absolute -left-1/4 -top-1/4 h-[150%] w-[150%] rounded-full bg-cyan-500/5 blur-[120px]"
+            animate={{
+              x: [0, 50, 0],
+              y: [0, 30, 0],
+            }}
+            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </div>
+
+        {/* Shockwave Effect when Portal triggers */}
         {showPortal && (
           <motion.div
-            className="absolute inset-0 overflow-hidden"
+            className="absolute inset-0 z-50 flex items-center justify-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.1 }}
           >
-            <motion.div
-              className="absolute inset-0"
-              initial={{ scale: 0, opacity: 1 }}
-              animate={{ scale: 4, opacity: 0 }}
-              transition={{
-                duration: prefersReducedMotion ? 0.2 : 0.6,
-                ease: [0.43, 0.13, 0.23, 0.96],
-              }}
-            >
-              {/* Radial gradient rings with glow */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                {[...Array(8)].map((_, i) => (
-                  <motion.div
-                    key={i}
-                    className="absolute rounded-full border-4 border-purple-500/40 shadow-2xl shadow-purple-500/50"
-                    initial={{ width: 0, height: 0, opacity: 0 }}
-                    animate={{
-                      width: `${(i + 1) * 250}%`,
-                      height: `${(i + 1) * 250}%`,
-                      opacity: [0, 0.8, 0],
-                    }}
-                    transition={{
-                      duration: prefersReducedMotion ? 0.15 : 0.5,
-                      delay: i * 0.03,
-                      ease: 'easeOut',
-                    }}
-                  />
-                ))}
-              </div>
-
-              {/* Radial burst effect */}
+            {[...Array(3)].map((_, i) => (
               <motion.div
-                className="absolute inset-0 bg-gradient-radial from-purple-400/40 via-purple-500/20 to-transparent"
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 5, opacity: [0, 1, 0] }}
-                transition={{ duration: prefersReducedMotion ? 0.2 : 0.6 }}
+                key={i}
+                className="absolute rounded-full border border-cyan-500/30"
+                initial={{ width: 0, height: 0, opacity: 0.8 }}
+                animate={{ width: "300%", height: "300%", opacity: 0 }}
+                transition={{ duration: 1.5, delay: i * 0.2, ease: "easeOut" }}
               />
-
-              {/* Light rays */}
-              {[...Array(12)].map((_, i) => (
-                <motion.div
-                  key={`ray-${i}`}
-                  className="absolute left-1/2 top-1/2 h-2 w-full origin-left bg-gradient-to-r from-purple-400/50 to-transparent"
-                  style={{
-                    transform: `rotate(${i * 30}deg)`,
-                  }}
-                  initial={{ scaleX: 0, opacity: 0 }}
-                  animate={{ scaleX: 2, opacity: [0, 0.6, 0] }}
-                  transition={{
-                    duration: 0.4,
-                    delay: i * 0.02,
-                    ease: 'easeOut',
-                  }}
-                />
-              ))}
-            </motion.div>
+            ))}
           </motion.div>
         )}
 
-        {/* Logo in top-left */}
-        <motion.div
-          className="absolute left-8 top-8 z-20"
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          <div className="text-2xl font-bold text-white">
-            Mohamed Azab
-          </div>
-        </motion.div>
-
         {/* Main Content */}
-        <div className="relative z-10 flex flex-col items-center gap-8">
-          {/* Loading Counter or Welcome */}
+        <div className="relative z-10 flex flex-col items-center">
           <AnimatePresence mode="wait">
             {!showWelcome ? (
               <motion.div
                 key="loading"
-                className="text-center"
+                className="flex flex-col items-center"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                transition={{ duration: prefersReducedMotion ? 0.1 : 0.2 }}
+                exit={{ opacity: 0, scale: 0.9 }}
               >
-                {/* Pill-style loading indicator */}
-                <motion.div
-                  className="relative mx-auto mb-8 h-16 w-80 rounded-full bg-black/20 backdrop-blur-sm border border-purple-500/30 shadow-2xl shadow-purple-500/20"
-                  initial={{ scale: 0.8, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <div className="flex h-full items-center justify-between px-8">
-                    <span className="text-lg font-medium text-white">LOADING</span>
-                    <div className="flex items-center gap-4">
-                      <span className="text-lg font-medium text-white">{Math.round(progress)}%</span>
-                      <div className="h-2 w-16 rounded-full bg-white/20">
-                        <motion.div
-                          className="h-full rounded-full bg-white"
-                          initial={{ width: 0 }}
-                          animate={{ width: `${progress}%` }}
-                          transition={{ duration: 0.1 }}
-                        />
-                      </div>
-                    </div>
+                {/* Modern circular loader */}
+                <div className="relative mb-12 h-32 w-32">
+                  <svg className="h-full w-full" viewBox="0 0 100 100">
+                    <circle
+                      className="text-white/5 stroke-current"
+                      strokeWidth="2"
+                      cx="50"
+                      cy="50"
+                      r="45"
+                      fill="transparent"
+                    />
+                    <motion.circle
+                      className="text-cyan-500 stroke-current"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      cx="50"
+                      cy="50"
+                      r="45"
+                      fill="transparent"
+                      initial={{ strokeDasharray: "283", strokeDashoffset: 283 }}
+                      animate={{ strokeDashoffset: 283 - (283 * progress) / 100 }}
+                      transition={{ duration: 0.1 }}
+                    />
+                  </svg>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-2xl font-bold tracking-tighter text-white">
+                      {Math.round(progress)}%
+                    </span>
                   </div>
-                </motion.div>
+                </div>
                 
-                <motion.p
-                  className="text-xl font-medium tracking-wider text-purple-300"
-                  animate={{ opacity: [0.5, 1, 0.5] }}
+                <motion.div
+                  className="flex flex-col items-center gap-2"
+                  animate={{ opacity: [0.4, 1, 0.4] }}
                   transition={{ duration: 2, repeat: Infinity }}
                 >
-                  PASSIONATE LEARNER • BUILDING THE FUTURE
-                </motion.p>
+                  <span className="text-xs uppercase tracking-[0.4em] text-cyan-500/80 font-bold">Initializing</span>
+                  <div className="h-[1px] w-12 bg-gradient-to-r from-transparent via-cyan-500 to-transparent" />
+                </motion.div>
               </motion.div>
             ) : (
               <motion.div
                 key="welcome"
-                className="text-center"
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: prefersReducedMotion ? 0.1 : 0.3 }}
+                variants={containerVars}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                className="flex flex-col items-center"
               >
-                <motion.h1
-                  className="bg-gradient-to-r from-purple-400 via-purple-300 to-purple-400 bg-clip-text text-7xl font-bold text-transparent md:text-9xl"
-                  animate={{
-                    backgroundPosition: ['0%', '100%', '0%'],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                  }}
-                  style={{
-                    backgroundSize: '200% 200%',
-                  }}
+                <div className="flex gap-2 md:gap-6 overflow-hidden py-10">
+                  {welcomeWords.map((char, i) => (
+                    <motion.span
+                      key={i}
+                      variants={letterVars}
+                      className="text-7xl font-black tracking-tighter text-white md:text-[12rem] lg:text-[15rem]"
+                      style={{ 
+                        fontFamily: 'var(--font-display)',
+                        textShadow: '0 0 30px rgba(255,255,255,0.2)'
+                      }}
+                    >
+                      {char}
+                    </motion.span>
+                  ))}
+                </div>
+                
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1.2, duration: 0.8 }}
+                  className="text-xs md:text-sm uppercase tracking-[0.8em] text-cyan-500/60 font-medium"
                 >
-                  WELCOME
-                </motion.h1>
+                  MOHAMED AZAB • PORTFOLIO 2026
+                </motion.p>
               </motion.div>
             )}
           </AnimatePresence>
         </div>
 
-        {/* Bottom Right Spinner */}
-        {!showPortal && (
+        {/* Animated Orbs */}
+        <div className="absolute inset-0 pointer-events-none">
           <motion.div
-            className="absolute bottom-8 right-8"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <div className="relative h-12 w-12">
-              {/* Outer ring */}
-              <motion.div
-                className="absolute inset-0 rounded-full border-2 border-purple-500/20 border-t-purple-500"
-                animate={{ rotate: 360 }}
-                transition={{
-                  duration: 1,
-                  repeat: Infinity,
-                  ease: 'linear',
-                }}
-              />
-              {/* Inner ring */}
-              <motion.div
-                className="absolute inset-2 rounded-full border-2 border-purple-400/20 border-b-purple-400"
-                animate={{ rotate: -360 }}
-                transition={{
-                  duration: 0.8,
-                  repeat: Infinity,
-                  ease: 'linear',
-                }}
-              />
-            </div>
-          </motion.div>
-        )}
+            className="absolute top-1/2 left-1/2 h-px w-px bg-cyan-500 shadow-[0_0_150px_60px_rgba(45,212,191,0.15)]"
+            animate={{
+              scale: showPortal ? [1, 50, 0] : 1,
+              opacity: showPortal ? [0.5, 1, 0] : 0.5,
+            }}
+            transition={{ duration: 1.2, ease: "easeIn" }}
+          />
+        </div>
       </motion.div>
     </AnimatePresence>
   )
 }
-
