@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, type Variants } from 'framer-motion'
 import { PERSONAL, NAV_LINKS } from '@/lib/data'
 import { scrollToElement } from '@/lib/utils'
 
@@ -9,7 +9,7 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
-  const logoWispVariants = {
+  const logoWispVariants: Variants = {
     rest: { opacity: 0, scale: 0.9, y: 6, filter: 'blur(22px)' },
     hover: {
       opacity: 1,
@@ -18,9 +18,9 @@ export default function Navbar() {
       filter: 'blur(30px)',
       transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] },
     },
-  } as const
+  }
 
-  const logoWispDriftVariants = {
+  const logoWispDriftVariants: Variants = {
     rest: { opacity: 0, scale: 0.85, rotate: 0, filter: 'blur(26px)' },
     hover: {
       opacity: 1,
@@ -29,7 +29,7 @@ export default function Navbar() {
       filter: 'blur(34px)',
       transition: { duration: 2.8, repeat: Infinity, ease: 'easeInOut' },
     },
-  } as const
+  }
 
   useEffect(() => {
     const handleScroll = () => {
