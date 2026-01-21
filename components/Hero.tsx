@@ -50,7 +50,7 @@ export default function Hero() {
         </div>
 
         {/* Content */}
-        <div className="relative z-10 mx-auto flex min-h-screen max-w-4xl flex-col items-center justify-center px-6 text-center lg:px-8">
+        <div className="relative z-10 mx-auto flex min-h-screen max-w-4xl flex-col items-center justify-center px-6 pt-28 pb-10 text-center sm:pt-32 sm:pb-12 lg:px-8">
           <div className="mb-4">
             <motion.p 
               className="text-lg font-medium text-white/70 md:text-xl mb-2"
@@ -167,7 +167,7 @@ export default function Hero() {
   // Split Layout (Default) - Now centered without holographic card
   return (
     <section className="relative min-h-screen overflow-hidden bg-transparent">
-      <div className="mx-auto flex min-h-screen max-w-7xl flex-col justify-center px-6 lg:px-8">
+      <div className="mx-auto flex min-h-screen max-w-7xl flex-col justify-center px-6 pt-28 pb-10 sm:pt-32 sm:pb-12 lg:px-8">
         <div className="space-y-4">
           <div className="space-y-2">
             <motion.p 

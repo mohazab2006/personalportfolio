@@ -9,6 +9,28 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
+  const logoWispVariants = {
+    rest: { opacity: 0, scale: 0.9, y: 6, filter: 'blur(22px)' },
+    hover: {
+      opacity: 1,
+      scale: 1.35,
+      y: 0,
+      filter: 'blur(30px)',
+      transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] },
+    },
+  } as const
+
+  const logoWispDriftVariants = {
+    rest: { opacity: 0, scale: 0.85, rotate: 0, filter: 'blur(26px)' },
+    hover: {
+      opacity: 1,
+      scale: 1.45,
+      rotate: [0, 8, -6, 0],
+      filter: 'blur(34px)',
+      transition: { duration: 2.8, repeat: Infinity, ease: 'easeInOut' },
+    },
+  } as const
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20)
@@ -43,9 +65,31 @@ export default function Navbar() {
             <motion.button
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
               className="group relative flex items-center"
-              whileHover={{ scale: 1.05 }}
+              initial="rest"
+              animate="rest"
+              whileHover="hover"
               whileTap={{ scale: 0.98 }}
             >
+              {/* Bigger hover wisp (behind the pill) */}
+              <motion.div
+                variants={logoWispVariants}
+                className="pointer-events-none absolute -inset-10 -z-10 rounded-full opacity-0"
+                style={{
+                  background:
+                    'radial-gradient(60% 60% at 30% 40%, rgba(45,212,191,0.45) 0%, rgba(45,212,191,0.0) 65%), radial-gradient(55% 55% at 70% 60%, rgba(6,182,212,0.28) 0%, rgba(6,182,212,0.0) 70%)',
+                  mixBlendMode: 'screen',
+                }}
+              />
+              <motion.div
+                variants={logoWispDriftVariants}
+                className="pointer-events-none absolute -inset-14 -z-10 rounded-full opacity-0"
+                style={{
+                  background:
+                    'radial-gradient(50% 50% at 45% 35%, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.0) 62%), radial-gradient(50% 50% at 55% 70%, rgba(45,212,191,0.25) 0%, rgba(45,212,191,0.0) 70%)',
+                  mixBlendMode: 'screen',
+                }}
+              />
+
               {/* Logo Pill Container - Liquid Glass */}
               <div className="liquid-glass relative overflow-hidden rounded-full px-5 py-1.5 border border-white/10 group-hover:border-dark-accent/40 group-hover:bg-dark-accent/5 group-hover:shadow-[0_0_25px_rgba(45,212,191,0.2)]">
                 {/* Subtle light sweep */}
@@ -58,71 +102,29 @@ export default function Navbar() {
                   {PERSONAL.name.toUpperCase().replace(' ', ' • ')}
                 </span>
               </div>
-
-              {/* Decorative side element */}
-              <div className="ml-3 hidden h-px w-8 bg-gradient-to-r from-dark-accent/30 to-transparent md:block opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             </motion.button>
           </div>
 
-          {/* Center: Connect Button */}
-          <div className="hidden items-center justify-center lg:flex">
-            <motion.a
-              href={`mailto:${PERSONAL.email}`}
-              className="group flex items-center gap-2 text-sm text-dark-text/70 transition-colors hover:text-dark-accent hover:drop-shadow-[0_0_10px_rgba(45,212,191,0.6)] active:text-white"
-              initial={{ opacity: 0 }}
-              animate={{ 
-                opacity: 1,
-                scale: [1, 1.05, 1]
-              }}
-              transition={{ 
-                opacity: { duration: 0.5, delay: 0.5 },
-                scale: { duration: 2, repeat: Infinity, ease: "easeInOut" }
-              }}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <span className="text-xs uppercase tracking-wider">connect</span>
-              <span className="font-mono">{PERSONAL.email}</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                stroke="currentColor"
-                className="h-4 w-4 transition-transform group-hover:translate-x-1"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-                />
-              </svg>
-            </motion.a>
-          </div>
+          {/* Right: Nav Links (no connect/email) */}
+          <div className="hidden items-center lg:flex lg:pr-8">
+            <div className="liquid-glass flex items-center gap-1 rounded-full border border-white/10 px-1 py-1">
+              {NAV_LINKS.map((link) => (
+                <motion.button
+                  key={link}
+                  onClick={() => handleNavClick(link)}
+                  className="group relative rounded-full px-3 py-2 text-xs font-bold text-white/70 transition-all duration-300 hover:text-dark-accent xl:px-4 xl:text-sm"
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <span className="relative z-10 tracking-widest">{link.toUpperCase()}</span>
 
-          {/* Right: Nav Links */}
-          <div className="hidden items-center gap-1 lg:flex lg:gap-3 lg:pr-8">
-            {NAV_LINKS.map((link, index) => (
-              <motion.button
-                key={link}
-                onClick={() => handleNavClick(link)}
-                className="group relative px-3 py-2 text-xs font-bold text-white/60 transition-all duration-300 hover:text-dark-accent xl:px-4 xl:text-sm"
-                whileTap={{ scale: 0.95 }}
-              >
-                <span className="relative z-10 tracking-widest">{link.toUpperCase()}</span>
-                
-                {/* Modern Hover Pill - Liquid Glass hint */}
-                <motion.div 
-                  className="absolute inset-0 -z-10 rounded-lg bg-white/5 opacity-0 transition-all duration-300 group-hover:opacity-100 backdrop-blur-md border border-white/5"
-                  layoutId="nav-hover-bg"
-                />
-                
-                {/* Bottom Glow Line */}
-                <motion.div 
-                  className="absolute bottom-0 left-2 right-2 h-[2px] bg-dark-accent opacity-0 shadow-[0_0_12px_rgba(45,212,191,0.8)] transition-all duration-300 group-hover:opacity-100"
-                />
-              </motion.button>
-            ))}
+                  {/* Soft hover lens */}
+                  <motion.div
+                    className="absolute inset-0 -z-10 rounded-full bg-white/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                    layoutId="nav-hover-bg"
+                  />
+                </motion.button>
+              ))}
+            </div>
           </div>
 
           {/* Mobile Menu Button */}
@@ -165,7 +167,7 @@ export default function Navbar() {
             transition={{ duration: 0.2 }}
           >
             <div className="flex h-full flex-col items-center justify-center gap-8 p-8">
-              {/* Email */}
+              {/* Connect (mobile only) */}
               <a
                 href={`mailto:${PERSONAL.email}`}
                 className="group flex flex-col items-center gap-2 text-center"
