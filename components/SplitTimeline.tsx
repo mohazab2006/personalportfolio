@@ -102,10 +102,11 @@ function DoubleColumnTimeline() {
 }
 
 function SingleColumnTimeline() {
+  // Work experience first (at the top), then education, then leadership
   const allItems = [
+    ...EXPERIENCE.map((item) => ({ ...item, type: 'work' as const })),
     ...EDUCATION.map((item) => ({ ...item, type: 'education' as const })),
     ...LEADERSHIP.map((item) => ({ ...item, type: 'leadership' as const })),
-    ...EXPERIENCE.map((item) => ({ ...item, type: 'work' as const })),
   ]
 
   return (
@@ -139,6 +140,8 @@ function TimelineCard({ item, index, side }: TimelineCardProps) {
   const title = isEducation ? item.degree : item.role
   const subtitle = isEducation ? item.school : item.org
   const dates = isEducation ? item.years : item.dates
+  const logo = !isEducation && 'logo' in item ? item.logo : undefined
+  const upcoming = !isEducation && 'upcoming' in item ? item.upcoming : false
 
   return (
     <motion.div
@@ -173,11 +176,30 @@ function TimelineCard({ item, index, side }: TimelineCardProps) {
 
       {/* Card */}
       <motion.div
-        className="group rounded-2xl bg-light-bg-secondary p-6 shadow-lg transition-all hover:shadow-xl dark:bg-dark-bg-secondary/80 dark:backdrop-blur-lg border border-transparent dark:border-white/10 hover:border-dark-accent/30"
+        className={`group relative rounded-2xl bg-light-bg-secondary p-6 shadow-lg transition-all hover:shadow-xl dark:bg-dark-bg-secondary/80 dark:backdrop-blur-lg border border-transparent dark:border-white/10 hover:border-dark-accent/30 ${upcoming ? 'ring-1 ring-dark-accent/20' : ''}`}
         whileHover={{ y: -5, scale: 1.02 }}
       >
-        {/* Type Badge */}
-        <div className={`mb-3 flex ${side === 'left' ? 'justify-end' : 'justify-start'}`}>
+        {/* Logo - positioned in top right corner */}
+        {logo && (
+          <div className={`absolute top-4 ${side === 'left' ? 'left-4' : 'right-4'}`}>
+            <motion.div
+              className="h-10 w-10 rounded-lg bg-white/10 p-1.5 backdrop-blur-sm border border-white/10 flex items-center justify-center overflow-hidden"
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3, delay: index * 0.1 + 0.2 }}
+            >
+              <img
+                src={logo}
+                alt={`${subtitle} logo`}
+                className="h-full w-full object-contain"
+              />
+            </motion.div>
+          </div>
+        )}
+
+        {/* Type Badge + Upcoming Badge */}
+        <div className={`mb-3 flex items-center gap-2 ${side === 'left' ? 'justify-end' : 'justify-start'} ${logo ? (side === 'left' ? 'pr-0' : 'pr-14') : ''}`}>
           <span
             className={`rounded-full px-3 py-1 text-xs font-medium ${
               item.type === 'education'
@@ -193,10 +215,15 @@ function TimelineCard({ item, index, side }: TimelineCardProps) {
                 ? '👥 Leadership'
                 : '💼 Work'}
           </span>
+          {upcoming && (
+            <span className="rounded-full bg-dark-accent/20 px-3 py-1 text-xs font-medium text-dark-accent animate-pulse">
+              Upcoming
+            </span>
+          )}
         </div>
 
         {/* Header */}
-        <h3 className="mb-2 text-xl font-bold text-light-text dark:text-dark-text">{title}</h3>
+        <h3 className={`mb-2 text-xl font-bold text-light-text dark:text-dark-text ${logo && side !== 'left' ? 'pr-14' : ''}`}>{title}</h3>
         <p className="mb-1 text-dark-accent">{subtitle}</p>
         <p className="mb-4 text-sm text-light-text/60 dark:text-dark-text/60">{dates}</p>
 
@@ -207,15 +234,13 @@ function TimelineCard({ item, index, side }: TimelineCardProps) {
 
         {/* Bullets or Courses */}
         {!isEducation && item.bullets && (
-          <ul className={`mb-4 space-y-2 ${side === 'left' ? 'text-right' : 'text-left'}`}>
+          <ul className={`mb-4 space-y-2 text-left`}>
             {item.bullets.map((bullet, i) => (
               <li
                 key={i}
                 className="text-sm text-light-text/70 dark:text-dark-text/70"
               >
-                {side === 'left' && '• '}
-                {bullet}
-                {side !== 'left' && ' •'}
+                • {bullet}
               </li>
             ))}
           </ul>

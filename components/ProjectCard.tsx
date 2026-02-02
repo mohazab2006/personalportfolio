@@ -1,11 +1,11 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Project } from '@/lib/data'
 import { getProjectImageUrl } from '@/lib/projects'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 
 type ProjectCardProps = {
   project: Project
@@ -13,9 +13,45 @@ type ProjectCardProps = {
 }
 
 export default function ProjectCard({ project, index }: ProjectCardProps) {
-  const [imageError, setImageError] = useState(false)
-  const firstScreenshot = project.screenshots[0]
-  const imagePath = getProjectImageUrl(project.slug, firstScreenshot)
+  const [imageErrors, setImageErrors] = useState<Set<number>>(new Set())
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [isHovering, setIsHovering] = useState(false)
+  const intervalRef = useRef<NodeJS.Timeout | null>(null)
+  
+  const screenshots = project.screenshots
+  const hasMultipleImages = screenshots.length > 1
+  
+  // Auto-advance images on hover
+  useEffect(() => {
+    if (isHovering && hasMultipleImages) {
+      intervalRef.current = setInterval(() => {
+        setCurrentImageIndex((prev) => (prev + 1) % screenshots.length)
+      }, 2000) // Change image every 2 seconds
+    } else {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+        intervalRef.current = null
+      }
+      // Reset to first image when not hovering
+      if (!isHovering) {
+        setCurrentImageIndex(0)
+      }
+    }
+    
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+      }
+    }
+  }, [isHovering, hasMultipleImages, screenshots.length])
+  
+  const handleImageError = useCallback((index: number) => {
+    setImageErrors((prev) => new Set(prev).add(index))
+  }, [])
+  
+  const currentScreenshot = screenshots[currentImageIndex]
+  const imagePath = getProjectImageUrl(project.slug, currentScreenshot)
+  const hasError = imageErrors.has(currentImageIndex)
 
   return (
     <motion.div
@@ -25,33 +61,71 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       whileHover={{ y: -8, scale: 1.01 }}
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
     >
       {/* Glossy Reflection Overlay */}
       <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-transparent via-white/[0.02] to-white/[0.05] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
       
-      {/* Image */}
+      {/* Image Carousel */}
       <div className="relative aspect-video w-full overflow-hidden">
-        <div className="absolute inset-0 z-10 bg-gradient-to-b from-transparent via-transparent to-[#0F0F12]" />
-        {!imageError ? (
-          <Image
-            src={imagePath}
-            alt={project.title}
-            fill
-            className="object-cover transition-transform duration-700 group-hover:scale-105"
-            onError={() => setImageError(true)}
-            loading="lazy"
-            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            placeholder="blur"
-            blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgZmlsbD0iIzI5MjUzYSIvPjwvc3ZnPg=="
-          />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center bg-white/5">
-            <div className="text-center">
-              <div className="mb-2 text-4xl">🖼️</div>
-              <p className="text-sm text-light-text/50 dark:text-dark-text/50">
-                Image coming soon
-              </p>
+        <div className="absolute inset-0 z-10 bg-gradient-to-b from-transparent via-transparent to-[#0F0F12] pointer-events-none" />
+        
+        <AnimatePresence mode="wait">
+          {!hasError ? (
+            <motion.div
+              key={currentImageIndex}
+              className="absolute inset-0"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <Image
+                src={imagePath}
+                alt={`${project.title} - Screenshot ${currentImageIndex + 1}`}
+                fill
+                className="object-cover transition-transform duration-700 group-hover:scale-105"
+                onError={() => handleImageError(currentImageIndex)}
+                loading="lazy"
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                placeholder="blur"
+                blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgZmlsbD0iIzI5MjUzYSIvPjwvc3ZnPg=="
+              />
+            </motion.div>
+          ) : (
+            <div className="flex h-full w-full items-center justify-center bg-white/5">
+              <div className="text-center">
+                <div className="mb-2 text-4xl">🖼️</div>
+                <p className="text-sm text-light-text/50 dark:text-dark-text/50">
+                  Image coming soon
+                </p>
+              </div>
             </div>
+          )}
+        </AnimatePresence>
+
+        {/* Bubble Indicators - Only show if multiple images */}
+        {hasMultipleImages && (
+          <div className="absolute bottom-3 left-1/2 z-20 flex -translate-x-1/2 gap-1.5">
+            {screenshots.map((_, i) => (
+              <motion.button
+                key={i}
+                onClick={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  setCurrentImageIndex(i)
+                }}
+                className={`h-2 w-2 rounded-full transition-all duration-300 ${
+                  i === currentImageIndex
+                    ? 'bg-dark-accent shadow-[0_0_8px_rgba(45,212,191,0.6)]'
+                    : 'bg-white/40 hover:bg-white/60'
+                }`}
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.9 }}
+                aria-label={`View screenshot ${i + 1}`}
+              />
+            ))}
           </div>
         )}
 

@@ -15,6 +15,8 @@ export type ExperienceItem = {
   dates: string
   bullets: string[]
   tags?: string[]
+  logo?: string // optional logo path (e.g., '/logos/cira.svg')
+  upcoming?: boolean // for future positions
 }
 
 export type EducationItem = {
@@ -166,6 +168,19 @@ export const PROJECTS: Project[] = [
 
 // Work Experience
 export const EXPERIENCE: ExperienceItem[] = [
+  {
+    role: 'Junior DevOps Specialist',
+    org: 'CIRA (Canadian Internet Registration Authority)',
+    dates: 'May 2026 – August 2026',
+    bullets: [
+      'Upcoming co-op position focusing on DevOps practices and infrastructure automation.',
+      'Will contribute to CI/CD pipelines, cloud infrastructure, and deployment workflows.',
+      'Joining the team managing Canada\'s .CA domain registry infrastructure.',
+    ],
+    tags: ['DevOps', 'CI/CD', 'Cloud', 'Infrastructure', 'Automation'],
+    logo: '/logos/cira.png',
+    upcoming: true,
+  },
   {
     role: 'Software Developer (Web Applications)',
     org: 'Independent Projects',

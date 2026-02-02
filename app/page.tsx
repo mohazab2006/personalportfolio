@@ -19,6 +19,9 @@ const SplitTimeline = lazy(() => import('@/components/SplitTimeline'))
 const Interests = lazy(() => import('@/components/Interests'))
 const Contact = lazy(() => import('@/components/Contact'))
 
+// Session storage key for loader state
+const LOADER_SHOWN_KEY = 'portfolio_loader_shown'
+
 // Loading fallback component
 const SectionLoader = () => (
   <div className="flex min-h-[400px] items-center justify-center">
@@ -27,15 +30,33 @@ const SectionLoader = () => (
 )
 
 export default function Home() {
-  const [isLoading, setIsLoading] = useState(true)
-  const [showContent, setShowContent] = useState(false)
+  // Check if loader was already shown this session
+  const [isLoading, setIsLoading] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return !sessionStorage.getItem(LOADER_SHOWN_KEY)
+    }
+    return true
+  })
+  const [showContent, setShowContent] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return !!sessionStorage.getItem(LOADER_SHOWN_KEY)
+    }
+    return false
+  })
 
   useEffect(() => {
+    // If loader already shown, enable scroll immediately
+    if (!isLoading) {
+      document.body.style.overflow = 'auto'
+      return
+    }
     // Disable scroll during loading
     document.body.style.overflow = 'hidden'
-  }, [])
+  }, [isLoading])
 
   const handleLoadingComplete = () => {
+    // Mark loader as shown for this session
+    sessionStorage.setItem(LOADER_SHOWN_KEY, 'true')
     setIsLoading(false)
     // Small delay before showing content for smooth transition
     setTimeout(() => {
@@ -46,7 +67,7 @@ export default function Home() {
 
   return (
     <>
-      {/* Loader - Always plays on refresh */}
+      {/* Loader - Only plays once per session */}
       <AnimatePresence mode="wait">
         {isLoading && <Loader key="loader" onComplete={handleLoadingComplete} />}
       </AnimatePresence>

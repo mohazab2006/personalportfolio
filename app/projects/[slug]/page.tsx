@@ -39,7 +39,7 @@ export default function ProjectPage({ params }: Props) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-dark-bg text-dark-text flex items-center justify-center">
+      <div className="min-h-screen bg-transparent text-dark-text flex items-center justify-center">
         <div className="h-12 w-12 animate-spin rounded-full border-4 border-dark-accent/40 border-t-dark-accent"></div>
       </div>
     )
@@ -50,10 +50,17 @@ export default function ProjectPage({ params }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-dark-bg text-dark-text">
+    <div className="relative min-h-screen text-dark-text">
+      {/* Animated Background Orbs - matching main page */}
+      <div className="fixed inset-0 -z-20 overflow-hidden pointer-events-none" aria-hidden="true">
+        <div className="absolute -left-1/4 top-0 h-96 w-96 animate-float rounded-full bg-dark-accent/10 blur-3xl" />
+        <div className="absolute -right-1/4 bottom-0 h-96 w-96 animate-float rounded-full bg-cyan-500/5 blur-3xl" style={{ animationDelay: '2s' }} />
+        <div className="absolute left-1/2 top-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 animate-pulse-glow rounded-full bg-dark-accent/5 blur-3xl" />
+      </div>
+
       {/* Hero Section */}
       <motion.section
-        className="relative overflow-hidden bg-gradient-to-b from-dark-bg-secondary to-dark-bg"
+        className="relative overflow-hidden bg-gradient-to-b from-dark-bg-secondary/80 to-transparent backdrop-blur-sm"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
@@ -150,28 +157,27 @@ export default function ProjectPage({ params }: Props) {
 
       {/* Content Section */}
       <motion.section 
-        className="py-20"
+        className="relative py-20"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.3 }}
       >
-        <div className="mx-auto max-w-5xl px-6 lg:px-8">
+        <div className="mx-auto max-w-5xl px-6 lg:px-8 relative z-10">
           {/* Overview */}
-          {/* Overview */}
-          <div className="mb-16">
+          <div className="mb-16 rounded-2xl bg-dark-bg-secondary/60 backdrop-blur-lg p-8 border border-white/5">
             <h2 className="mb-6 text-3xl font-bold text-dark-text">Overview</h2>
             <p className="text-lg leading-relaxed text-dark-text/80">{project.description}</p>
           </div>
 
           {/* Tech Stack Details */}
-          <div className="mb-16">
+          <div className="mb-16 rounded-2xl bg-dark-bg-secondary/60 backdrop-blur-lg p-8 border border-white/5">
             <h2 className="mb-6 text-3xl font-bold text-dark-text">Tech Stack</h2>
             <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
               {project.stack.map((tech) => (
                 <motion.div
                   key={tech}
-                  className="rounded-xl bg-dark-bg-secondary p-4 text-center"
-                  whileHover={{ scale: 1.05, y: -2 }}
+                  className="rounded-xl bg-white/5 border border-white/10 p-4 text-center backdrop-blur-sm"
+                  whileHover={{ scale: 1.05, y: -2, borderColor: 'rgba(45, 212, 191, 0.3)' }}
                 >
                   <p className="font-medium text-dark-text">{tech}</p>
                 </motion.div>
@@ -180,7 +186,7 @@ export default function ProjectPage({ params }: Props) {
           </div>
 
           {/* Screenshots Gallery */}
-          <div>
+          <div className="rounded-2xl bg-dark-bg-secondary/60 backdrop-blur-lg p-8 border border-white/5">
             <h2 className="mb-6 text-3xl font-bold text-dark-text">Screenshots</h2>
             <div className="space-y-8">
               {project.screenshots.map((screenshot, index) => {
@@ -188,7 +194,7 @@ export default function ProjectPage({ params }: Props) {
                 return (
                   <motion.div
                     key={index}
-                    className="overflow-hidden rounded-2xl bg-dark-bg-secondary shadow-lg"
+                    className="overflow-hidden rounded-2xl bg-dark-bg-secondary/80 shadow-lg border border-white/10"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
