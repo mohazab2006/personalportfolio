@@ -1,12 +1,26 @@
 'use client'
 
 import { motion, AnimatePresence } from 'framer-motion'
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { INTERESTS, INTEREST_STORIES } from '@/lib/data'
 import Section from './Section'
 
 export default function Interests() {
   const [selectedInterest, setSelectedInterest] = useState<string | null>(null)
+  const storyRef = useRef<HTMLDivElement>(null)
+
+  // Scroll to the story section when an interest is selected
+  useEffect(() => {
+    if (selectedInterest && storyRef.current) {
+      // Small delay to allow the animation to start
+      setTimeout(() => {
+        storyRef.current?.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'center' 
+        })
+      }, 100)
+    }
+  }, [selectedInterest])
 
   return (
     <Section
@@ -67,6 +81,7 @@ export default function Interests() {
       <AnimatePresence mode="wait">
         {selectedInterest && (
           <motion.div
+            ref={storyRef}
             key={selectedInterest}
             className="mt-12 rounded-2xl bg-dark-bg-secondary/80 backdrop-blur-xl border border-white/10 p-8 shadow-2xl"
             initial={{ opacity: 0, y: 20, scale: 0.95 }}

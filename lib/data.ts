@@ -77,7 +77,7 @@ export const SERVICES: ServiceItem[] = [
     icon: '🔒',
     title: 'Security & Infrastructure',
     description:
-      'I approach systems with a security-first mindset—thinking about threat models, attack surface, and safe defaults before I ship. I\'m actively learning core cyber methodologies and how to turn them into practical hardening, monitoring, and secure design choices. Security is built into every project from day one, not an afterthought.',
+      'I approach systems with a security-first mindset, focusing on threat models, attack surfaces, safe defaults, and proven security methodologies. Security is built into every project from day one, not an afterthought.',
   },
 ]
 
