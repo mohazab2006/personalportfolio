@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, lazy, Suspense } from 'react'
+import { useState, useEffect, useRef, lazy, Suspense } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import Loader from '@/components/Loader'
 import Navbar from '@/components/Navbar'
@@ -21,6 +21,38 @@ const Contact = lazy(() => import('@/components/Contact'))
 
 // Session storage key for loader state
 const LOADER_SHOWN_KEY = 'portfolio_loader_shown'
+
+// Safari (and some WebKit) throttle requestAnimationFrame during load; if we mount
+// Hero immediately when the loader finishes, animations can be skipped (all text appears at once).
+// Mounting animated content after 2 rAF cycles ensures the browser is ready to run the animation loop.
+function useAnimationReady(showContent: boolean) {
+  const [animatedContentReady, setAnimatedContentReady] = useState(false)
+  const rafId = useRef<number | null>(null)
+
+  useEffect(() => {
+    if (!showContent) {
+      setAnimatedContentReady(false)
+      return
+    }
+    let cancelled = false
+    const run = () => {
+      requestAnimationFrame(() => {
+        if (cancelled) return
+        requestAnimationFrame(() => {
+          if (cancelled) return
+          setAnimatedContentReady(true)
+        })
+      })
+    }
+    rafId.current = requestAnimationFrame(run)
+    return () => {
+      cancelled = true
+      if (rafId.current != null) cancelAnimationFrame(rafId.current)
+    }
+  }, [showContent])
+
+  return animatedContentReady
+}
 
 // Loading fallback component
 const SectionLoader = () => (
@@ -44,6 +76,9 @@ export default function Home() {
     return false
   })
 
+  // Delay mounting Hero/sections until 2 rAF after content is shown (fixes Safari animation skip)
+  const animatedContentReady = useAnimationReady(showContent)
+
   useEffect(() => {
     // If loader already shown, enable scroll immediately
     if (!isLoading) {
@@ -58,11 +93,18 @@ export default function Home() {
     // Mark loader as shown for this session
     sessionStorage.setItem(LOADER_SHOWN_KEY, 'true')
     setIsLoading(false)
-    // Small delay before showing content for smooth transition
-    setTimeout(() => {
-      setShowContent(true)
-      document.body.style.overflow = 'auto'
-    }, 100)
+    const showContentAfterDelay = () => {
+      setTimeout(() => {
+        setShowContent(true)
+        document.body.style.overflow = 'auto'
+      }, 100)
+    }
+    // Safari (and others) throttle rAF/timers until load completes; wait for load so animations run
+    if (typeof document !== 'undefined' && document.readyState !== 'complete') {
+      window.addEventListener('load', showContentAfterDelay, { once: true })
+    } else {
+      showContentAfterDelay()
+    }
   }
 
   return (
@@ -89,25 +131,31 @@ export default function Home() {
           <ChatButton />
           <SectionDots />
 
-          {/* Page Sections */}
+          {/* Page Sections - mount after 2 rAF so Safari runs Framer Motion animations (no instant skip) */}
           <main className="relative z-[1] overflow-x-hidden">
-            <Hero />
-            <About />
-            <Suspense fallback={<SectionLoader />}>
-              <Education />
-            </Suspense>
-            <Suspense fallback={<SectionLoader />}>
-              <Portfolio />
-            </Suspense>
-            <Suspense fallback={<SectionLoader />}>
-              <SplitTimeline />
-            </Suspense>
-            <Suspense fallback={<SectionLoader />}>
-              <Interests />
-            </Suspense>
-            <Suspense fallback={<SectionLoader />}>
-              <Contact />
-            </Suspense>
+            {animatedContentReady ? (
+              <>
+                <Hero />
+                <About />
+                <Suspense fallback={<SectionLoader />}>
+                  <Education />
+                </Suspense>
+                <Suspense fallback={<SectionLoader />}>
+                  <Portfolio />
+                </Suspense>
+                <Suspense fallback={<SectionLoader />}>
+                  <SplitTimeline />
+                </Suspense>
+                <Suspense fallback={<SectionLoader />}>
+                  <Interests />
+                </Suspense>
+                <Suspense fallback={<SectionLoader />}>
+                  <Contact />
+                </Suspense>
+              </>
+            ) : (
+              <div className="min-h-screen" aria-hidden="true" />
+            )}
           </main>
 
           {/* Footer */}
