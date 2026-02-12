@@ -1,9 +1,22 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { EDUCATION, LEADERSHIP, EXPERIENCE, ExperienceItem, EducationItem } from '@/lib/data'
 import Section from './Section'
+
+// Match Tailwind lg breakpoint (1024px) – used only for split timeline column order on phone
+function useIsMobileView() {
+  const [isMobile, setIsMobile] = useState(false)
+  useEffect(() => {
+    const m = window.matchMedia('(max-width: 1023px)')
+    setIsMobile(m.matches)
+    const on = () => setIsMobile(m.matches)
+    m.addEventListener('change', on)
+    return () => m.removeEventListener('change', on)
+  }, [])
+  return isMobile
+}
 
 export default function SplitTimeline() {
   const [isSingleColumn, setIsSingleColumn] = useState(false)
@@ -56,10 +69,17 @@ export default function SplitTimeline() {
 }
 
 function DoubleColumnTimeline() {
-  const leftItems = [
-    ...EDUCATION.map((item) => ({ ...item, type: 'education' as const })),
-    ...LEADERSHIP.map((item) => ({ ...item, type: 'leadership' as const })),
-  ]
+  const isMobile = useIsMobileView()
+  // On phone: show most recent first → Work, then Leadership, then Education (left column order reversed)
+  const leftItems = isMobile
+    ? [
+        ...LEADERSHIP.map((item) => ({ ...item, type: 'leadership' as const })),
+        ...EDUCATION.map((item) => ({ ...item, type: 'education' as const })),
+      ]
+    : [
+        ...EDUCATION.map((item) => ({ ...item, type: 'education' as const })),
+        ...LEADERSHIP.map((item) => ({ ...item, type: 'leadership' as const })),
+      ]
 
   const rightItems = EXPERIENCE.map((item) => ({ ...item, type: 'work' as const }))
 
@@ -72,8 +92,8 @@ function DoubleColumnTimeline() {
       transition={{ duration: 0.3 }}
     >
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_auto_1fr]">
-        {/* Left Column: Education + Leadership */}
-        <div className="space-y-12">
+        {/* Left Column: Education + Leadership (on desktop); Leadership + Education (on phone, so after Work we get L then E) */}
+        <div className="order-last space-y-12 lg:order-none">
           {leftItems.map((item, index) => (
             <TimelineCard key={index} item={item} index={index} side="left" />
           ))}
@@ -90,8 +110,8 @@ function DoubleColumnTimeline() {
           />
         </div>
 
-        {/* Right Column: Work Experience */}
-        <div className="space-y-12">
+        {/* Right Column: Work Experience — show first on phone (most recent first) */}
+        <div className="order-first space-y-12 lg:order-none">
           {rightItems.map((item, index) => (
             <TimelineCard key={index} item={item} index={index} side="right" />
           ))}
