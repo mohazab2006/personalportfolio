@@ -25,6 +25,8 @@ export type EducationItem = {
   years: string
   gpa?: string
   courses?: string[]
+  logo?: string // optional logo path (e.g., '/logos/carleton.png')
+  tags?: string[] // optional pills (e.g. AI/ML, Cybersecurity)
 }
 
 export type InterestItem = {
@@ -99,6 +101,8 @@ export const EDUCATION: EducationItem[] = [
       'Probability Models',
       'Algorithms',
     ],
+    logo: '/logos/carleton.png',
+    tags: ['AI & Machine Learning', 'Cybersecurity', 'Business Minor', 'Honours', 'Ottawa'],
   },
 ]
 
@@ -111,7 +115,7 @@ export const PROJECTS: Project[] = [
     demo: 'https://htclean.ca/',
     description:
       'A comprehensive service-booking platform for HT Clean, a premium cleaning company specializing in car detailing and property maintenance. The website features real-time scheduling capabilities, instant quote generation, and seamless lead capture functionality. Built with a mobile-first approach and optimized for SEO, the platform streamlines customer bookings and business operations. The site showcases professional cleaning services including car detailing, window cleaning, and power washing services, with integrated contact forms and social media integration. The modern, responsive design ensures excellent user experience across all devices while maintaining fast loading times and secure data handling.',
-    stack: ['Next.js', 'TypeScript', 'Tailwind', 'HTML', 'Supabase', 'Docker'],
+    stack: ['Next.js', 'TypeScript', 'Tailwind', 'Supabase', 'Docker', 'REST API', 'SEO', 'Booking'],
     screenshots: ['hero.jpg', 'screen-1.jpg', 'screen-2.jpg'],
   },
   {
@@ -121,7 +125,7 @@ export const PROJECTS: Project[] = [
     demo: 'https://empowerorphans.com/',
     description:
       'A comprehensive nonprofit platform for Empower Orphans, a student-led organization mobilizing campus chapters to support orphaned children. The website features donation tracking with real-time progress bars, chapter management system for multiple universities (Carleton University, University of Ottawa), event coordination, and volunteer application forms. Built with role-based access control (RBAC) for chapter leaders and administrators, the platform enables transparent fundraising with clear goal setting and impact reporting. The site includes interactive donation forms, chapter-specific social media integration, contact management, and a responsive design optimized for student engagement and donor transparency.',
-    stack: ['Next.js', 'TypeScript', 'Tailwind', 'HTML', 'Supabase', 'Docker'],
+    stack: ['Next.js', 'TypeScript', 'Tailwind', 'Supabase', 'Docker', 'RBAC', 'Donations', 'Chapters'],
     screenshots: ['hero.jpg', 'screen-1.jpg', 'screen-2.jpg'],
   },
   {
@@ -131,7 +135,7 @@ export const PROJECTS: Project[] = [
     demo: 'https://www.empowerorphans.ca/',
     description:
       'Initial MVP for Empower Orphans, a nonprofit organization focused on providing hope and opportunity to orphaned children. The website features donation tracking, event management for fundraising activities like bake sales, charity partnerships with Children\'s Aid Society of Ottawa (CASOTT), and community engagement tools. Built as a foundation to prove out core features and workflows, this version established the organization\'s online presence with donation forms, contact management, and event coordination. The site emphasizes transparency in fundraising with clear mission statements and impact tracking, serving as the foundation that led to the enhanced V2 with expanded capabilities.',
-    stack: ['HTML', 'CSS', 'JavaScript', 'EmailJS API'],
+    stack: ['HTML', 'CSS', 'JavaScript', 'EmailJS', 'MVP', 'Nonprofit'],
     screenshots: ['hero.jpg', 'screen-1.jpg', 'screen-2.jpg'],
   },
   {
@@ -141,7 +145,7 @@ export const PROJECTS: Project[] = [
     demo: '',
     description:
       'An interactive portfolio experience built to push the boundaries of modern web development, featuring Snaggy - a custom AI chatbot assistant powered by Groq\'s LLaMA 3.3 70B model. Snaggy acts as my personal AI representative, trained on my complete background, projects, skills, and experience, capable of answering questions about my journey from Egypt to Canada, coding origins through video games, basketball coaching experience, and technical expertise. The portfolio showcases cutting-edge web technologies including a custom cursor system with magnetic effects, 3D animated orbs using React Three Fiber, smooth page transitions with Framer Motion, real-time AI chat interface with fullscreen mode, sophisticated loader with progress animation, split timeline for experience/education, holographic cards, interactive particle background, and smooth scrolling with Lenis. The project demonstrates advanced full-stack development combining frontend animations, backend API integration, AI model implementation, and modern UX design patterns. Built as a passion project to explore the intersection of web development and artificial intelligence, showcasing both technical skills and creative problem-solving.',
-    stack: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion', '@react-three/fiber', '@react-three/drei', 'Three.js', 'Groq AI', 'LLaMA 3.3', 'next-themes', 'Lenis'],
+    stack: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion', 'Three.js', 'Groq AI', 'LLaMA', 'Lenis', 'AI Chat'],
     screenshots: ['hero.jpg'],
   },
   {
@@ -151,7 +155,7 @@ export const PROJECTS: Project[] = [
     demo: '',
     description:
       "A comprehensive self-hosted infrastructure project that became a deep learning journey in system administration, security, and DevOps. Built from scratch on Ubuntu, this server taught me Linux fundamentals, shell scripting with Bash, and Python automation. I learned Docker containerization to run multiple services, Nginx reverse proxy configuration for load balancing, and Let's Encrypt SSL certificate management for secure connections. The project expanded into cybersecurity with VPN setup for secure remote access, SSH key management, firewall configuration, and basic intrusion detection. I implemented automated backup systems, monitoring solutions, and learned about network security, port forwarding, and service hardening. This hands-on experience with real infrastructure taught me the importance of security-first thinking, system reliability, and the power of owning your own infrastructure rather than relying on third-party services.",
-    stack: ['Ubuntu', 'Docker', 'Nginx', "Let's Encrypt", 'VPN', 'SSH', 'Bash', 'Python'],
+    stack: ['Ubuntu', 'Docker', 'Nginx', "Let's Encrypt", 'VPN', 'SSH', 'Bash', 'Python', 'DevOps', 'Self-Hosted'],
     screenshots: ['hero.jpg'],
   },
   {
@@ -161,7 +165,17 @@ export const PROJECTS: Project[] = [
     demo: '',
     description:
       'Full-stack library system with searchable inventory, QR/OCR tools, and RBAC for librarians, students, and admins. Streamlined library operations with modern technology and role-based access control.',
-    stack: ['Python (Django)', 'Supabase (Postgres)', 'REST API', 'JS/HTML/CSS'],
+    stack: ['Python', 'Django', 'Supabase', 'PostgreSQL', 'REST API', 'QR/OCR', 'RBAC', 'Library'],
+    screenshots: ['hero.jpg'],
+  },
+  {
+    slug: 'ramibarbershop',
+    title: 'Rami The Barber',
+    github: 'https://github.com/mohazab2006/ramibarbershop',
+    demo: 'https://ramithebarber.com',
+    description:
+      'Website for Rami The Barber, a barber shop in Ottawa (Barrhaven). Features a hero section, about Rami with photo and bio, services (Haircut & Beard, Haircut), before/after transformations, gallery, Game Tape videos, reviews, location and contact, and footer with booking CTA. The Book page offers full Square booking integration. Media (hero, gallery, transformations, videos, about photo, OG image) is served from Supabase Storage.',
+    stack: ['Next.js', 'TypeScript', 'Tailwind', 'Supabase', 'Square', 'Booking', 'Storage', 'Barber'],
     screenshots: ['hero.jpg'],
   },
 ]
@@ -177,7 +191,7 @@ export const EXPERIENCE: ExperienceItem[] = [
       'Will contribute to CI/CD pipelines, cloud infrastructure, and deployment workflows.',
       'Joining the team managing Canada\'s .CA domain registry infrastructure.',
     ],
-    tags: ['DevOps', 'CI/CD', 'Cloud', 'Infrastructure', 'Automation'],
+    tags: ['DevOps', 'CI/CD', 'Cloud', 'Infrastructure', 'Automation', '.CA Registry', 'Upcoming'],
     logo: '/logos/cira.png',
     upcoming: true,
   },
@@ -186,12 +200,12 @@ export const EXPERIENCE: ExperienceItem[] = [
     org: 'Independent Projects',
     dates: 'October 2023 – Present',
     bullets: [
-      'Built and deployed production-ready web applications for small businesses and non-profits (HT Clean, Salam Society, Milk Inc., Empower Orphans).',
+      'Built and deployed production-ready web applications for small businesses and non-profits (HT Clean, Salam Society, Milk Inc., Rami The Barber, Empower Orphans).',
       'Delivered real-world features: booking flows, admin dashboards, authentication, RBAC, API integrations, and AI-powered assistance.',
       'Full-stack development with feature development, AI integration, deployment, and security-aware design.',
       'Managed self-hosted infrastructure with Nginx reverse proxy and Let\'s Encrypt SSL/TLS certificates.',
     ],
-    tags: ['Next.js', 'TypeScript', 'Supabase', 'Docker', 'Nginx', 'SSL', 'AI Integration', 'RBAC', 'Full-Stack'],
+    tags: ['Next.js', 'TypeScript', 'Supabase', 'Docker', 'Nginx', 'SSL', 'AI Integration', 'RBAC', 'Full-Stack', 'Freelance', 'Self-Hosted'],
   },
 ]
 
@@ -206,7 +220,30 @@ export const LEADERSHIP: ExperienceItem[] = [
       'Built & maintain the organization website; improved donor engagement.',
       'Lead 30+ members & executives; expand community reach.',
     ],
-    tags: ['Leadership', 'Nonprofit', 'Community'],
+    tags: ['Leadership', 'Nonprofit', 'Co-Founder', 'Web Dev', 'Fundraising', '30+ Members'],
+    logo: '/logos/empower-orphans.png',
+  },
+  {
+    role: 'Youth Program Director',
+    org: 'Salam Society',
+    dates: 'Sept 2025 – Present',
+    bullets: [
+      'Lead youth programs and initiatives focused on community and children.',
+      'Coordinate programming and engagement for Salam Society.',
+    ],
+    tags: ['Leadership', 'Youth Programs', 'Children', 'Community', 'Salam Society'],
+    logo: '/logos/salam-society.png',
+  },
+  {
+    role: 'Director',
+    org: 'RISE Community',
+    dates: 'Oct 2025 – Present',
+    bullets: [
+      'Direct community initiatives and programs.',
+      'Support RISE Community’s mission and outreach.',
+    ],
+    tags: ['Leadership', 'Director', 'Community', 'RISE', 'Outreach'],
+    logo: '/logos/rise-community.png',
   },
 ]
 
@@ -280,27 +317,44 @@ export const INTEREST_STORIES = {
 
 // Tech Stack (for interactive display)
 export const TECH_STACK = {
-  Frontend: [
+  Languages: [
     ['TypeScript', 90],
+    ['JavaScript', 88],
+    ['Python', 85],
+    ['Java', 80],
+    ['C', 78],
+    ['C++', 70],
+    ['SQL', 75],
+    ['Bash', 72],
+    ['HTML/CSS', 88],
+  ] as [string, number][],
+  Frontend: [
+    ['React', 88],
     ['Next.js', 85],
-    ['React', 85],
-    ['Tailwind', 80],
+    ['Tailwind CSS', 85],
+    ['Framer Motion', 75],
+    ['Three.js', 65],
   ] as [string, number][],
   Backend: [
-    ['Supabase/Postgres', 75],
-    ['Node.js', 80],
-    ['Django', 70],
+    ['Node.js', 82],
+    ['Supabase', 80],
+    ['PostgreSQL', 75],
+    ['Django', 72],
   ] as [string, number][],
-  Infra: [
-    ['Docker', 75],
-    ['Nginx', 70],
-    ['VPS/SSL', 75],
+  DevOps: [
+    ['Docker', 78],
+    ['Nginx', 75],
+    ['Linux (Ubuntu)', 76],
+    ['CI/CD', 70],
+    ['SSL/TLS', 74],
+    ['Let\'s Encrypt', 72],
   ] as [string, number][],
-  Languages: [
-    ['Python', 80],
-    ['Java', 75],
-    ['C', 70],
-    ['Bash', 70],
+  Networking: [
+    ['HTTP/HTTPS', 82],
+    ['VPN', 70],
+    ['DNS', 68],
+    ['TCP/IP', 72],
+    ['Reverse Proxy', 74],
   ] as [string, number][],
 }
 

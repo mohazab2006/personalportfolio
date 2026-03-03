@@ -160,7 +160,7 @@ function TimelineCard({ item, index, side }: TimelineCardProps) {
   const title = isEducation ? item.degree : item.role
   const subtitle = isEducation ? item.school : item.org
   const dates = isEducation ? item.years : item.dates
-  const logo = !isEducation && 'logo' in item ? item.logo : undefined
+  const logo = 'logo' in item ? item.logo : undefined
   const upcoming = !isEducation && 'upcoming' in item ? item.upcoming : false
 
   return (
@@ -284,8 +284,8 @@ function TimelineCard({ item, index, side }: TimelineCardProps) {
           </div>
         )}
 
-        {/* Tags */}
-        {!isEducation && item.tags && item.tags.length > 0 && (
+        {/* Tags (work/leadership and education when present) */}
+        {item.tags && item.tags.length > 0 && (
           <div className={`flex flex-wrap gap-2 ${side === 'left' ? 'justify-end' : 'justify-start'}`}>
             {item.tags.map((tag, i) => (
               <span

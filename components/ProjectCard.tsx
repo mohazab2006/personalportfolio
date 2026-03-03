@@ -145,7 +145,7 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
 
         {/* Tech Stack */}
         <div className="mb-4 flex flex-wrap gap-2">
-          {project.stack.slice(0, 4).map((tech) => (
+          {project.stack.slice(0, 6).map((tech) => (
             <span
               key={tech}
               className="rounded-full bg-white/5 border border-white/10 px-3 py-1 text-xs font-medium text-white/70 backdrop-blur-sm group-hover:border-dark-accent/20 group-hover:bg-dark-accent/5 transition-all"

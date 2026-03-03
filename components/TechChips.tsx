@@ -8,7 +8,7 @@ import { useReducedMotion } from '@/lib/utils'
 type Category = keyof typeof TECH_STACK
 
 export default function TechChips() {
-  const [activeCategory, setActiveCategory] = useState<Category>('Frontend')
+  const [activeCategory, setActiveCategory] = useState<Category>('Languages')
   const categories = getTechCategories() as Category[]
   const prefersReducedMotion = useReducedMotion()
 
