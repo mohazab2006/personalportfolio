@@ -342,9 +342,9 @@ export const TECH_STACK = {
     ['Django', 72],
   ] as [string, number][],
   DevOps: [
-    ['Docker', 78],
+    ['Docker', 80],
     ['Nginx', 75],
-    ['Linux (Ubuntu)', 76],
+    ['Linux (Ubuntu)', 85],
     ['CI/CD', 70],
     ['SSL/TLS', 74],
     ['Let\'s Encrypt', 72],
