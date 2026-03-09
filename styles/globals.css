@@ -67,6 +67,21 @@ body {
   100% { transform: translate3d(-1%, 2%, 0) rotate(-1deg); }
 }
 
+@keyframes terminal-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.terminal-cursor {
+  display: inline-block;
+  width: 0.2em;
+  height: 0.85em;
+  background-color: currentColor;
+  margin-left: 2px;
+  vertical-align: baseline;
+  animation: terminal-blink 1s step-end infinite;
+}
+
 /* Liquid Glass Effect */
 .liquid-glass {
   background: rgba(255, 255, 255, 0.05);

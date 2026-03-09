@@ -61,7 +61,7 @@ export default function Hero() {
               hi, my name is
             </motion.p>
             <h1 className="text-4xl md:text-6xl lg:text-[7rem] xl:text-[9rem] flex flex-wrap justify-center leading-[0.9] text-neon" style={{ fontFamily: 'var(--font-display)', letterSpacing: '0.02em' }}>
-              {"MOHAMED AZAB".split("").map((char, index) => (
+              {"> Mohamed Azab".split("").map((char, index) => (
                 <span 
                   key={index} 
                   className="inline-block overflow-hidden"
@@ -80,6 +80,13 @@ export default function Hero() {
                   </motion.span>
                 </span>
               ))}
+              <motion.span
+                className="terminal-cursor text-white ml-0.5 inline-block"
+                aria-hidden="true"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.85, duration: 0.15 }}
+              />
             </h1>
           </div>
 
@@ -179,7 +186,7 @@ export default function Hero() {
               hi, my name is
             </motion.p>
             <h1 className="text-5xl md:text-7xl lg:text-[8rem] xl:text-[10rem] flex flex-wrap leading-[0.9] text-neon" style={{ fontFamily: 'var(--font-display)', letterSpacing: '0.02em' }}>
-              {"MOHAMED AZAB".split("").map((char, index) => (
+              {"> Mohamed Azab".split("").map((char, index) => (
                 <span 
                   key={index} 
                   className="inline-block overflow-hidden"
@@ -198,6 +205,13 @@ export default function Hero() {
                   </motion.span>
                 </span>
               ))}
+              <motion.span
+                className="terminal-cursor text-white ml-0.5 inline-block"
+                aria-hidden="true"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.85, duration: 0.15 }}
+              />
             </h1>
           </div>
 
