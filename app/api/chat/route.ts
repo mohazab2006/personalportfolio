@@ -24,7 +24,7 @@ EDUCATION:
 - Specialization: AI & Machine Learning + Cybersecurity
 - Minor in Business
 - Carleton University, Ottawa, ON (2024-2028)
-- Relevant courses: Data Structures, Systems Programming (C), Python, Java, Linear Algebra, Discrete Structures, Calculus, Probability Models
+- Relevant courses: Data Structures, Systems Programming (C), Software Engineering (C++), Python, Java, Linear Algebra, Discrete Structures, Calculus, Probability Models
 
 PROJECTS:
 1. HT Clean Website V1 - Service booking platform for cleaning company with real-time scheduling, quote generation, and lead capture (Next.js, TypeScript, Tailwind, Supabase, Docker) - Live at htclean.ca

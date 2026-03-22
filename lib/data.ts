@@ -93,6 +93,7 @@ export const EDUCATION: EducationItem[] = [
     courses: [
       'Data Structures',
       'Systems Programming (C)',
+      'Software Engineering (C++)',
       'Imperative Programming (Python)',
       'OOP (Java)',
       'Linear Algebra',
