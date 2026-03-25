@@ -117,7 +117,7 @@ export const PROJECTS: Project[] = [
     description:
       'A comprehensive service-booking platform for HT Clean, a premium cleaning company specializing in car detailing and property maintenance. The website features real-time scheduling capabilities, instant quote generation, and seamless lead capture functionality. Built with a mobile-first approach and optimized for SEO, the platform streamlines customer bookings and business operations. The site showcases professional cleaning services including car detailing, window cleaning, and power washing services, with integrated contact forms and social media integration. The modern, responsive design ensures excellent user experience across all devices while maintaining fast loading times and secure data handling.',
     stack: ['Next.js', 'TypeScript', 'Tailwind', 'Supabase', 'Docker', 'REST API', 'SEO', 'Booking'],
-    screenshots: ['hero.jpg', 'screen-1.jpg', 'screen-2.jpg'],
+    screenshots: ['hero.jpg', 'screen-1.jpg', 'screen-2.jpg', 'screen-3.jpg', 'screen-4.jpg', 'screen-5.jpg'],
   },
   {
     slug: 'empower-orphans-website-v2',

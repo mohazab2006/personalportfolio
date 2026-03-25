@@ -27,7 +27,7 @@ VALUES (
     'OpenAI API',
     'Cybersecurity'
   ]::TEXT[],
-  ARRAY['hero.jpg', 'screen-1.jpg', 'screen-2.jpg']::TEXT[],
+  ARRAY['hero.jpg', 'screen-1.jpg', 'screen-2.jpg', 'screen-3.jpg', 'screen-4.jpg', 'screen-5.jpg']::TEXT[],
   3
 )
 ON CONFLICT (slug)
