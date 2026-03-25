@@ -140,6 +140,16 @@ export const PROJECTS: Project[] = [
     screenshots: ['hero.jpg', 'screen-1.jpg', 'screen-2.jpg'],
   },
   {
+    slug: 'sentinelstack-ai',
+    title: 'SentinelStack AI',
+    github: 'https://github.com/mohazab2006/SentinelStack',
+    demo: '',
+    description:
+      'AI-powered cybersecurity platform designed to simulate SOC workflows end-to-end: traffic ingestion, deterministic detections, anomaly analysis, severity fusion, and automated response. Built as a Dockerized multi-service stack with a Next.js SOC dashboard, FastAPI detection services, PostgreSQL persistence, and NGINX routing. The platform combines rule-based threat detection with ML-based behavioral anomaly scoring, then enriches alerts with OpenAI-assisted triage summaries and action recommendations. This project strengthened my applied security engineering skills across detection pipelines, explainable risk scoring, response automation, and production-style service orchestration.',
+    stack: ['Next.js', 'TypeScript', 'Python', 'FastAPI', 'scikit-learn', 'PostgreSQL', 'Docker', 'NGINX', 'OpenAI API', 'Cybersecurity'],
+    screenshots: ['hero.jpg', 'screen-1.jpg', 'screen-2.jpg'],
+  },
+  {
     slug: 'personal-portfolio',
     title: 'Personal Portfolio',
     github: 'https://github.com/mohazab2006/personalportfolio',
@@ -338,8 +348,11 @@ export const TECH_STACK = {
   ] as [string, number][],
   Backend: [
     ['Node.js', 82],
+    ['FastAPI', 78],
     ['Supabase', 80],
     ['PostgreSQL', 75],
+    ['scikit-learn', 72],
+    ['OpenAI API', 78],
     ['Django', 72],
   ] as [string, number][],
   DevOps: [
