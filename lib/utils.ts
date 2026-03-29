@@ -53,7 +53,7 @@ export function useIntersectionObserver(
   options: IntersectionObserverInit & { triggerOnce?: boolean } = {}
 ): boolean {
   const [isIntersecting, setIsIntersecting] = useState(false)
-  const { triggerOnce, ...observerOptions } = options
+  const { triggerOnce, threshold, rootMargin, root } = options
 
   useEffect(() => {
     const element = ref.current
@@ -65,31 +65,42 @@ export function useIntersectionObserver(
       return
     }
 
-    // Fallback: force visible after 1.5s in case the observer never fires
-    // (LinkedIn in-app browser can silently swallow observer callbacks)
+    // Safari doesn't fire IntersectionObserver for elements already in the
+    // viewport when the observer first attaches — check immediately via
+    // getBoundingClientRect as a synchronous fallback
+    const rect = element.getBoundingClientRect()
+    const thresholdValue = typeof threshold === 'number' ? threshold : 0
+    if (rect.top < window.innerHeight * (1 - thresholdValue) && rect.bottom > 0) {
+      setIsIntersecting(true)
+      return
+    }
+
+    // Fallback timer: force visible after 1.5s in case the observer never fires
+    // (LinkedIn in-app browser silently swallows callbacks; also guards against
+    // the Safari case where the sync check above just missed due to layout timing)
     const fallbackTimer = setTimeout(() => setIsIntersecting(true), 1500)
 
-    const observer = new IntersectionObserver(([entry]) => {
-      const isNowIntersecting = entry.isIntersecting
-
-      // If triggerOnce is true and we've already triggered, don't update
-      if (triggerOnce && isIntersecting) return
-
-      setIsIntersecting(isNowIntersecting)
-
-      // If triggerOnce is true and we're now intersecting, disconnect
-      if (triggerOnce && isNowIntersecting) {
-        clearTimeout(fallbackTimer)
-        observer.disconnect()
-      }
-    }, observerOptions)
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsIntersecting(true)
+          clearTimeout(fallbackTimer)
+          if (triggerOnce) observer.disconnect()
+        }
+      },
+      { threshold, rootMargin, root }
+    )
 
     observer.observe(element)
     return () => {
       clearTimeout(fallbackTimer)
       observer.disconnect()
     }
-  }, [ref, observerOptions, triggerOnce, isIntersecting])
+  // Use primitive option values so the effect doesn't re-run on every render
+  // (passing the options object directly would create a new reference each time,
+  // cancelling and restarting the fallback timer before it ever completes)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ref, triggerOnce, threshold, rootMargin])
 
   return isIntersecting
 }
