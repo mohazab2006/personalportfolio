@@ -59,22 +59,36 @@ export function useIntersectionObserver(
     const element = ref.current
     if (!element) return
 
+    // Some in-app browsers (e.g. LinkedIn) don't support IntersectionObserver
+    if (typeof IntersectionObserver === 'undefined') {
+      setIsIntersecting(true)
+      return
+    }
+
+    // Fallback: force visible after 1.5s in case the observer never fires
+    // (LinkedIn in-app browser can silently swallow observer callbacks)
+    const fallbackTimer = setTimeout(() => setIsIntersecting(true), 1500)
+
     const observer = new IntersectionObserver(([entry]) => {
       const isNowIntersecting = entry.isIntersecting
-      
+
       // If triggerOnce is true and we've already triggered, don't update
       if (triggerOnce && isIntersecting) return
-      
+
       setIsIntersecting(isNowIntersecting)
-      
+
       // If triggerOnce is true and we're now intersecting, disconnect
       if (triggerOnce && isNowIntersecting) {
+        clearTimeout(fallbackTimer)
         observer.disconnect()
       }
     }, observerOptions)
 
     observer.observe(element)
-    return () => observer.disconnect()
+    return () => {
+      clearTimeout(fallbackTimer)
+      observer.disconnect()
+    }
   }, [ref, observerOptions, triggerOnce, isIntersecting])
 
   return isIntersecting
