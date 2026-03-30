@@ -12,6 +12,7 @@ const Cursor = dynamic(() => import('@/components/Cursor'), { ssr: false })
 // Lazy load below-fold sections
 const FeaturedWork = lazy(() => import('@/components/FeaturedWork'))
 const SplitTimeline = lazy(() => import('@/components/SplitTimeline'))
+const Education = lazy(() => import('@/components/Education'))
 const TechStack = lazy(() => import('@/components/TechStack'))
 const Contact = lazy(() => import('@/components/Contact'))
 
@@ -34,6 +35,9 @@ export default function Home() {
         </Suspense>
         <Suspense fallback={<SectionLoader />}>
           <SplitTimeline />
+        </Suspense>
+        <Suspense fallback={<SectionLoader />}>
+          <Education />
         </Suspense>
         <Suspense fallback={<SectionLoader />}>
           <TechStack />

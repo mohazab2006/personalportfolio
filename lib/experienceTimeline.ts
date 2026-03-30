@@ -88,16 +88,14 @@ export function buildSortedTimeline(): TimelineEntry[] {
   return rows.sort((a, b) => getTimelineStartMs(b) - getTimelineStartMs(a))
 }
 
-/** Left column: education + leadership, newest first. */
-export function buildEducationLeadershipTimeline(): TimelineEntry[] {
-  const rows: TimelineEntry[] = [
-    ...EDUCATION.map((item) => ({ ...item, kind: 'education' as const })),
-    ...LEADERSHIP.map((item) => ({ ...item, kind: 'leadership' as const })),
-  ]
+/** Right column: leadership only, newest first. (Education is a separate section below.) */
+export function buildLeadershipTimeline(): TimelineEntry[] {
+  const rows: TimelineEntry[] = LEADERSHIP.map((item) => ({ ...item, kind: 'leadership' as const }))
   return rows.sort((a, b) => getTimelineStartMs(b) - getTimelineStartMs(a))
 }
 
-/** Right column: work only, newest first. */
+
+/** Work / co-op entries only, newest first (Experience section, left column). */
 export function buildWorkTimeline(): TimelineEntry[] {
   const rows = EXPERIENCE.map((item) => ({ ...item, kind: 'work' as const }))
   return rows.sort((a, b) => getTimelineStartMs(b) - getTimelineStartMs(a))

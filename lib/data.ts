@@ -60,7 +60,7 @@ export const PERSONAL = {
 }
 
 // Navigation Links (matches docs/information-architecture.md)
-export const NAV_LINKS = ['Projects', 'Experience', 'Stack', 'Contact']
+export const NAV_LINKS = ['Projects', 'Experience', 'Education', 'Stack', 'Contact']
 
 // About Section
 export const ABOUT_TEXT = `I'm Mohamed Azab, a Computer Science student at Carleton University specializing in AI & Machine Learning with a focus on Cybersecurity. I'm passionate about building modern, performant web applications and exploring the intersection of software engineering, artificial intelligence, and security.

@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { useMemo } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import {
-  buildEducationLeadershipTimeline,
+  buildLeadershipTimeline,
   buildWorkTimeline,
   timelineKey,
   type TimelineEntry,
@@ -49,12 +49,12 @@ function TimelineCard({ entry }: { entry: TimelineEntry }) {
     <article className="relative rounded-2xl border border-white/[0.08] bg-white/[0.025] p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.03)_inset] backdrop-blur-sm transition-colors hover:border-white/[0.12] sm:p-7">
       <div className="mb-5 flex items-start gap-4 sm:gap-5">
         {logo && (
-          <div className="relative h-[3.25rem] w-[3.25rem] shrink-0 overflow-hidden rounded-xl border border-white/[0.08] bg-white/[0.05] sm:h-16 sm:w-16">
+          <div className="relative h-[3.25rem] w-[3.25rem] shrink-0 overflow-hidden rounded-full bg-gradient-to-b from-white/[0.09] to-white/[0.03] shadow-[0_2px_16px_-4px_rgba(0,0,0,0.45)] ring-1 ring-white/10 sm:h-16 sm:w-16">
             <Image
               src={logoUrl(logo)}
               alt=""
               fill
-              className="object-contain p-2 sm:p-2.5"
+              className="object-contain p-1.5 sm:p-2"
               sizes="(max-width: 640px) 52px, 64px"
               unoptimized
             />
@@ -173,10 +173,11 @@ function SectionIntro() {
     >
       <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-emerald-400/80">Experience</p>
       <h2 className="font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-        Work, education & leadership
+        Work & leadership
       </h2>
       <p className="mx-auto mt-4 max-w-xl text-sm text-white/50">
-        Work first, then education and leadership. Newest first within each column.
+        Professional roles and campus leadership. Degree and coursework live in Education below. Newest first
+        in each column.
       </p>
     </motion.div>
   )
@@ -184,7 +185,7 @@ function SectionIntro() {
 
 export default function SplitTimeline() {
   const workEntries = useMemo(() => buildWorkTimeline(), [])
-  const educationLeadershipEntries = useMemo(() => buildEducationLeadershipTimeline(), [])
+  const leadershipEntries = useMemo(() => buildLeadershipTimeline(), [])
 
   return (
     <section className="relative py-16 sm:py-24" id="experience">
@@ -204,9 +205,9 @@ export default function SplitTimeline() {
           <div className="lg:border-l lg:border-white/[0.07] lg:pl-10 xl:pl-14">
             <Column
               side="right"
-              label="Education & leadership"
-              subtitle="Degree program and organizations where I lead initiatives and teams."
-              entries={educationLeadershipEntries}
+              label="Leadership"
+              subtitle="Organizations and initiatives outside of coursework."
+              entries={leadershipEntries}
             />
           </div>
         </div>
