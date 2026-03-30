@@ -10,42 +10,35 @@ module.exports = {
     extend: {
       colors: {
         dark: {
-          bg: '#050505', // Deeper black
-          'bg-secondary': '#0F0F12',
-          text: '#F5F7FB',
-          accent: '#2DD4BF', // Electric Cyan
-          'accent-hover': '#06B6D4',
+          bg: '#050505',
+          'bg-secondary': '#0A0A0C',
+          surface: '#111114',
+          text: '#F0F0F3',
+          muted: '#8B8B9A',
+          accent: '#2DD4BF',
+          'accent-hover': '#14B8A6',
           'accent-light': '#99F6E4',
+          border: 'rgba(255, 255, 255, 0.08)',
         },
+        // Legacy tokens — kept until components are rebuilt in later milestones
         light: {
           bg: '#FFFFFF',
           'bg-secondary': '#F7F8FA',
           text: '#0B0B0F',
-          accent: '#6D28D9',
-          'accent-hover': '#5B21B6',
-          'accent-light': '#A78BFA',
-        },
-      },
-      animation: {
-        'spin-slow': 'spin 20s linear infinite',
-        'pulse-glow': 'pulse-glow 3s ease-in-out infinite',
-        'float': 'float 6s ease-in-out infinite',
-      },
-      keyframes: {
-        'pulse-glow': {
-          '0%, 100%': { opacity: '0.5' },
-          '50%': { opacity: '1' },
-        },
-        'float': {
-          '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-20px)' },
+          accent: '#2DD4BF',
+          'accent-hover': '#14B8A6',
+          'accent-light': '#99F6E4',
         },
       },
       fontFamily: {
         sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
+        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+      },
+      spacing: {
+        section: '6rem',
+        'section-lg': '8rem',
       },
     },
   },
   plugins: [],
 }
-

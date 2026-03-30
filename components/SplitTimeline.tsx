@@ -1,307 +1,216 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { EDUCATION, LEADERSHIP, EXPERIENCE, ExperienceItem, EducationItem } from '@/lib/data'
-import Section from './Section'
+import Image from 'next/image'
+import { useMemo } from 'react'
+import { motion, useReducedMotion } from 'framer-motion'
+import {
+  buildEducationLeadershipTimeline,
+  buildWorkTimeline,
+  timelineKey,
+  type TimelineEntry,
+} from '@/lib/experienceTimeline'
 
-// Match Tailwind lg breakpoint (1024px) – used only for split timeline column order on phone
-function useIsMobileView() {
-  const [isMobile, setIsMobile] = useState(false)
-  useEffect(() => {
-    const m = window.matchMedia('(max-width: 1023px)')
-    setIsMobile(m.matches)
-    const on = () => setIsMobile(m.matches)
-    m.addEventListener('change', on)
-    return () => m.removeEventListener('change', on)
-  }, [])
-  return isMobile
+const viewport = { once: true, amount: 0.22, margin: '0px 0px -12% 0px' } as const
+
+const easeSmooth = [0.16, 1, 0.3, 1] as const
+
+const TYPE_LABEL: Record<TimelineEntry['kind'], string> = {
+  work: 'Work',
+  education: 'Education',
+  leadership: 'Leadership',
+}
+
+/** Bump `NEXT_PUBLIC_LOGO_VERSION` in `.env.local` when replacing files under `/public/logos` with the same name. */
+function logoUrl(path: string): string {
+  const v = process.env.NEXT_PUBLIC_LOGO_VERSION
+  return v ? `${path}?v=${encodeURIComponent(v)}` : path
+}
+
+function listForEntry(entry: TimelineEntry): string[] {
+  if (entry.kind === 'education') {
+    const lines: string[] = []
+    if (entry.gpa) lines.push(entry.gpa)
+    if (entry.tags?.length) lines.push(...entry.tags)
+    else if (entry.courses?.length) lines.push(...entry.courses.slice(0, 8))
+    return lines
+  }
+  return entry.bullets
+}
+
+function TimelineCard({ entry }: { entry: TimelineEntry }) {
+  const isEducation = entry.kind === 'education'
+  const title = isEducation ? entry.school : entry.org
+  const subtitle = isEducation ? entry.degree : entry.role
+  const period = isEducation ? entry.years : entry.dates
+  const logo = entry.logo
+  const highlights = listForEntry(entry)
+
+  return (
+    <article className="relative rounded-2xl border border-white/[0.08] bg-white/[0.025] p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.03)_inset] backdrop-blur-sm transition-colors hover:border-white/[0.12] sm:p-7">
+      <div className="mb-5 flex items-start gap-4 sm:gap-5">
+        {logo && (
+          <div className="relative h-[3.25rem] w-[3.25rem] shrink-0 overflow-hidden rounded-xl border border-white/[0.08] bg-white/[0.05] sm:h-16 sm:w-16">
+            <Image
+              src={logoUrl(logo)}
+              alt=""
+              fill
+              className="object-contain p-2 sm:p-2.5"
+              sizes="(max-width: 640px) 52px, 64px"
+              unoptimized
+            />
+          </div>
+        )}
+        <div className="min-w-0 flex-1">
+          <div className="mb-1.5 flex flex-wrap items-center gap-2">
+            <span className="rounded-md border border-white/[0.08] bg-white/[0.04] px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-white/50">
+              {TYPE_LABEL[entry.kind]}
+            </span>
+            <span className="text-xs text-white/45">{period}</span>
+          </div>
+          <h3 className="font-display text-lg font-semibold tracking-tight text-white sm:text-xl">{title}</h3>
+          <p className="mt-1 text-sm leading-snug text-white/58 sm:text-[0.9375rem]">{subtitle}</p>
+        </div>
+      </div>
+      <ul className="space-y-2.5 border-t border-white/[0.06] pt-5">
+        {highlights.map((h, i) => (
+          <li key={i} className="flex gap-2.5 text-sm leading-relaxed text-white/68 sm:text-[0.9375rem]">
+            <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-emerald-400/70" />
+            <span>{h}</span>
+          </li>
+        ))}
+      </ul>
+    </article>
+  )
+}
+
+function ColumnHeader({ label, subtitle }: { label: string; subtitle: string }) {
+  const reduceMotion = useReducedMotion()
+
+  return (
+    <motion.div
+      className="mb-6 sm:mb-8"
+      initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: reduceMotion ? 0 : 0.45, ease: easeSmooth }}
+      viewport={viewport}
+    >
+      <h3 className="font-display text-lg font-semibold tracking-tight text-white sm:text-xl">{label}</h3>
+      <p className="mt-1.5 max-w-md text-sm leading-relaxed text-white/42">{subtitle}</p>
+    </motion.div>
+  )
+}
+
+function TimelineReveal({
+  side,
+  index,
+  children,
+}: {
+  side: 'left' | 'right'
+  index: number
+  children: React.ReactNode
+}) {
+  const reduceMotion = useReducedMotion()
+  const fromX = reduceMotion ? 0 : side === 'left' ? -22 : 22
+
+  return (
+    <motion.div
+      className="w-full"
+      initial={
+        reduceMotion
+          ? { opacity: 1, x: 0, y: 0 }
+          : { opacity: 0, x: fromX, y: 26 }
+      }
+      whileInView={{ opacity: 1, x: 0, y: 0 }}
+      transition={{
+        duration: reduceMotion ? 0 : 0.58,
+        delay: reduceMotion ? 0 : index * 0.07,
+        ease: easeSmooth,
+      }}
+      viewport={viewport}
+    >
+      {children}
+    </motion.div>
+  )
+}
+
+function Column({
+  label,
+  subtitle,
+  entries,
+  side,
+}: {
+  label: string
+  subtitle: string
+  entries: TimelineEntry[]
+  side: 'left' | 'right'
+}) {
+  return (
+    <div className="relative min-w-0">
+      <ColumnHeader label={label} subtitle={subtitle} />
+      <ul className="flex flex-col gap-8 sm:gap-9">
+        {entries.map((entry, index) => (
+          <li key={timelineKey(entry, index)}>
+            <TimelineReveal side={side} index={index}>
+              <TimelineCard entry={entry} />
+            </TimelineReveal>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+function SectionIntro() {
+  const reduceMotion = useReducedMotion()
+
+  return (
+    <motion.div
+      className="mb-12 text-center sm:mb-16"
+      initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: reduceMotion ? 0 : 0.5, ease: easeSmooth }}
+      viewport={{ once: true, amount: 0.6 }}
+    >
+      <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-emerald-400/80">Experience</p>
+      <h2 className="font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+        Work, education & leadership
+      </h2>
+      <p className="mx-auto mt-4 max-w-xl text-sm text-white/50">
+        Work first, then education and leadership. Newest first within each column.
+      </p>
+    </motion.div>
+  )
 }
 
 export default function SplitTimeline() {
-  const [isSingleColumn, setIsSingleColumn] = useState(false)
+  const workEntries = useMemo(() => buildWorkTimeline(), [])
+  const educationLeadershipEntries = useMemo(() => buildEducationLeadershipTimeline(), [])
 
   return (
-    <Section
-      id="experience"
-      title="Experience"
-      subtitle="My professional journey, education, and leadership"
-      className="bg-light-bg dark:bg-transparent"
-    >
-      <div className="space-y-8">
-        {/* Toggle Button */}
-        <div className="flex justify-center">
-          <motion.button
-            onClick={() => setIsSingleColumn(!isSingleColumn)}
-            className="magnetic-button flex items-center gap-2 rounded-full bg-white/5 border border-white/15 px-6 py-3 text-sm font-medium text-white/80 transition-all hover:bg-dark-accent/10 hover:border-dark-accent/40 hover:text-dark-accent active:bg-white/10 active:text-white"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2}
-              stroke="currentColor"
-              className="h-5 w-5"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12"
-              />
-            </svg>
-            {isSingleColumn ? 'Switch to Split View' : 'Switch to Single Column'}
-          </motion.button>
-        </div>
+    <section className="relative py-16 sm:py-24" id="experience">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <SectionIntro />
 
-        {/* Timeline */}
-        <AnimatePresence mode="wait">
-          {isSingleColumn ? (
-            <SingleColumnTimeline key="single" />
-          ) : (
-            <DoubleColumnTimeline key="double" />
-          )}
-        </AnimatePresence>
-      </div>
-    </Section>
-  )
-}
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-0">
+          <div className="lg:pr-10 xl:pr-14">
+            <Column
+              side="left"
+              label="Work"
+              subtitle="Co-op and freelance engineering roles."
+              entries={workEntries}
+            />
+          </div>
 
-function DoubleColumnTimeline() {
-  const isMobile = useIsMobileView()
-  // On phone: show most recent first → Work, then Leadership, then Education (left column order reversed)
-  const leftItems = isMobile
-    ? [
-        ...LEADERSHIP.map((item) => ({ ...item, type: 'leadership' as const })),
-        ...EDUCATION.map((item) => ({ ...item, type: 'education' as const })),
-      ]
-    : [
-        ...EDUCATION.map((item) => ({ ...item, type: 'education' as const })),
-        ...LEADERSHIP.map((item) => ({ ...item, type: 'leadership' as const })),
-      ]
-
-  const rightItems = EXPERIENCE.map((item) => ({ ...item, type: 'work' as const }))
-
-  return (
-    <motion.div
-      className="relative"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
-    >
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_auto_1fr]">
-        {/* Left Column: Education + Leadership (on desktop); Leadership + Education (on phone, so after Work we get L then E) */}
-        <div className="order-last space-y-12 lg:order-none">
-          {leftItems.map((item, index) => (
-            <TimelineCard key={index} item={item} index={index} side="left" />
-          ))}
-        </div>
-
-        {/* Center Line - Hidden on mobile, visible on lg+ */}
-        <div className="relative hidden w-1 lg:block">
-          <motion.div
-            className="h-full w-full bg-gradient-to-b from-dark-accent/60 via-dark-accent/30 to-dark-accent/10"
-            initial={{ scaleY: 0 }}
-            animate={{ scaleY: 1 }}
-            transition={{ duration: 1, delay: 0.3 }}
-            style={{ transformOrigin: 'top' }}
-          />
-        </div>
-
-        {/* Right Column: Work Experience — show first on phone (most recent first) */}
-        <div className="order-first space-y-12 lg:order-none">
-          {rightItems.map((item, index) => (
-            <TimelineCard key={index} item={item} index={index} side="right" />
-          ))}
+          <div className="lg:border-l lg:border-white/[0.07] lg:pl-10 xl:pl-14">
+            <Column
+              side="right"
+              label="Education & leadership"
+              subtitle="Degree program and organizations where I lead initiatives and teams."
+              entries={educationLeadershipEntries}
+            />
+          </div>
         </div>
       </div>
-    </motion.div>
+    </section>
   )
 }
-
-function SingleColumnTimeline() {
-  // Work experience first (at the top), then education, then leadership
-  const allItems = [
-    ...EXPERIENCE.map((item) => ({ ...item, type: 'work' as const })),
-    ...EDUCATION.map((item) => ({ ...item, type: 'education' as const })),
-    ...LEADERSHIP.map((item) => ({ ...item, type: 'leadership' as const })),
-  ]
-
-  return (
-    <motion.div
-      className="relative mx-auto max-w-3xl"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
-    >
-      {/* Vertical Line */}
-      <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-dark-accent/60 via-dark-accent/30 to-dark-accent/10 md:left-8" />
-
-      <div className="space-y-12 pl-8 md:pl-20">
-        {allItems.map((item, index) => (
-          <TimelineCard key={index} item={item} index={index} side="single" />
-        ))}
-      </div>
-    </motion.div>
-  )
-}
-
-type TimelineCardProps = {
-  item: (ExperienceItem | EducationItem) & { type: 'education' | 'leadership' | 'work' }
-  index: number
-  side: 'left' | 'right' | 'single'
-}
-
-function TimelineCard({ item, index, side }: TimelineCardProps) {
-  const isEducation = 'degree' in item
-  const title = isEducation ? item.degree : item.role
-  const subtitle = isEducation ? item.school : item.org
-  const dates = isEducation ? item.years : item.dates
-  const logo = 'logo' in item ? item.logo : undefined
-  const upcoming = !isEducation && 'upcoming' in item ? item.upcoming : false
-
-  return (
-    <motion.div
-      className={`relative ${side === 'left' ? 'text-right' : ''}`}
-      initial={{ opacity: 0, x: side === 'left' ? -50 : side === 'right' ? 50 : -20 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true, amount: 0.3 }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
-    >
-      {/* Connector Dot - Hidden on mobile for split view, visible on lg+ */}
-      {side !== 'single' && (
-        <motion.div
-          className={`absolute top-8 hidden h-3 w-3 rounded-full bg-white shadow-lg shadow-white/15 lg:block ${
-            side === 'left' ? '-right-[1.35rem]' : '-left-[1.35rem]'
-          }`}
-          initial={{ scale: 0 }}
-          whileInView={{ scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.3, delay: index * 0.1 + 0.3 }}
-        />
-      )}
-
-      {side === 'single' && (
-        <motion.div
-          className="absolute -left-8 top-8 h-3 w-3 rounded-full bg-white shadow-lg shadow-white/15 md:-left-[4.5rem]"
-          initial={{ scale: 0 }}
-          whileInView={{ scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.3, delay: index * 0.1 + 0.3 }}
-        />
-      )}
-
-      {/* Card */}
-      <motion.div
-        className={`group relative rounded-2xl bg-light-bg-secondary p-6 shadow-lg transition-all hover:shadow-xl dark:bg-dark-bg-secondary/80 dark:backdrop-blur-lg border border-transparent dark:border-white/10 hover:border-dark-accent/30 ${upcoming ? 'ring-1 ring-dark-accent/20' : ''}`}
-        whileHover={{ y: -5, scale: 1.02 }}
-      >
-        {/* Logo - positioned in top right corner */}
-        {logo && (
-          <div className={`absolute top-4 ${side === 'left' ? 'left-4' : 'right-4'}`}>
-            <motion.div
-              className="h-10 w-10 rounded-lg bg-white/10 p-1.5 backdrop-blur-sm border border-white/10 flex items-center justify-center overflow-hidden"
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.3, delay: index * 0.1 + 0.2 }}
-            >
-              <img
-                src={logo}
-                alt={`${subtitle} logo`}
-                className="h-full w-full object-contain"
-              />
-            </motion.div>
-          </div>
-        )}
-
-        {/* Type Badge + Upcoming Badge */}
-        <div className={`mb-3 flex items-center gap-2 ${side === 'left' ? 'justify-end' : 'justify-start'} ${logo ? (side === 'left' ? 'pr-0' : 'pr-14') : ''}`}>
-          <span
-            className={`rounded-full px-3 py-1 text-xs font-medium ${
-              item.type === 'education'
-                ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400'
-                : item.type === 'leadership'
-                  ? 'bg-green-500/10 text-green-600 dark:text-green-400'
-                  : 'bg-white/10 text-white/80'
-            }`}
-          >
-            {item.type === 'education'
-              ? '🎓 Education'
-              : item.type === 'leadership'
-                ? '👥 Leadership'
-                : '💼 Work'}
-          </span>
-          {upcoming && (
-            <span className="rounded-full bg-dark-accent/20 px-3 py-1 text-xs font-medium text-dark-accent animate-pulse">
-              Upcoming
-            </span>
-          )}
-        </div>
-
-        {/* Header */}
-        <h3 className={`mb-2 text-xl font-bold text-light-text dark:text-dark-text ${logo && side !== 'left' ? 'pr-14' : ''}`}>{title}</h3>
-        <p className="mb-1 text-dark-accent">{subtitle}</p>
-        <p className="mb-4 text-sm text-light-text/60 dark:text-dark-text/60">{dates}</p>
-
-        {/* GPA for Education */}
-        {isEducation && item.gpa && (
-          <p className="mb-3 text-sm font-semibold text-dark-accent">{item.gpa}</p>
-        )}
-
-        {/* Bullets or Courses */}
-        {!isEducation && item.bullets && (
-          <ul className={`mb-4 space-y-2 text-left`}>
-            {item.bullets.map((bullet, i) => (
-              <li
-                key={i}
-                className="text-sm text-light-text/70 dark:text-dark-text/70"
-              >
-                • {bullet}
-              </li>
-            ))}
-          </ul>
-        )}
-
-        {isEducation && item.courses && item.courses.length > 0 && (
-          <div className={`mb-4 ${side === 'left' ? 'text-right' : 'text-left'}`}>
-            <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-light-text/70 dark:text-dark-text/70">
-              Relevant Courses
-            </h4>
-            <div className={`flex flex-wrap gap-2 ${side === 'left' ? 'justify-end' : 'justify-start'}`}>
-              {item.courses.map((course, i) => (
-                <span
-                  key={i}
-                  className="rounded-full bg-blue-500/10 px-3 py-1 text-xs text-blue-600 dark:text-blue-400"
-                >
-                  {course}
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Tags (work/leadership and education when present) */}
-        {item.tags && item.tags.length > 0 && (
-          <div className={`flex flex-wrap gap-2 ${side === 'left' ? 'justify-end' : 'justify-start'}`}>
-            {item.tags.map((tag, i) => (
-              <span
-                key={i}
-                className="rounded-full bg-white/5 border border-white/10 px-3 py-1 text-xs text-white/70"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-        )}
-
-        {/* Glow effect */}
-        <div className="absolute inset-0 -z-10 rounded-2xl bg-white/0 opacity-0 blur-xl transition-all group-hover:bg-white/8 group-hover:opacity-100" />
-      </motion.div>
-    </motion.div>
-  )
-}
-

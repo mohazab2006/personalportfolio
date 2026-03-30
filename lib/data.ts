@@ -41,6 +41,11 @@ export type ServiceItem = {
   description: string
 }
 
+/** Public resume URL: env override, else Supabase Storage (personal-files bucket). */
+export const RESUME_PDF_URL =
+  process.env.NEXT_PUBLIC_RESUME_PDF_URL ??
+  'https://gqjbmzvtwnkkrqqhugka.supabase.co/storage/v1/object/public/personal-files/resume.pdf'
+
 // Personal Information
 export const PERSONAL = {
   name: 'Mohamed Azab',
@@ -50,12 +55,12 @@ export const PERSONAL = {
   university: 'Carleton University',
   tagline:
     "Hello, my name is Mohamed Azab — I'm a Computer Science student at Carleton University (AI & ML). A passionate learner who enjoys building reliable, well-designed software.",
-  resumePdf: '/resume.pdf',
+  resumePdf: RESUME_PDF_URL,
   heroFallback: '/hero-fallback.png',
 }
 
-// Navigation Links
-export const NAV_LINKS = ['About', 'Education', 'Portfolio', 'Experience', 'Interests', 'Contact']
+// Navigation Links (matches docs/information-architecture.md)
+export const NAV_LINKS = ['Projects', 'Experience', 'Stack', 'Contact']
 
 // About Section
 export const ABOUT_TEXT = `I'm Mohamed Azab, a Computer Science student at Carleton University specializing in AI & Machine Learning with a focus on Cybersecurity. I'm passionate about building modern, performant web applications and exploring the intersection of software engineering, artificial intelligence, and security.
@@ -110,6 +115,36 @@ export const EDUCATION: EducationItem[] = [
 // Projects
 export const PROJECTS: Project[] = [
   {
+    slug: 'knowledge-mesh',
+    title: 'KnowledgeMesh',
+    github: 'https://github.com/mohazab2006/KnowledgeMesh',
+    demo: '',
+    description:
+      'Workspace-scoped knowledge product: upload documents, index in the background, then ask in natural language and get answers backed by real passages with citations. Multi-service RAG stack with a gateway for auth, ingestion, retrieval, and LLM calls; PostgreSQL with pgvector for embeddings; Redis-backed ingestion queue; worker pipeline for extract, chunk, and embed; Next.js frontend with semantic search, citation-backed answers, optional MMR reranking, and SSE streaming.',
+    stack: ['RAG', 'Ollama', 'Next.js', 'Redis', 'TypeScript', 'Python', 'FastAPI', 'PostgreSQL', 'pgvector', 'Docker', 'NGINX', 'OpenAI API'],
+    screenshots: ['hero.jpg', 'screen-1.jpg', 'screen-2.jpg', 'screen-3.jpg'],
+  },
+  {
+    slug: 'path-to-offer-ai',
+    title: 'PathToOffer AI',
+    github: 'https://github.com/mohazab2006/PathToOfferAI',
+    demo: '',
+    description:
+      'AI job-application assistant that parses job descriptions, scores your resume, generates optimized versions and tailored cover letters, and exports polished PDFs for real applications.',
+    stack: ['Next.js', 'Tailwind', 'FastAPI', 'Python', 'OpenAI GPT-4o', 'SQLite', 'ReportLab'],
+    screenshots: ['hero.jpg', 'screen-1.jpg', 'screen-2.jpg', 'screen-3.jpg', 'screen-4.jpg', 'screen-5.jpg'],
+  },
+  {
+    slug: 'StudynFlow',
+    title: 'StudynFlow',
+    github: 'https://github.com/mohazab2006/StudynFlow',
+    demo: '',
+    description:
+      'Local-first desktop productivity app for students, combining School/Life workspaces, recurring templates, weather + calendar dashboard, AI-powered syllabus parsing, and flexible grade tracking with RapidTables-like calculations.',
+    stack: ['Tauri', 'Rust', 'React', 'OpenAi', 'TypeScript', 'Tailwind', 'SQLite', 'TanStack Query', 'React Router', 'Zod'],
+    screenshots: ['hero.jpg', 'screen-1.jpg', 'screen-2.jpg'],
+  },
+  {
     slug: 'ht-clean-website-v1',
     title: 'HT Clean Website V1',
     github: 'https://github.com/mohazab2006/HT-Clean-V1',
@@ -127,16 +162,6 @@ export const PROJECTS: Project[] = [
     description:
       'A comprehensive nonprofit platform for Empower Orphans, a student-led organization mobilizing campus chapters to support orphaned children. The website features donation tracking with real-time progress bars, chapter management system for multiple universities (Carleton University, University of Ottawa), event coordination, and volunteer application forms. Built with role-based access control (RBAC) for chapter leaders and administrators, the platform enables transparent fundraising with clear goal setting and impact reporting. The site includes interactive donation forms, chapter-specific social media integration, contact management, and a responsive design optimized for student engagement and donor transparency.',
     stack: ['Next.js', 'TypeScript', 'Tailwind', 'Supabase', 'Docker', 'RBAC', 'Donations', 'Chapters'],
-    screenshots: ['hero.jpg', 'screen-1.jpg', 'screen-2.jpg'],
-  },
-  {
-    slug: 'empower-orphans-website-v1',
-    title: 'Empower Orphans Website V1',
-    github: 'https://github.com/mohazab2006/Empower-Orphans-V1',
-    demo: 'https://www.empowerorphans.ca/',
-    description:
-      'Initial MVP for Empower Orphans, a nonprofit organization focused on providing hope and opportunity to orphaned children. The website features donation tracking, event management for fundraising activities like bake sales, charity partnerships with Children\'s Aid Society of Ottawa (CASOTT), and community engagement tools. Built as a foundation to prove out core features and workflows, this version established the organization\'s online presence with donation forms, contact management, and event coordination. The site emphasizes transparency in fundraising with clear mission statements and impact tracking, serving as the foundation that led to the enhanced V2 with expanded capabilities.',
-    stack: ['HTML', 'CSS', 'JavaScript', 'EmailJS', 'MVP', 'Nonprofit'],
     screenshots: ['hero.jpg', 'screen-1.jpg', 'screen-2.jpg'],
   },
   {
@@ -170,16 +195,6 @@ export const PROJECTS: Project[] = [
     screenshots: ['hero.jpg'],
   },
   {
-    slug: 'school-library-management-system',
-    title: 'School Library Management System',
-    github: '',
-    demo: '',
-    description:
-      'Full-stack library system with searchable inventory, QR/OCR tools, and RBAC for librarians, students, and admins. Streamlined library operations with modern technology and role-based access control.',
-    stack: ['Python', 'Django', 'Supabase', 'PostgreSQL', 'REST API', 'QR/OCR', 'RBAC', 'Library'],
-    screenshots: ['hero.jpg'],
-  },
-  {
     slug: 'ramibarbershop',
     title: 'Rami The Barber',
     github: 'https://github.com/mohazab2006/ramibarbershop',
@@ -208,8 +223,9 @@ export const EXPERIENCE: ExperienceItem[] = [
   },
   {
     role: 'Software Developer (Web Applications)',
-    org: 'Independent Projects',
+    org: 'AmanahTech',
     dates: 'October 2023 – Present',
+    logo: '/logos/ammanah.png',
     bullets: [
       'Built and deployed production-ready web applications for small businesses and non-profits (HT Clean, Salam Society, Milk Inc., Rami The Barber, Empower Orphans).',
       'Delivered real-world features: booking flows, admin dashboards, authentication, RBAC, API integrations, and AI-powered assistance.',
@@ -246,14 +262,14 @@ export const LEADERSHIP: ExperienceItem[] = [
     logo: '/logos/salam-society.png',
   },
   {
-    role: 'Director',
+    role: 'Executive Director',
     org: 'RISE Community',
     dates: 'Oct 2025 – Present',
     bullets: [
-      'Direct community initiatives and programs.',
-      'Support RISE Community’s mission and outreach.',
+      'Lead overall direction for RISE: programs, partnerships, and volunteer teams.',
+      'Own strategic planning and community outreach for Ottawa-area initiatives.',
     ],
-    tags: ['Leadership', 'Director', 'Community', 'RISE', 'Outreach'],
+    tags: ['Leadership', 'Executive Director', 'Community', 'RISE', 'Outreach'],
     logo: '/logos/rise-community.png',
   },
 ]
@@ -326,50 +342,22 @@ export const INTEREST_STORIES = {
   }
 }
 
-// Tech Stack (for interactive display)
-export const TECH_STACK = {
-  Languages: [
-    ['TypeScript', 90],
-    ['JavaScript', 88],
-    ['Python', 85],
-    ['Java', 80],
-    ['C', 78],
-    ['C++', 70],
-    ['SQL', 75],
-    ['Bash', 72],
-    ['HTML/CSS', 88],
-  ] as [string, number][],
-  Frontend: [
-    ['React', 88],
-    ['Next.js', 85],
-    ['Tailwind CSS', 85],
-    ['Framer Motion', 75],
-    ['Three.js', 65],
-  ] as [string, number][],
-  Backend: [
-    ['Node.js', 82],
-    ['FastAPI', 78],
-    ['Supabase', 80],
-    ['PostgreSQL', 75],
-    ['scikit-learn', 72],
-    ['OpenAI API', 78],
-    ['Django', 72],
-  ] as [string, number][],
-  DevOps: [
-    ['Docker', 80],
-    ['Nginx', 75],
-    ['Linux (Ubuntu)', 85],
-    ['CI/CD', 70],
-    ['SSL/TLS', 74],
-    ['Let\'s Encrypt', 72],
-  ] as [string, number][],
-  Networking: [
-    ['HTTP/HTTPS', 82],
-    ['VPN', 70],
-    ['DNS', 68],
-    ['TCP/IP', 72],
-    ['Reverse Proxy', 74],
-  ] as [string, number][],
+// Tech Stack — grouped by category only (per docs/content-strategy.md: no ratings / percentages)
+export const TECH_STACK: Record<string, string[]> = {
+  Languages: ['TypeScript', 'JavaScript', 'Python', 'Rust', 'Java', 'C', 'C++', 'SQL', 'Bash', 'HTML/CSS'],
+  Frameworks: [
+    'Next.js',
+    'React',
+    'Tauri',
+    'Tailwind CSS',
+    'Framer Motion',
+    'FastAPI',
+    'Node.js',
+  ],
+  'Infra / DevOps': ['Docker', 'Nginx', 'Linux', 'CI/CD', 'GitHub Actions', 'SSL/TLS', "Let's Encrypt", 'VPN'],
+  Security: ['Kali Linux', 'Tailscale', 'UFW', 'RBAC', 'JWT', 'Proxmox', 'Cloudflare'],
+  'AI / ML & data': ['OpenAI API', 'Groq', 'scikit-learn', 'PostgreSQL', 'SQLite', 'pgvector', 'Redis', 'Supabase'],
+  Tools: ['Git', 'VS Code', 'Vercel', 'Postman', 'VirtualBox', 'OpenStack'],
 }
 
 // Get all unique tech from projects
@@ -386,3 +374,13 @@ export const getTechCategories = (): string[] => {
   return Object.keys(TECH_STACK)
 }
 
+/**
+ * Projects UI: first slug gets the wide horizontal card; all others use the same image grid card.
+ * (Remaining entries kept for ordering reference / chat context; layout uses only `[0]`.)
+ */
+export const FEATURED_SLUGS_ORDERED = [
+  'knowledge-mesh',
+  'sentinelstack-ai',
+  'path-to-offer-ai',
+  'StudynFlow',
+] as const

@@ -20,41 +20,32 @@ export default function Section({ id, title, subtitle, children, className = '' 
     <motion.section
       ref={ref}
       id={id}
-      className={`relative py-20 lg:py-32 ${className}`}
+      className={`relative py-12 sm:py-16 lg:py-section xl:py-section-lg ${className}`}
       initial={{ opacity: 0 }}
       animate={isVisible ? { opacity: 1 } : { opacity: 0 }}
-      transition={{ duration: 0.6 }}
+      transition={{ duration: 0.5 }}
     >
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         {/* Section Header */}
         <motion.div
-          className="group mb-16 text-center"
-          initial={{ opacity: 0, y: 30 }}
-          animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
+          className="mb-12 lg:mb-16"
+          initial={{ opacity: 0, y: 20 }}
+          animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
         >
-          <h2 className="section-title mb-4 text-4xl font-bold text-light-text dark:text-dark-text md:text-5xl lg:text-6xl cursor-default text-neon transition-colors duration-300">
+          <h2 className="text-2xl font-bold tracking-tight text-dark-text sm:text-3xl md:text-4xl lg:text-5xl">
             {title}
           </h2>
           {subtitle && (
-            <p className="mx-auto max-w-2xl text-lg text-light-text/70 dark:text-dark-text/70">
+            <p className="mt-3 max-w-2xl text-base text-dark-muted lg:text-lg">
               {subtitle}
             </p>
           )}
-
-          {/* Subtle divider accent (alive but clean) */}
-          <motion.div
-            className="mx-auto mt-8 h-[2px] w-28 bg-gradient-to-r from-transparent via-dark-accent to-transparent group-hover:via-dark-accent group-hover:shadow-[0_0_15px_rgba(45,212,191,0.8)] transition-all duration-500"
-            initial={{ width: 0, opacity: 0 }}
-            animate={isVisible ? { width: '7rem', opacity: 1 } : { width: 0, opacity: 0 }}
-            transition={{ duration: 0.8, delay: 0.25, ease: 'easeOut' }}
-          />
+          <div className="mt-6 h-px w-16 bg-dark-accent" />
         </motion.div>
 
-        {/* Section Content */}
         {children}
       </div>
     </motion.section>
   )
 }
-

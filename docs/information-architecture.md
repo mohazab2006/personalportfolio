@@ -57,7 +57,8 @@ Grouped by category, not percentages:
 - Languages
 - Frameworks
 - Infra / DevOps
-- AI / Data
+- Security
+- AI / ML & data
 - Tools
 
 ## Contact requirements

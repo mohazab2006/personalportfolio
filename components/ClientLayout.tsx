@@ -1,17 +1,7 @@
 'use client'
 
-import dynamic from 'next/dynamic'
-
-// Lazy load heavy visual components for better performance
-const CustomCursor = dynamic(() => import('@/components/CustomCursor'), { ssr: false })
-const InteractiveBackground = dynamic(() => import('@/components/InteractiveBackground'), { ssr: false })
-
+// ClientLayout stripped of visual gimmicks (custom cursor, interactive background).
+// Kept as a client boundary for any future client-only providers.
 export default function ClientLayout() {
-  return (
-    <>
-      <CustomCursor />
-      <InteractiveBackground />
-    </>
-  )
+  return null
 }
-

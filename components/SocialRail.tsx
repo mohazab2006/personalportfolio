@@ -1,98 +1,132 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import { PERSONAL } from '@/lib/data'
 
-const socialLinks = [
-  {
-    name: 'GitHub',
-    url: PERSONAL.github,
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="currentColor"
-        className="h-5 w-5"
-      >
-        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-      </svg>
-    ),
-  },
-  {
-    name: 'LinkedIn',
-    url: PERSONAL.linkedin,
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="currentColor"
-        className="h-5 w-5"
-      >
-        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-      </svg>
-    ),
-  },
-  {
-    name: 'Email',
-    url: `mailto:${PERSONAL.email}`,
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={2}
-        stroke="currentColor"
-        className="h-5 w-5"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
-        />
-      </svg>
-    ),
-  },
-]
+export const socialRailBtnClass =
+  'magnetic-button flex h-11 w-11 shrink-0 items-center justify-center rounded-[10px] border border-white/[0.1] bg-dark-surface text-white/85 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition-[color,background-color,border-color,transform] duration-200 hover:border-white/[0.16] hover:bg-[#18181b] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dark-accent/40 focus-visible:ring-offset-2 focus-visible:ring-offset-dark-bg active:scale-[0.97]'
 
-export default function SocialRail() {
+const iconClass = 'h-[1.125rem] w-[1.125rem]'
+
+function IconGithub() {
   return (
-    <motion.div
-      className="fixed bottom-0 left-6 z-40 hidden flex-col items-center gap-6 lg:flex"
-      initial={{ opacity: 0, x: -20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.5, delay: 1 }}
-    >
-      {socialLinks.map((link, index) => (
-          <motion.a
-            key={link.name}
-            href={link.url}
-            target={link.name !== 'Email' ? '_blank' : undefined}
-            rel={link.name !== 'Email' ? 'noopener noreferrer' : undefined}
-            className="liquid-glass magnetic-button group relative flex h-10 w-10 items-center justify-center rounded-xl text-dark-text active:text-white"
-            whileHover={{ scale: 1.15, y: -3 }}
-            whileTap={{ scale: 0.95 }}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.3, delay: 1.2 + index * 0.1 }}
-            aria-label={link.name}
-          >
-            <div className="scale-100">{link.icon}</div>
-
-          {/* Tooltip */}
-          <span className="absolute left-full ml-4 whitespace-nowrap rounded-md bg-dark-bg-secondary px-3 py-2 text-sm font-medium text-dark-text opacity-0 transition-opacity group-hover:opacity-100">
-            {link.name}
-          </span>
-        </motion.a>
-      ))}
-
-      {/* Vertical Line */}
-      <motion.div
-        className="h-24 w-px bg-gradient-to-b from-dark-accent/50 to-transparent"
-        initial={{ scaleY: 0 }}
-        animate={{ scaleY: 1 }}
-        transition={{ duration: 0.5, delay: 1.5 }}
+    <svg className={iconClass} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} aria-hidden>
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"
       />
-    </motion.div>
+    </svg>
   )
 }
 
+function IconLinkedIn() {
+  return (
+    <svg className={iconClass} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} aria-hidden>
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6zM2 9h4v12H2V9zM4 6a2 2 0 100-4 2 2 0 000 4z"
+      />
+    </svg>
+  )
+}
+
+function IconMail() {
+  return (
+    <svg className={iconClass} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} aria-hidden>
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
+      />
+    </svg>
+  )
+}
+
+function IconResume() {
+  return (
+    <svg className={iconClass} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} aria-hidden>
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M14.25 2.25H6a2.25 2.25 0 00-2.25 2.25v15a2.25 2.25 0 002.25 2.25h12a2.25 2.25 0 002.25-2.25V7.5L14.25 2.25z"
+      />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M14.25 2.25v5.25h5.25M9 12.75h6M9 16.5h6M9 9h2.25" />
+    </svg>
+  )
+}
+
+const ITEMS = [
+  { name: 'GitHub', href: PERSONAL.github, external: true, Icon: IconGithub },
+  { name: 'LinkedIn', href: PERSONAL.linkedin, external: true, Icon: IconLinkedIn },
+  { name: 'Email', href: `mailto:${PERSONAL.email}`, external: false, Icon: IconMail },
+  { name: 'Resume', href: PERSONAL.resumePdf, external: true, Icon: IconResume },
+] as const
+
+const MOBILE_MENU_SOCIAL = ITEMS.filter((item) => item.name !== 'Resume')
+
+/** GitHub, LinkedIn, and email — sits directly under the mobile Resume control. */
+export function MobileMenuSocialRow({ onNavigate }: { onNavigate: () => void }) {
+  return (
+    <ul className="flex items-center justify-center gap-3" aria-label="Social and contact links">
+      {MOBILE_MENU_SOCIAL.map((item) => {
+        const Icon = item.Icon
+        return (
+          <li key={item.name}>
+            <a
+              href={item.href}
+              target={item.external ? '_blank' : undefined}
+              rel={item.external ? 'noopener noreferrer' : undefined}
+              className={socialRailBtnClass}
+              aria-label={item.name}
+              title={item.name}
+              onClick={onNavigate}
+            >
+              <Icon />
+            </a>
+          </li>
+        )
+      })}
+    </ul>
+  )
+}
+
+export default function SocialRail() {
+  const reduceMotion = useReducedMotion()
+
+  return (
+    <motion.nav
+      className="fixed right-5 top-1/2 z-40 hidden -translate-y-1/2 lg:flex"
+      aria-label="Social and contact links"
+      initial={reduceMotion ? false : { opacity: 0, x: 16 }}
+      animate={reduceMotion ? undefined : { opacity: 1, x: 0 }}
+      transition={{ duration: 0.45, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
+    >
+      <ul className="flex flex-col gap-3">
+        {ITEMS.map((item, index) => {
+          const Icon = item.Icon
+          return (
+            <motion.li
+              key={item.name}
+              initial={reduceMotion ? false : { opacity: 0, x: 12 }}
+              animate={reduceMotion ? undefined : { opacity: 1, x: 0 }}
+              transition={{ duration: 0.35, delay: 0.45 + index * 0.06, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <a
+                href={item.href}
+                target={item.external ? '_blank' : undefined}
+                rel={item.external ? 'noopener noreferrer' : undefined}
+                className={socialRailBtnClass}
+                aria-label={item.name === 'Resume' ? 'Open resume PDF' : item.name}
+                title={item.name}
+              >
+                <Icon />
+              </a>
+            </motion.li>
+          )
+        })}
+      </ul>
+    </motion.nav>
+  )
+}

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="Site icon">
+  <defs>
+    <linearGradient id="maSiteIconGrad" x1="6" y1="4" x2="26" y2="28" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5eead4"/>
+      <stop offset="1" stop-color="#14b8a6"/>
+    </linearGradient>
+  </defs>
+  <rect width="32" height="32" rx="8" fill="#070908"/>
+  <rect width="32" height="32" rx="8" fill="none" stroke="rgba(45,212,191,0.22)" stroke-width="1"/>
+  <path
+    d="M11.5 9.5 19.2 16l-7.7 6.5"
+    fill="none"
+    stroke="url(#maSiteIconGrad)"
+    stroke-width="2.35"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+</svg>

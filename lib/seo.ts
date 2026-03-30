@@ -1,12 +1,16 @@
 import { Metadata } from 'next'
 import { PERSONAL } from './data'
 
+/** Bump when replacing the mark so browsers refetch (tab icons are cached aggressively). */
+export const SITE_ICON_PATH = '/icon.svg?v=6'
+
 export const siteConfig = {
   name: PERSONAL.name,
   description:
     'Computer Science student at Carleton University specializing in AI & Machine Learning. Portfolio featuring Snaggy, an AI chatbot assistant. Passionate about building modern web applications, machine learning, and cybersecurity.',
   url: 'https://mohamedazab.dev', // Your actual domain
-  ogImage: '/og-image.jpg?v=2',
+  /** Bump when replacing `public/og-image.jpg` so link previews refetch. */
+  ogImage: '/og-image.jpg?v=3',
   links: {
     github: PERSONAL.github,
     linkedin: PERSONAL.linkedin,
@@ -34,11 +38,11 @@ export function generateMetadata({
     description: metaDescription,
     icons: {
       icon: [
-        { url: '/favicon.svg', type: 'image/svg+xml' },
-        { url: '/favicon.svg', sizes: 'any' }
+        { url: SITE_ICON_PATH, type: 'image/svg+xml' },
+        { url: SITE_ICON_PATH, sizes: 'any' },
       ],
-      shortcut: '/favicon.svg',
-      apple: '/favicon.svg',
+      shortcut: SITE_ICON_PATH,
+      apple: SITE_ICON_PATH,
     },
     keywords: [
       'Mohamed Azab',

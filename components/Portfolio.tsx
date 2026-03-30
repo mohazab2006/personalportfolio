@@ -5,7 +5,7 @@ import { getProjects } from '@/lib/projects'
 import { Project } from '@/lib/data'
 import Section from './Section'
 import ProjectCard from './ProjectCard'
-import TechChips from './TechChips'
+import TechStack from './TechStack'
 
 export default function Portfolio() {
   const [projects, setProjects] = useState<Project[]>([])
@@ -55,13 +55,7 @@ export default function Portfolio() {
           ))}
         </div>
 
-        {/* Tech Stack Section */}
-        <div className="mx-auto max-w-4xl">
-          <h3 className="mb-8 text-center text-3xl font-bold text-light-text dark:text-dark-text">
-            Tech Stack
-          </h3>
-          <TechChips />
-        </div>
+        <TechStack />
       </div>
     </Section>
   )

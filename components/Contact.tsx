@@ -78,12 +78,11 @@ export default function Contact() {
               href={method.href}
               target={method.name !== 'Email' ? '_blank' : undefined}
               rel={method.name !== 'Email' ? 'noopener noreferrer' : undefined}
-              className="magnetic-button group relative overflow-hidden rounded-2xl bg-[#0F0F12]/80 backdrop-blur-xl p-8 text-center border border-white/5 transition-all duration-500 hover:border-dark-accent/40 hover:shadow-[0_0_30px_rgba(45,212,191,0.1)] light-highlight"
+              className="magnetic-button group relative overflow-hidden rounded-2xl border border-white/5 bg-[#0F0F12]/80 p-8 text-center backdrop-blur-xl transition-[transform,box-shadow,border-color] duration-300 hover:border-dark-accent/40 hover:shadow-[0_0_30px_rgba(45,212,191,0.1)] light-highlight motion-reduce:transition-none [@media(hover:hover)]:hover:-translate-y-1 active:scale-[0.99]"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              whileHover={{ y: -8, scale: 1.05 }}
             >
               {/* Glossy sweep */}
               <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-transparent via-white/[0.01] to-white/[0.03] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
@@ -177,9 +176,8 @@ export default function Contact() {
           </p>
           <motion.a
             href={`mailto:${PERSONAL.email}`}
-            className="magnetic-button inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 font-semibold text-black shadow-lg shadow-white/10 transition-all hover:bg-dark-accent hover:text-black hover:shadow-dark-accent/20 active:bg-white active:text-black"
-            whileHover={{ scale: 1.05, y: -2 }}
-            whileTap={{ scale: 0.95 }}
+            className="magnetic-button inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full bg-white px-8 py-4 font-semibold text-black shadow-lg shadow-white/10 transition-[transform,background-color,box-shadow] [@media(hover:hover)]:hover:bg-dark-accent [@media(hover:hover)]:hover:text-black [@media(hover:hover)]:hover:shadow-dark-accent/20 active:bg-white active:text-black"
+            whileTap={{ scale: 0.97 }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

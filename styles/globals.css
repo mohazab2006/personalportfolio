@@ -1,14 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-:root {
-  --font-inter: 'Inter', sans-serif;
-  --font-display: 'Bebas Neue', sans-serif;
-}
 
 * {
   box-sizing: border-box;
@@ -16,7 +8,6 @@
   margin: 0;
 }
 
-/* Prevent horizontal overflow on mobile */
 html,
 body {
   width: 100%;
@@ -26,7 +17,7 @@ body {
 html {
   scroll-behavior: smooth;
   overflow-x: hidden;
-  width: 100%;
+  scroll-padding-top: 100px;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -43,29 +34,16 @@ html {
 }
 
 body {
-  font-family: var(--font-inter);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
   max-width: 100vw;
+  /* Slight vertical lift so the canvas isn’t pure flat #050505 */
+  background-color: #070708;
+  background-image: linear-gradient(180deg, #0c0c11 0%, #070708 28%, #050505 100%);
 }
 
-/* Ambient animated background layer (more light-filled) */
-.ambient-gradient {
-  opacity: 0.25;
-  background:
-    radial-gradient(1200px circle at 10% 10%, rgba(45, 212, 191, 0.2) 0%, transparent 50%),
-    radial-gradient(1400px circle at 90% 80%, rgba(6, 182, 212, 0.15) 0%, transparent 50%),
-    radial-gradient(1000px circle at 50% 50%, rgba(45, 212, 191, 0.08) 0%, transparent 60%);
-  animation: ambientShift 20s ease-in-out infinite alternate;
-  filter: blur(60px);
-}
-
-@keyframes ambientShift {
-  0% { transform: translate3d(-2%, -2%, 0) rotate(0deg); }
-  50% { transform: translate3d(2%, 1%, 0) rotate(2deg); }
-  100% { transform: translate3d(-1%, 2%, 0) rotate(-1deg); }
-}
+/* ── Terminal cursor ─────────────────────────────── */
 
 @keyframes terminal-blink {
   0%, 50% { opacity: 1; }
@@ -74,186 +52,29 @@ body {
 
 .terminal-cursor {
   display: inline-block;
-  width: 0.2em;
-  height: 0.85em;
+  width: 0.35em;
+  height: 0.7em;
   background-color: currentColor;
-  margin-left: 2px;
-  vertical-align: baseline;
+  margin-left: 0.22em;
   animation: terminal-blink 1s step-end infinite;
 }
 
-/* Liquid Glass Effect */
-.liquid-glass {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 
-    inset 0 1px 2px rgba(255, 255, 255, 0.15),
-    inset 0 -1px 2px rgba(0, 0, 0, 0.2),
-    0 10px 40px -10px rgba(0, 0, 0, 0.5);
-  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-}
+/* ── Selection ───────────────────────────────────── */
 
-.liquid-glass:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(45, 212, 191, 0.4);
-  box-shadow: 
-    inset 0 1px 4px rgba(255, 255, 255, 0.2),
-    0 0 25px rgba(45, 212, 191, 0.2),
-    0 15px 50px -10px rgba(0, 0, 0, 0.6);
-  transform: translateY(-2px);
-}
-
-/* Hide default cursor on desktop */
-@media (hover: hover) and (pointer: fine) {
-  * {
-    cursor: none !important;
-  }
-}
-
-/* Custom Cursor */
-.custom-cursor {
-  position: fixed;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  z-index: 9999;
-  mix-blend-mode: difference;
-}
-
-/* High Contrast Mode */
-.high-contrast {
-  --contrast-boost: 1.2;
-}
-
-.high-contrast * {
-  filter: contrast(var(--contrast-boost));
-}
-
-/* Glass Effect (Enhanced for high-light feel) */
-.glass {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 
-    inset 0 1px 1px rgba(255, 255, 255, 0.1),
-    0 4px 24px rgba(0, 0, 0, 0.4);
-}
-
-.dark .glass {
-  background: rgba(15, 15, 18, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.05),
-    0 8px 32px 0 rgba(0, 0, 0, 0.8);
-}
-
-/* Light Sweep Animation */
-@keyframes sweep {
-  0% { transform: translateX(-100%) skewX(-15deg); }
-  100% { transform: translateX(200%) skewX(-15deg); }
-}
-
-.sweep-hover {
-  position: relative;
-  overflow: hidden;
-}
-
-.sweep-hover::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(
-    to right,
-    transparent,
-    rgba(255, 255, 255, 0.05),
-    transparent
-  );
-  transform: translateX(-100%) skewX(-15deg);
-  pointer-events: none;
-}
-
-.sweep-hover:hover::after {
-  animation: sweep 1.5s ease-in-out;
-}
-
-/* Specular Light Highlight */
-.light-highlight {
-  position: relative;
-}
-
-.light-highlight::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    circle at 20% 0%,
-    rgba(45, 212, 191, 0.15) 0%,
-    transparent 40%
-  );
-  pointer-events: none;
-  border-radius: inherit;
-}
-
-/* Neon Text Glow */
-.text-neon {
-  text-shadow: 
-    0 0 5px rgba(45, 212, 191, 0.2),
-    0 0 10px rgba(45, 212, 191, 0.1);
-}
-
-/* Background "Lens Flare" or Light Leak */
-.light-leak {
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  z-index: -5;
-  background: 
-    radial-gradient(circle at 80% 20%, rgba(45, 212, 191, 0.08) 0%, transparent 40%),
-    radial-gradient(circle at 10% 80%, rgba(6, 182, 212, 0.05) 0%, transparent 35%);
-  filter: blur(60px);
-}
-
-.light .glass {
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(109, 40, 217, 0.1);
-}
-
-/* Glow Effects */
-.glow-cyan {
-  box-shadow: 0 0 20px rgba(45, 212, 191, 0.3);
-}
-
-.glow-cyan-strong {
-  box-shadow: 0 0 30px rgba(45, 212, 191, 0.5), 0 0 60px rgba(45, 212, 191, 0.3);
-}
-
-/* Selection */
 ::selection {
   background-color: rgba(45, 212, 191, 0.3);
   color: inherit;
 }
 
-/* Focus Visible */
+/* ── Focus visible ───────────────────────────────── */
+
 *:focus-visible {
   outline: 2px solid #2DD4BF;
   outline-offset: 2px;
 }
 
-/* Smooth Transitions */
-* {
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
+/* ── Prose (project detail pages) ────────────────── */
 
-/* Prose Styling for Project Pages */
 .prose {
   @apply text-base leading-relaxed;
 }
@@ -279,37 +100,5 @@ body {
 }
 
 .prose a {
-  @apply text-white underline decoration-white/30 underline-offset-4 hover:text-cyan-400 hover:decoration-cyan-400/60;
+  @apply text-white underline decoration-white/30 underline-offset-4 hover:text-dark-accent hover:decoration-dark-accent/60 transition-colors;
 }
-
-/* Remove cursor for touch devices */
-@media (hover: none) and (pointer: coarse) {
-  .custom-cursor {
-    display: none;
-  }
-}
-
-/* Scroll Padding for Anchor Links */
-html {
-  scroll-padding-top: 100px;
-}
-
-/* Name letter hover effect */
-.name-letter {
-  transition: color 0.2s ease;
-}
-
-.name-letter:hover {
-  color: #2DD4BF !important;
-  text-shadow: 0 0 15px rgba(45, 212, 191, 0.6);
-}
-
-/* Section title hover effect */
-.section-title {
-  transition: color 0.3s ease;
-}
-
-.section-title:hover {
-  color: #2DD4BF !important;
-}
-
