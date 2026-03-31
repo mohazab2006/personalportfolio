@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/resume.pdf",
+      "destination": "https://gqjbmzvtwnkkrqqhugka.supabase.co/storage/v1/object/public/personal-files/resume.pdf"
+    }
+  ]
+}
