@@ -41,10 +41,10 @@ export type ServiceItem = {
   description: string
 }
 
-/** Public resume URL: env override, else Supabase Storage (personal-files bucket). */
+/** Public resume URL: env override, else local domain route. */
 export const RESUME_PDF_URL =
   process.env.NEXT_PUBLIC_RESUME_PDF_URL ??
-  'https://gqjbmzvtwnkkrqqhugka.supabase.co/storage/v1/object/public/personal-files/resume.pdf'
+  '/resume.pdf'
 
 // Personal Information
 export const PERSONAL = {
