@@ -18,7 +18,7 @@ export default function ProjectPageHeader({ title }: { title: string }) {
           /
         </span>
         <Link
-          href="/#projects"
+          href="/projects"
           className="shrink-0 text-sm text-dark-accent transition-colors hover:text-white"
         >
           Projects

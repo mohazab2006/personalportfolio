@@ -81,7 +81,7 @@ export default function ProjectPage({ params }: Props) {
         <header className="border-b border-white/[0.05] bg-gradient-to-b from-dark-bg-secondary/50 to-transparent">
           <div className="mx-auto max-w-7xl px-4 pb-12 pt-8 sm:px-6 sm:pb-14 sm:pt-10 lg:px-8">
             <Link
-              href="/#projects"
+              href="/projects"
               className="group mb-6 inline-flex min-h-[44px] items-center gap-2 text-sm text-dark-accent transition-colors hover:text-white"
             >
               <svg
@@ -199,8 +199,8 @@ export default function ProjectPage({ params }: Props) {
 
       <footer className="border-t border-white/5 pb-[max(2.5rem,env(safe-area-inset-bottom,0px)+1rem)] pt-10 text-center">
         <p className="text-xs text-white/35">© 2026 Mohamed Azab</p>
-        <Link href="/#projects" className="mt-2 inline-block text-xs text-dark-accent hover:text-white">
-          ← Back to portfolio
+        <Link href="/projects" className="mt-2 inline-block text-xs text-dark-accent hover:text-white">
+          ← All projects
         </Link>
       </footer>
     </div>

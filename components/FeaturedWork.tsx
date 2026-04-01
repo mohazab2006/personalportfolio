@@ -1,12 +1,16 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { getProjects, mergeProjectsWithLocal, heroImageTryList, projectValueLine } from '@/lib/projects'
 import { Project, PROJECTS as LOCAL_PROJECTS, FEATURED_SLUGS_ORDERED } from '@/lib/data'
 import Section from './Section'
 import ProjectStorageImage from './ProjectStorageImage'
 import ProjectLinks from './ProjectLinks'
+
+/** Grid cards shown below the hero on narrow viewports; rest link to /projects */
+const MOBILE_GRID_VISIBLE = 4
 
 const HERO_SLUG = FEATURED_SLUGS_ORDERED[0]
 
@@ -99,7 +103,7 @@ function FeaturedHeroCard({ project }: { project: Project }) {
   )
 }
 
-function ProjectGridCard({ project, index }: { project: Project; index: number }) {
+export function ProjectGridCard({ project, index }: { project: Project; index: number }) {
   const line = projectValueLine(project.description, 150)
 
   return (
@@ -161,6 +165,8 @@ export default function FeaturedWork() {
 
   const hero = projects.find((p) => p.slug === HERO_SLUG)
   const gridProjects = hero ? projects.filter((p) => p.slug !== hero.slug) : projects
+  const mobileMoreCount =
+    gridProjects.length > MOBILE_GRID_VISIBLE ? gridProjects.length - MOBILE_GRID_VISIBLE : 0
 
   if (loading) {
     return (
@@ -196,9 +202,36 @@ export default function FeaturedWork() {
           >
             <div className="grid gap-6 sm:grid-cols-2 sm:gap-7 xl:grid-cols-3 xl:gap-8">
               {gridProjects.map((project, i) => (
-                <ProjectGridCard key={project.slug} project={project} index={i} />
+                <div
+                  key={project.slug}
+                  className={i >= MOBILE_GRID_VISIBLE ? 'hidden lg:contents' : 'contents'}
+                >
+                  <ProjectGridCard project={project} index={i} />
+                </div>
               ))}
             </div>
+            {mobileMoreCount > 0 && (
+              <div className="mt-8 flex justify-center lg:hidden">
+                <Link
+                  href="/projects"
+                  className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-xl border border-white/[0.12] bg-white/[0.04] px-6 py-3 text-sm font-semibold text-white transition-colors hover:border-dark-accent/35 hover:bg-dark-accent/10 hover:text-dark-accent"
+                >
+                  More projects
+                  <span className="text-dark-muted">({mobileMoreCount})</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2}
+                    stroke="currentColor"
+                    className="h-4 w-4"
+                    aria-hidden
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                  </svg>
+                </Link>
+              </div>
+            )}
           </div>
         )}
       </div>
