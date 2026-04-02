@@ -131,7 +131,7 @@ export function ProjectGridCard({ project, index }: { project: Project; index: n
         <h3 className="mb-2 text-lg font-semibold tracking-tight text-white">{project.title}</h3>
         <p className="mb-5 line-clamp-2 text-sm leading-relaxed text-dark-muted">{line}</p>
         <div className="mb-5 flex flex-wrap gap-2">
-          {project.stack.slice(0, 5).map((tech) => (
+          {project.stack.slice(0, 7).map((tech) => (
             <span key={tech} className={tagClass}>
               {tech}
             </span>
