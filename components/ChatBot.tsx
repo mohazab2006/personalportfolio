@@ -16,7 +16,7 @@ export default function ChatBot({ isOpen, onClose }: { isOpen: boolean; onClose:
     {
       role: 'assistant',
       content:
-        "I'm Snaggy — Mohamed's site assistant. Ask about projects, experience, or stack; I'll keep answers grounded in what's on this portfolio.",
+        "I'm Snaggy — Mohamed's site assistant. Ask about a project and I'll break it down in plain English, then nerd out on the stack (with maybe one dumb joke). Everything I say is tied to what's on this portfolio.",
     },
   ])
   const [input, setInput] = useState('')
