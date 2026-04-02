@@ -70,6 +70,21 @@ export function galleryScreenshots(screenshots: string[]): string[] {
 /**
  * Get the public URL for a project image
  */
+/**
+ * Split project copy without a DB column: put the punchy card line first, then a line with only `---`, then the full overview.
+ * If there is no `---` separator, the whole string is the overview and cards use the first sentence as before.
+ */
+export function splitProjectDescription(raw: string): { hook: string | null; body: string } {
+  const t = raw.trim()
+  if (!t) return { hook: null, body: '' }
+  const m = t.match(/^([\s\S]*?)\r?\n\s*---\s*\r?\n([\s\S]+)$/)
+  if (!m) return { hook: null, body: t }
+  const hook = m[1].trim()
+  const body = m[2].trim()
+  if (!body) return { hook: null, body: t }
+  return { hook: hook || null, body }
+}
+
 /** One-line / first-sentence value prop for cards (per docs/project-strategy.md). */
 export function projectValueLine(description: string, maxLen = 200): string {
   const t = description.trim()
@@ -81,6 +96,30 @@ export function projectValueLine(description: string, maxLen = 200): string {
   const cut = t.slice(0, maxLen - 1)
   const sp = cut.lastIndexOf(' ')
   return (sp > 40 ? cut.slice(0, sp) : cut) + '…'
+}
+
+/** Card / TL;DR line: DB `summary`, else part before `---` in `description`, else null. */
+export function projectHook(project: Project): string | null {
+  const s = project.summary?.trim()
+  if (s) return s
+  return splitProjectDescription(project.description).hook
+}
+
+/** Long overview for the detail page when using columns: `description`. Legacy: body after `---` or full `description`. */
+export function projectOverviewText(project: Project): string {
+  if (project.summary?.trim()) return project.description.trim()
+  const { hook, body } = splitProjectDescription(project.description)
+  return hook ? body : project.description.trim()
+}
+
+/** Card blurb: hook from `summary` or `---` split; else first sentence of `description`. */
+export function projectCardBlurb(project: Project): string {
+  const hook = projectHook(project)
+  if (hook) return /[.!?…]$/.test(hook) ? hook : `${hook}.`
+  const t = project.description.trim()
+  const i = t.indexOf('.')
+  if (i > 0) return `${t.slice(0, i + 1).trim()}`
+  return projectValueLine(t, 220)
 }
 
 export function getProjectImageUrl(slug: string, imageName: string): string {
@@ -175,6 +214,7 @@ export async function getProjects(): Promise<Project[]> {
     title: row.title,
     github: row.github,
     demo: row.demo || undefined,
+    summary: row.summary?.trim() ? row.summary.trim() : undefined,
     description: row.description,
     stack: row.stack,
     screenshots: row.screenshots,
@@ -209,6 +249,7 @@ export function mergeProjectsWithLocal(remote: Project[]): Project[] {
             ...r,
             demo: r.demo ?? local.demo,
             github: r.github || local.github,
+            summary: r.summary ?? local.summary,
           }
         : r
     )
@@ -225,6 +266,7 @@ function rowToProject(data: {
   title: string
   github: string
   demo: string | null
+  summary?: string | null
   description: string
   stack: string[]
   screenshots: string[]
@@ -234,6 +276,7 @@ function rowToProject(data: {
     title: data.title,
     github: data.github,
     demo: data.demo || undefined,
+    summary: data.summary?.trim() ? data.summary.trim() : undefined,
     description: data.description,
     stack: data.stack,
     screenshots: data.screenshots,
@@ -255,7 +298,15 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
 
     if (!error && data) {
       const remote = rowToProject(data)
-      return local ? { ...local, ...remote, demo: remote.demo ?? local.demo, github: remote.github || local.github } : remote
+      return local
+        ? {
+            ...local,
+            ...remote,
+            demo: remote.demo ?? local.demo,
+            github: remote.github || local.github,
+            summary: remote.summary ?? local.summary,
+          }
+        : remote
     }
 
     if (error && error.code !== 'PGRST116') {

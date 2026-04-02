@@ -4,6 +4,8 @@ export type Project = {
   title: string
   github: string // required if repo exists, else ""
   demo?: string
+  /** Short hook when using Supabase columns; optional for local-only rows. */
+  summary?: string
   description: string
   stack: string[]
   screenshots: string[] // at least ["hero.jpg"]

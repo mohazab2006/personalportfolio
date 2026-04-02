@@ -31,6 +31,7 @@ export type Database = {
           title: string
           github: string
           demo: string | null
+          summary: string
           description: string
           stack: string[]
           screenshots: string[]
@@ -44,6 +45,7 @@ export type Database = {
           title: string
           github: string
           demo?: string | null
+          summary?: string
           description: string
           stack: string[]
           screenshots: string[]
@@ -57,6 +59,7 @@ export type Database = {
           title?: string
           github?: string
           demo?: string | null
+          summary?: string
           description?: string
           stack?: string[]
           screenshots?: string[]

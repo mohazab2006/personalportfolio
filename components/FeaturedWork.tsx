@@ -3,7 +3,13 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { getProjects, mergeProjectsWithLocal, heroImageTryList, projectValueLine } from '@/lib/projects'
+import {
+  getProjects,
+  mergeProjectsWithLocal,
+  heroImageTryList,
+  projectValueLine,
+  projectHook,
+} from '@/lib/projects'
 import { Project, PROJECTS as LOCAL_PROJECTS, FEATURED_SLUGS_ORDERED } from '@/lib/data'
 import Section from './Section'
 import ProjectStorageImage from './ProjectStorageImage'
@@ -56,7 +62,8 @@ function ProjectsSkeleton() {
 }
 
 function FeaturedHeroCard({ project }: { project: Project }) {
-  const line = projectValueLine(project.description, 280)
+  const hook = projectHook(project)
+  const line = hook ? projectValueLine(hook, 280) : projectValueLine(project.description, 280)
 
   return (
     <motion.div
@@ -104,7 +111,8 @@ function FeaturedHeroCard({ project }: { project: Project }) {
 }
 
 export function ProjectGridCard({ project, index }: { project: Project; index: number }) {
-  const line = projectValueLine(project.description, 150)
+  const hook = projectHook(project)
+  const line = hook ? projectValueLine(hook, 150) : projectValueLine(project.description, 150)
 
   return (
     <motion.article

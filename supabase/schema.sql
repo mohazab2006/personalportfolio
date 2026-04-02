@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS projects (
   title TEXT NOT NULL,
   github TEXT NOT NULL DEFAULT '',
   demo TEXT,
+  summary TEXT NOT NULL DEFAULT '',
   description TEXT NOT NULL,
   stack TEXT[] NOT NULL DEFAULT '{}',
   screenshots TEXT[] NOT NULL DEFAULT '{}',

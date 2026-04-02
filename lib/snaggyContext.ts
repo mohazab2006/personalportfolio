@@ -7,6 +7,7 @@ import {
   PROJECTS,
   TECH_STACK,
 } from '@/lib/data'
+import { projectHook, projectOverviewText } from '@/lib/projects'
 
 const PHONE = '(613) 619-5360'
 
@@ -19,7 +20,10 @@ function clip(s: string, max: number): string {
 function formatProjectLine(p: (typeof PROJECTS)[number]): string {
   const demo = p.demo ? ` Live/demo: ${p.demo}.` : ''
   const gh = p.github ? ` Repo: ${p.github.replace('https://github.com/', 'github.com/')}.` : ''
-  return `${p.title} — ${clip(p.description, 260)} Stack includes: ${p.stack.slice(0, 10).join(', ')}.${demo}${gh}`
+  const hook = projectHook(p)
+  const body = projectOverviewText(p)
+  const headline = hook ? `${clip(hook, 180)} Overview: ${clip(body, 280)}` : clip(p.description, 280)
+  return `${p.title} — ${headline} Stack includes: ${p.stack.slice(0, 10).join(', ')}.${demo}${gh}`
 }
 
 function featuredProjectSlugs(): Set<string> {

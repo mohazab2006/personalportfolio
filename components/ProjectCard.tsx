@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion'
 import { Project } from '@/lib/data'
-import { getProjectImageUrl } from '@/lib/projects'
+import { getProjectImageUrl, projectCardBlurb } from '@/lib/projects'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useState, useEffect, useRef, useCallback } from 'react'
@@ -140,7 +140,7 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
         </h3>
 
         <p className="mb-4 line-clamp-2 text-sm text-white/60 leading-relaxed group-hover:text-white/80 transition-colors">
-          {project.description.split('.')[0]}.
+          {projectCardBlurb(project)}
         </p>
 
         {/* Tech Stack */}

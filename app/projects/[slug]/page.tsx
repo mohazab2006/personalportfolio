@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { useState, useEffect, use } from 'react'
 import { motion } from 'framer-motion'
-import { getProjectBySlug, galleryScreenshots } from '@/lib/projects'
+import { getProjectBySlug, galleryScreenshots, projectHook, projectOverviewText } from '@/lib/projects'
 import type { Project } from '@/lib/data'
 import ProjectPageHeader from '@/components/ProjectPageHeader'
 import ProjectDetailGallery from '@/components/ProjectDetailGallery'
@@ -66,6 +66,8 @@ export default function ProjectPage({ params }: Props) {
   }
 
   const shots = galleryScreenshots(project.screenshots)
+  const hook = projectHook(project)
+  const overviewText = projectOverviewText(project)
 
   return (
     <div className="relative min-h-screen text-dark-text">
@@ -176,10 +178,20 @@ export default function ProjectPage({ params }: Props) {
 
         <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
           <section id="overview" className="scroll-mt-28">
-            <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-dark-muted">Summary</p>
+            {hook ? (
+              <>
+                <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-dark-muted">TL;DR</p>
+                <div className="mb-8 rounded-2xl border border-dark-accent/20 bg-dark-accent/[0.06] p-6 sm:p-8">
+                  <p className="max-w-prose text-base leading-[1.7] text-white/88 sm:text-lg sm:leading-relaxed">
+                    {hook}
+                  </p>
+                </div>
+              </>
+            ) : null}
+            <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-dark-muted">Overview</p>
             <div className="rounded-2xl border border-white/[0.06] bg-dark-bg-secondary/40 p-6 sm:p-8">
-              <p className="max-w-prose text-base leading-[1.7] text-white/78 sm:text-lg sm:leading-relaxed">
-                {project.description}
+              <p className="max-w-prose whitespace-pre-line text-base leading-[1.7] text-white/78 sm:text-lg sm:leading-relaxed">
+                {overviewText}
               </p>
             </div>
           </section>

@@ -5,6 +5,7 @@
 
 import { createClient } from '@supabase/supabase-js'
 import { PROJECTS } from '../lib/data'
+import { splitProjectDescription, projectValueLine } from '../lib/projects'
 import * as dotenv from 'dotenv'
 import * as path from 'path'
 
@@ -41,6 +42,11 @@ async function migrateProjects() {
       const project = PROJECTS[i]
       console.log(`📦 Migrating project ${i + 1}/${PROJECTS.length}: ${project.title}`)
 
+      const { hook, body } = splitProjectDescription(project.description)
+      const summary =
+        project.summary?.trim() || hook || projectValueLine(project.description, 220)
+      const description = hook && body ? body : project.description
+
       const { data, error } = await supabase
         .from('projects')
         .insert({
@@ -48,7 +54,8 @@ async function migrateProjects() {
           title: project.title,
           github: project.github || '',
           demo: project.demo || null,
-          description: project.description,
+          summary,
+          description,
           stack: project.stack,
           screenshots: project.screenshots,
           order_index: i,
