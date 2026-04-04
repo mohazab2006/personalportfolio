@@ -211,7 +211,7 @@ export const PROJECTS: Project[] = [
 // Work Experience
 export const EXPERIENCE: ExperienceItem[] = [
   {
-    role: 'Junior DevOps Specialist',
+    role: 'Junior DevOps Specialist — Co-op',
     org: 'CIRA (Canadian Internet Registration Authority)',
     dates: 'May 2026 – August 2026',
     bullets: [
@@ -224,7 +224,7 @@ export const EXPERIENCE: ExperienceItem[] = [
     upcoming: true,
   },
   {
-    role: 'Software Developer (Web Applications)',
+    role: 'Founder & Full-Stack Developer — self-employed',
     org: 'AmanahTech',
     dates: 'October 2023 – Present',
     logo: '/logos/ammanah.png',
