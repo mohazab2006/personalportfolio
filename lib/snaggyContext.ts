@@ -100,6 +100,9 @@ ${buildEducationBlock()}
 WORK:
 ${buildWorkBlock()}
 
+WORK NAME NOTE (if someone asks what “AmanahTech” / “Amanah” means or how it translates):
+- It reflects Arabic أمانة (romanized “amanah”): trust, honesty, or integrity—not a random brand syllables.
+
 LEADERSHIP & EXTRACURRICULAR:
 ${buildLeadershipBlock()}
 

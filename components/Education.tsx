@@ -3,12 +3,8 @@
 import Image from 'next/image'
 import { motion, useReducedMotion } from 'framer-motion'
 import { EDUCATION } from '@/lib/data'
+import { logoUrl } from '@/lib/logoUrl'
 import Section from '@/components/Section'
-
-function logoUrl(path: string): string {
-  const v = process.env.NEXT_PUBLIC_LOGO_VERSION
-  return v ? `${path}?v=${encodeURIComponent(v)}` : path
-}
 
 const courseChipClass =
   'rounded-md border border-white/[0.08] bg-white/[0.03] px-2.5 py-1.5 text-xs font-medium leading-tight tracking-wide text-white/75 sm:text-[13px]'

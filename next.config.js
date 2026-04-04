@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  env: {
+    // Expose commit SHA to client bundles so timeline/education logos get a fresh `?v=` per deploy.
+    NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA: process.env.VERCEL_GIT_COMMIT_SHA || '',
+  },
   async redirects() {
     return [{ source: '/favicon.svg', destination: '/icon.svg', permanent: false }]
   },

@@ -9,6 +9,7 @@ import {
   timelineKey,
   type TimelineEntry,
 } from '@/lib/experienceTimeline'
+import { logoUrl } from '@/lib/logoUrl'
 
 const viewport = { once: true, amount: 0.22, margin: '0px 0px -12% 0px' } as const
 
@@ -18,12 +19,6 @@ const TYPE_LABEL: Record<TimelineEntry['kind'], string> = {
   work: 'Work',
   education: 'Education',
   leadership: 'Leadership',
-}
-
-/** Bump `NEXT_PUBLIC_LOGO_VERSION` in `.env.local` when replacing files under `/public/logos` with the same name. */
-function logoUrl(path: string): string {
-  const v = process.env.NEXT_PUBLIC_LOGO_VERSION
-  return v ? `${path}?v=${encodeURIComponent(v)}` : path
 }
 
 function listForEntry(entry: TimelineEntry): string[] {
@@ -43,18 +38,25 @@ function TimelineCard({ entry }: { entry: TimelineEntry }) {
   const subtitle = isEducation ? entry.degree : entry.role
   const period = isEducation ? entry.years : entry.dates
   const logo = entry.logo
+  const logoFillsCircle = 'org' in entry && entry.org === 'AmanahTech'
   const highlights = listForEntry(entry)
 
   return (
     <article className="relative rounded-2xl border border-white/[0.08] bg-white/[0.025] p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.03)_inset] backdrop-blur-sm transition-colors hover:border-white/[0.12] sm:p-7">
       <div className="mb-5 flex items-start gap-4 sm:gap-5">
         {logo && (
-          <div className="relative h-[3.25rem] w-[3.25rem] shrink-0 overflow-hidden rounded-full bg-gradient-to-b from-white/[0.09] to-white/[0.03] shadow-[0_2px_16px_-4px_rgba(0,0,0,0.45)] ring-1 ring-white/10 sm:h-16 sm:w-16">
+          <div
+            className={
+              logoFillsCircle
+                ? 'relative h-[3.25rem] w-[3.25rem] shrink-0 overflow-hidden rounded-full bg-white shadow-[0_2px_16px_-4px_rgba(0,0,0,0.45)] ring-1 ring-white/15 sm:h-16 sm:w-16'
+                : 'relative h-[3.25rem] w-[3.25rem] shrink-0 overflow-hidden rounded-full bg-gradient-to-b from-white/[0.09] to-white/[0.03] shadow-[0_2px_16px_-4px_rgba(0,0,0,0.45)] ring-1 ring-white/10 sm:h-16 sm:w-16'
+            }
+          >
             <Image
               src={logoUrl(logo)}
               alt=""
               fill
-              className="object-contain p-1.5 sm:p-2"
+              className={logoFillsCircle ? 'object-cover object-center' : 'object-contain p-1.5 sm:p-2'}
               sizes="(max-width: 640px) 52px, 64px"
               unoptimized
             />
