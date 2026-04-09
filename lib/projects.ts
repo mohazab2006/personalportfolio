@@ -126,9 +126,14 @@ export function getProjectImageUrl(slug: string, imageName: string): string {
   const { data } = supabase.storage
     .from('project-images')
     .getPublicUrl(`${slug}/${imageName}`)
-  
-  return data.publicUrl
+
+  // Cache-bust: Supabase CDN caches by URL, so append a version param
+  // to force re-fetch when images are re-uploaded with the same name.
+  return `${data.publicUrl}?v=${IMAGE_CACHE_VERSION}`
 }
+
+/** Bump this when you re-upload images to Supabase to bust CDN cache. */
+const IMAGE_CACHE_VERSION = '2026-04-08'
 
 /**
  * Get the public URL for a personal file (resume, profile photo)
@@ -137,8 +142,8 @@ export function getPersonalFileUrl(fileName: string): string {
   const { data } = supabase.storage
     .from('personal-files')
     .getPublicUrl(fileName)
-  
-  return data.publicUrl
+
+  return `${data.publicUrl}?v=${IMAGE_CACHE_VERSION}`
 }
 
 /**
