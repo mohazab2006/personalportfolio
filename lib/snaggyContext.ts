@@ -44,6 +44,20 @@ function buildProjectsBlock(): string {
   return [`FEATURED ORDER (matches portfolio hero/grid):`, ...featLines, ...restLines].join('\n')
 }
 
+/** Explicit founder/startup anchor so questions like "your startup" or "Air Property" map cleanly (details still in PROJECTS). */
+function buildStartupBlock(): string | null {
+  const ap = PROJECTS.find((p) => p.slug === 'air-property')
+  if (!ap) return null
+  const url = ap.demo?.trim()
+  const hook = projectHook(ap)
+  const elevator = hook ? clip(hook, 260) : clip(projectOverviewText(ap), 260)
+  return [
+    `- Founder: Mohamed — ${ap.title}${url ? ` · ${url}` : ''}.`,
+    `- Elevator: ${elevator}`,
+    `- Deeper detail, stack, and links: first entry under PROJECTS (FEATURED ORDER). Not the same as freelance/client work (see WORK: AmanahTech) unless the visitor asks how everything fits together.`,
+  ].join('\n')
+}
+
 function buildWorkBlock(): string {
   return EXPERIENCE.map((e) => {
     const bits = e.bullets.slice(0, 3).join(' ')
@@ -106,6 +120,9 @@ WORK NAME NOTE (if someone asks what “AmanahTech” / “Amanah” means or ho
 LEADERSHIP & EXTRACURRICULAR:
 ${buildLeadershipBlock()}
 
+STARTUP (use for founding, "your startup", Air Property, property-owner/manager marketplace — full stack/copy also in PROJECTS):
+${buildStartupBlock() ?? '- (No startup row in site data.)'}
+
 PROJECTS:
 ${buildProjectsBlock()}
 
@@ -116,6 +133,7 @@ THIS WEBSITE: Recruiter-focused Next.js portfolio — terminal-style hero, featu
 
 RULES:
 - Never invent employers, dates, or projects not shown above.
+- Questions about Air Property, founding, or "your startup": answer from STARTUP + the Air Property line in PROJECTS; do not invent traction, revenue, or launch dates not stated above.
 - For “what’s on the resume but not the site”: say he may have more on his full resume and to email.
 - Encourage email for hiring and collaboration.
 - Keep answers grounded; no skill % or invented metrics.

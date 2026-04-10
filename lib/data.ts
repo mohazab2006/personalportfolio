@@ -117,6 +117,16 @@ export const EDUCATION: EducationItem[] = [
 // Projects
 export const PROJECTS: Project[] = [
   {
+    slug: 'air-property',
+    title: 'Air Property',
+    github: '',
+    demo: 'https://www.airproperty.ca/',
+    description:
+      'Stop guessing. Start verifying — AirProperty is my startup building a verify-first marketplace that connects Canadian property owners with certified property managers.\n\n---\n\nManagers complete training, assessment, and background checks before they can appear in search; owners browse verified profiles, send requests, and keep conversations in-app instead of scattered across texts. The product direction includes shared dashboards, structured tasks and messaging, and reputation tied to real engagements — launching in Canada with city-limited early access and a waitlist for owners and managers.',
+    stack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'SEO', 'Startup', 'Product', 'Canada'],
+    screenshots: ['hero.jpg'],
+  },
+  {
     slug: 'knowledge-mesh',
     title: 'KnowledgeMesh',
     github: 'https://github.com/mohazab2006/KnowledgeMesh',
@@ -350,6 +360,7 @@ export const TECH_STACK: Record<string, string[]> = {
   Frameworks: [
     'Next.js',
     'React',
+    'Vite',
     'Tauri',
     'Tailwind CSS',
     'Framer Motion',
@@ -358,7 +369,17 @@ export const TECH_STACK: Record<string, string[]> = {
   ],
   'Infra / DevOps': ['Docker', 'Nginx', 'Linux', 'CI/CD', 'GitHub Actions', 'SSL/TLS', "Let's Encrypt", 'VPN'],
   Security: ['Kali Linux', 'Tailscale', 'UFW', 'RBAC', 'JWT', 'Proxmox', 'Cloudflare'],
-  'AI / ML & data': ['OpenAI API', 'Groq', 'scikit-learn', 'PostgreSQL', 'SQLite', 'pgvector', 'Redis', 'Supabase'],
+  'AI / ML & data': [
+    'OpenAI API',
+    'Groq',
+    'scikit-learn',
+    'PostgreSQL',
+    'MongoDB',
+    'SQLite',
+    'pgvector',
+    'Redis',
+    'Supabase',
+  ],
   Tools: ['Git', 'VS Code', 'Vercel', 'Postman', 'VirtualBox', 'OpenStack'],
 }
 
@@ -381,6 +402,7 @@ export const getTechCategories = (): string[] => {
  * (Remaining entries kept for ordering reference / chat context; layout uses only `[0]`.)
  */
 export const FEATURED_SLUGS_ORDERED = [
+  'air-property',
   'knowledge-mesh',
   'sentinelstack-ai',
   'path-to-offer-ai',

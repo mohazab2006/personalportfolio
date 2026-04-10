@@ -101,14 +101,15 @@ export default function Hero() {
 
           {/* CTAs */}
           <motion.div
-            className="flex flex-wrap items-center gap-3 pt-3"
+            className="flex flex-wrap items-center gap-3 pt-3 sm:gap-3.5"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45, delay: 1.6 }}
           >
             <button
+              type="button"
               onClick={() => scrollToElement('projects')}
-              className="inline-flex min-h-[44px] items-center justify-center rounded-md bg-dark-accent px-5 py-2.5 text-sm font-semibold text-dark-bg transition-colors hover:bg-dark-accent-hover active:bg-dark-accent-hover"
+              className="inline-flex min-h-[44px] items-center justify-center rounded-xl bg-dark-accent px-6 py-2.5 text-sm font-semibold text-dark-bg shadow-lg shadow-emerald-950/35 ring-1 ring-inset ring-white/25 transition-all hover:bg-dark-accent-hover hover:shadow-xl hover:shadow-emerald-900/45 active:translate-y-px"
             >
               View Projects
             </button>
@@ -116,14 +117,14 @@ export default function Hero() {
               href={PERSONAL.resumePdf}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex min-h-[44px] items-center justify-center rounded-md border border-white/12 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:border-white/25 hover:bg-white/[0.04]"
+              className="inline-flex min-h-[44px] items-center justify-center rounded-xl border border-white/[0.18] bg-white/[0.06] px-6 py-2.5 text-sm font-semibold text-white shadow-sm shadow-black/20 backdrop-blur-sm transition-all hover:border-white/30 hover:bg-white/[0.1] hover:shadow-md active:translate-y-px"
             >
               Resume
             </a>
             <button
               type="button"
               onClick={openSnaggy}
-              className="inline-flex min-h-[44px] items-center justify-center rounded-md px-3 py-2.5 text-sm font-medium text-white/45 transition-colors hover:text-white/75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dark-accent/35 focus-visible:ring-offset-2 focus-visible:ring-offset-[#070708] active:text-white/60"
+              className="inline-flex min-h-[44px] items-center justify-center rounded-xl border border-emerald-400/25 bg-emerald-500/[0.08] px-5 py-2.5 text-sm font-semibold text-emerald-100/95 shadow-sm shadow-black/15 transition-all hover:border-emerald-400/45 hover:bg-emerald-500/[0.14] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dark-accent/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#070708] active:translate-y-px"
             >
               Ask Snaggy
             </button>
