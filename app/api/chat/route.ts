@@ -15,8 +15,8 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify({
         model: 'llama-3.3-70b-versatile',
         messages: [{ role: 'system', content: systemPrompt }, ...messages],
-        temperature: 0.72,
-        max_tokens: 720,
+        temperature: 0.58,
+        max_tokens: 420,
       }),
     })
 
