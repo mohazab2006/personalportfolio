@@ -206,16 +206,6 @@ export const PROJECTS: Project[] = [
     screenshots: ['hero.jpg', 'screen-1.jpg', 'screen-2.jpg'],
   },
   {
-    slug: 'personal-portfolio',
-    title: 'Personal Portfolio',
-    github: 'https://github.com/mohazab2006/personalportfolio',
-    demo: '',
-    description:
-      'An interactive portfolio experience built to push the boundaries of modern web development, featuring Snaggy - a custom AI chatbot assistant powered by Groq\'s LLaMA 3.3 70B model. Snaggy acts as my personal AI representative, trained on my complete background, projects, skills, and experience, capable of answering questions about my journey from Egypt to Canada, coding origins through video games, basketball coaching experience, and technical expertise. The portfolio showcases cutting-edge web technologies including a custom cursor system with magnetic effects, 3D animated orbs using React Three Fiber, smooth page transitions with Framer Motion, real-time AI chat interface with fullscreen mode, sophisticated loader with progress animation, split timeline for experience/education, holographic cards, interactive particle background, and smooth scrolling with Lenis. The project demonstrates advanced full-stack development combining frontend animations, backend API integration, AI model implementation, and modern UX design patterns. Built as a passion project to explore the intersection of web development and artificial intelligence, showcasing both technical skills and creative problem-solving.',
-    stack: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion', 'Three.js', 'Groq AI', 'LLaMA', 'Lenis', 'AI Chat'],
-    screenshots: ['hero.jpg'],
-  },
-  {
     slug: 'personal-home-server',
     title: 'Personal Home Server',
     github: '',
