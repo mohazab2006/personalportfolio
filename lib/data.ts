@@ -127,25 +127,6 @@ export const PROJECTS: Project[] = [
     screenshots: ['hero.jpg'],
   },
   {
-    slug: 'gainables',
-    title: 'Gainables — Ride for Mental Health',
-    github: '',
-    demo: '',
-    description:
-      'Campaign site for Gainables\' Ottawa → Montreal Ride for Mental Health: live GPS on a Mapbox tracker, a GSAP-driven biker timeline, donation totals, sponsors, and Supabase-backed content with an email-allowlisted admin.\n\n---\n\nBuilt with Next.js and Tailwind v4. Real-time rider positions flow from the Overland mobile app into a Supabase Edge Function (ingest-position), then Mapbox GL JS renders the route, checkpoints, and animated rider marker; the landing page centers a bold hero and scroll-driven timeline, donation strip with live goal progress, mission and sponsor strips, email signup (optional Resend), and FAQ. Admin covers ride content, media links, sponsors, subscribers, donations configuration, and exports — all grounded in Supabase Auth/Postgres with cache-friendly server rendering.',
-    stack: [
-      'Mapbox live map',
-      'GPS + Overland ingest',
-      'Supabase Edge Functions',
-      'Realtime positions',
-      'GSAP biker timeline',
-      'Live donation strip',
-      'Allowlisted admin',
-      'Next.js 16',
-    ],
-    screenshots: ['hero.png'],
-  },
-  {
     slug: 'knowledge-mesh',
     title: 'KnowledgeMesh',
     github: 'https://github.com/mohazab2006/KnowledgeMesh',
@@ -194,6 +175,25 @@ export const PROJECTS: Project[] = [
       'A comprehensive nonprofit platform for Empower Orphans, a student-led organization mobilizing campus chapters to support orphaned children. The website features donation tracking with real-time progress bars, chapter management system for multiple universities (Carleton University, University of Ottawa), event coordination, and volunteer application forms. Built with role-based access control (RBAC) for chapter leaders and administrators, the platform enables transparent fundraising with clear goal setting and impact reporting. The site includes interactive donation forms, chapter-specific social media integration, contact management, and a responsive design optimized for student engagement and donor transparency.',
     stack: ['Next.js', 'TypeScript', 'Tailwind', 'Supabase', 'Docker', 'RBAC', 'Donations', 'Chapters'],
     screenshots: ['hero.jpg', 'screen-1.jpg', 'screen-2.jpg'],
+  },
+  {
+    slug: 'gainables',
+    title: 'Gainables — Ride for Mental Health',
+    github: '',
+    demo: '',
+    description:
+      'Campaign site for Gainables\' Ottawa → Montreal Ride for Mental Health: live GPS on a Mapbox tracker, a GSAP-driven biker timeline, donation totals, sponsors, and Supabase-backed content with an email-allowlisted admin.\n\n---\n\nBuilt with Next.js and Tailwind v4. Real-time rider positions flow from the Overland mobile app into a Supabase Edge Function (ingest-position), then Mapbox GL JS renders the route, checkpoints, and animated rider marker; the landing page centers a bold hero and scroll-driven timeline, donation strip with live goal progress, mission and sponsor strips, email signup (optional Resend), and FAQ. Admin covers ride content, media links, sponsors, subscribers, donations configuration, and exports — all grounded in Supabase Auth/Postgres with cache-friendly server rendering.',
+    stack: [
+      'Mapbox live map',
+      'GPS + Overland ingest',
+      'Supabase Edge Functions',
+      'Realtime positions',
+      'GSAP biker timeline',
+      'Live donation strip',
+      'Allowlisted admin',
+      'Next.js 16',
+    ],
+    screenshots: ['hero.png'],
   },
   {
     slug: 'sentinelstack-ai',
@@ -420,9 +420,9 @@ export const getTechCategories = (): string[] => {
  * (Remaining entries kept for ordering reference / chat context; layout uses only `[0]`.)
  */
 export const FEATURED_SLUGS_ORDERED = [
-  'gainables',
   'air-property',
   'knowledge-mesh',
   'sentinelstack-ai',
   'path-to-offer-ai',
+  'StudynFlow',
 ] as const
