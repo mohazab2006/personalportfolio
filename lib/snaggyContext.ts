@@ -54,7 +54,7 @@ function buildStartupBlock(): string | null {
   return [
     `- Founder: Mohamed — ${ap.title}${url ? ` · ${url}` : ''}.`,
     `- Elevator: ${elevator}`,
-    `- Deeper detail, stack, and links: first entry under PROJECTS (FEATURED ORDER). Not the same as freelance/client work (see WORK: AmanahTech) unless the visitor asks how everything fits together.`,
+    `- Deeper detail, stack, and links: first entry under PROJECTS (FEATURED ORDER). Not the same as KOVA client work unless the visitor asks how everything fits together.`,
   ].join('\n')
 }
 
@@ -113,9 +113,6 @@ ${buildEducationBlock()}
 
 WORK:
 ${buildWorkBlock()}
-
-WORK NAME NOTE (if someone asks what “AmanahTech” / “Amanah” means or how it translates):
-- It reflects Arabic أمانة (romanized “amanah”): trust, honesty, or integrity—not a random brand syllables.
 
 LEADERSHIP & EXTRACURRICULAR:
 ${buildLeadershipBlock()}

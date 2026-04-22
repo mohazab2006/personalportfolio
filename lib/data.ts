@@ -234,17 +234,16 @@ export const EXPERIENCE: ExperienceItem[] = [
     upcoming: true,
   },
   {
-    role: 'Founder & Full-Stack Developer — self-employed',
-    org: 'AmanahTech',
+    role: 'Co-Founder & Developer',
+    org: 'KOVA',
     dates: 'October 2023 – Present',
-    logo: '/logos/ammanah.png',
+    logo: '/logos/kova.jpg',
     bullets: [
-      'Built and deployed production-ready web applications for small businesses and non-profits (HT Clean, Salam Society, Milk Inc., Rami The Barber, Empower Orphans).',
-      'Delivered real-world features: booking flows, admin dashboards, authentication, RBAC, API integrations, and AI-powered assistance.',
-      'Full-stack development with feature development, AI integration, deployment, and security-aware design.',
-      'Managed self-hosted infrastructure with Nginx reverse proxy and Let\'s Encrypt SSL/TLS certificates.',
+      'Production web apps for clients—scalable architecture, auth, RBAC dashboards, and API integrations.',
+      'AI-driven features: chatbots, automation, and data pipelines.',
+      'Cloud & ops: Docker, NGINX, SSL/TLS, domains, firewalls, backups; CI/CD with GitHub Actions.',
     ],
-    tags: ['Next.js', 'TypeScript', 'Supabase', 'Docker', 'Nginx', 'SSL', 'AI Integration', 'RBAC', 'Full-Stack', 'Freelance', 'Self-Hosted'],
+    tags: ['Ottawa, ON', 'Next.js', 'TypeScript', 'Docker', 'NGINX', 'GitHub Actions', 'AI', 'RBAC', 'Full-Stack'],
   },
 ]
 

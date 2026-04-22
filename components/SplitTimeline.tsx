@@ -38,7 +38,7 @@ function TimelineCard({ entry }: { entry: TimelineEntry }) {
   const subtitle = isEducation ? entry.degree : entry.role
   const period = isEducation ? entry.years : entry.dates
   const logo = entry.logo
-  const logoFillsCircle = 'org' in entry && entry.org === 'AmanahTech'
+  const logoFillsCircle = 'org' in entry && entry.org === 'KOVA'
   const highlights = listForEntry(entry)
 
   return (
@@ -199,7 +199,7 @@ export default function SplitTimeline() {
             <Column
               side="left"
               label="Work"
-              subtitle="Co-op and freelance engineering roles."
+              subtitle="Co-op, founding, and client-facing engineering."
               entries={workEntries}
             />
           </div>
