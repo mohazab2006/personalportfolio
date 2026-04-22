@@ -127,6 +127,25 @@ export const PROJECTS: Project[] = [
     screenshots: ['hero.jpg'],
   },
   {
+    slug: 'gainables',
+    title: 'Gainables — Ride for Mental Health',
+    github: '',
+    demo: '',
+    description:
+      'Campaign site for Gainables\' Ottawa → Montreal Ride for Mental Health: live GPS on a Mapbox tracker, a GSAP-driven biker timeline, donation totals, sponsors, and Supabase-backed content with an email-allowlisted admin.\n\n---\n\nBuilt with Next.js and Tailwind v4. Real-time rider positions flow from the Overland mobile app into a Supabase Edge Function (ingest-position), then Mapbox GL JS renders the route, checkpoints, and animated rider marker; the landing page centers a bold hero and scroll-driven timeline, donation strip with live goal progress, mission and sponsor strips, email signup (optional Resend), and FAQ. Admin covers ride content, media links, sponsors, subscribers, donations configuration, and exports — all grounded in Supabase Auth/Postgres with cache-friendly server rendering.',
+    stack: [
+      'Mapbox live map',
+      'GPS + Overland ingest',
+      'Supabase Edge Functions',
+      'Realtime positions',
+      'GSAP biker timeline',
+      'Live donation strip',
+      'Allowlisted admin',
+      'Next.js 16',
+    ],
+    screenshots: ['hero.png'],
+  },
+  {
     slug: 'knowledge-mesh',
     title: 'KnowledgeMesh',
     github: 'https://github.com/mohazab2006/KnowledgeMesh',
@@ -401,9 +420,9 @@ export const getTechCategories = (): string[] => {
  * (Remaining entries kept for ordering reference / chat context; layout uses only `[0]`.)
  */
 export const FEATURED_SLUGS_ORDERED = [
+  'gainables',
   'air-property',
   'knowledge-mesh',
   'sentinelstack-ai',
   'path-to-offer-ai',
-  'StudynFlow',
 ] as const
