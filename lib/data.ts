@@ -127,6 +127,29 @@ export const PROJECTS: Project[] = [
     screenshots: ['hero.jpg'],
   },
   {
+    slug: 'xgenius',
+    title: 'XGenius',
+    github: 'https://github.com/mohazab2006/XGenius',
+    demo: '',
+    description:
+      'AI-powered football analytics: World Cup match predictions, xG modeling, and Monte Carlo tournament simulation with an explainable insights layer.\n\n---\n\nXGenius combines expected-goals thinking, ML classifiers (e.g. win/draw/loss), statistical goal models, and large-scale probabilistic simulation so you can explore match probabilities and full-tournament outcomes—not just a single scoreline guess.\n\nMonorepo-style stack: FastAPI serves prediction and simulation APIs (PostgreSQL for data); Python ML layer uses Pandas/NumPy, scikit-learn, and XGBoost; Next.js + Tailwind frontend for dashboards, head-to-head and tournament views; Docker for repeatable runs. Example API ideas: single-match prediction, tournament simulation with many runs, and team advancement odds—grounded in the same engine the UI consumes.',
+    stack: [
+      'Python',
+      'FastAPI',
+      'Next.js',
+      'Tailwind CSS',
+      'PostgreSQL',
+      'scikit-learn',
+      'XGBoost',
+      'Pandas',
+      'NumPy',
+      'Docker',
+      'Monte Carlo',
+      'Sports analytics',
+    ],
+    screenshots: ['hero.jpg'],
+  },
+  {
     slug: 'knowledge-mesh',
     title: 'KnowledgeMesh',
     github: 'https://github.com/mohazab2006/KnowledgeMesh',
@@ -223,6 +246,27 @@ export const PROJECTS: Project[] = [
     description:
       'Website for Rami The Barber, a barber shop in Ottawa (Barrhaven). Features a hero section, about Rami with photo and bio, services (Haircut & Beard, Haircut), before/after transformations, gallery, Game Tape videos, reviews, location and contact, and footer with booking CTA. The Book page offers full Square booking integration. Media (hero, gallery, transformations, videos, about photo, OG image) is served from Supabase Storage.',
     stack: ['Next.js', 'TypeScript', 'Tailwind', 'Supabase', 'Square', 'Booking', 'Storage', 'Barber'],
+    screenshots: ['hero.jpg'],
+  },
+  {
+    slug: 'data-store-app',
+    title: 'Data Store App',
+    github: 'https://github.com/mohazab2006/data-store-app',
+    demo: '',
+    description:
+      'Full-stack CRUD lab: Spring Boot + JDBC + MySQL API with a Vite React TypeScript UI—built to master low-level SQL before comparing ORM approaches.\n\n---\n\nMonorepo with a Spring Boot backend and a Vite + React + TypeScript frontend. The REST API exposes user resources with proper HTTP status handling; the backend uses JDBC with prepared statements for create/read/update/delete against MySQL, plus validation and CORS for local dev. Axios drives the UI; Tailwind styles the forms and lists.\n\nDeliberately JDBC-first to understand how requests map to SQL and connections; README outlines a future Hibernate pass for contrast. Good for demonstrating solid Java/SQL fundamentals, API design, and a clean split between client and server.',
+    stack: [
+      'Spring Boot',
+      'Java',
+      'JDBC',
+      'MySQL',
+      'React',
+      'TypeScript',
+      'Vite',
+      'Tailwind CSS',
+      'Axios',
+      'REST API',
+    ],
     screenshots: ['hero.jpg'],
   },
 ]
@@ -411,6 +455,7 @@ export const getTechCategories = (): string[] => {
  */
 export const FEATURED_SLUGS_ORDERED = [
   'air-property',
+  'xgenius',
   'knowledge-mesh',
   'sentinelstack-ai',
   'path-to-offer-ai',
