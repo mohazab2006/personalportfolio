@@ -132,7 +132,7 @@ export const PROJECTS: Project[] = [
     github: 'https://github.com/mohazab2006/XGenius',
     demo: '',
     description:
-      'AI-powered football analytics: World Cup match predictions, xG modeling, and Monte Carlo tournament simulation with an explainable insights layer.\n\n---\n\nXGenius combines expected-goals thinking, ML classifiers (e.g. win/draw/loss), statistical goal models, and large-scale probabilistic simulation so you can explore match probabilities and full-tournament outcomes—not just a single scoreline guess.\n\nMonorepo-style stack: FastAPI serves prediction and simulation APIs (PostgreSQL for data); Python ML layer uses Pandas/NumPy, scikit-learn, and XGBoost; Next.js + Tailwind frontend for dashboards, head-to-head and tournament views; Docker for repeatable runs. Example API ideas: single-match prediction, tournament simulation with many runs, and team advancement odds—grounded in the same engine the UI consumes.',
+      'Predict matches, simulate the whole tournament—xG, ML, and Monte Carlo with readable explanations.\n\n---\n\nXGenius combines expected-goals thinking, ML classifiers (e.g. win/draw/loss), statistical goal models, and large-scale probabilistic simulation so you can explore match probabilities and full-tournament outcomes—not just a single scoreline guess.\n\nMonorepo-style stack: FastAPI serves prediction and simulation APIs (PostgreSQL for data); Python ML layer uses Pandas/NumPy, scikit-learn, and XGBoost; Next.js + Tailwind frontend for dashboards, head-to-head and tournament views; Docker for repeatable runs. Example API ideas: single-match prediction, tournament simulation with many runs, and team advancement odds—grounded in the same engine the UI consumes.',
     stack: [
       'Python',
       'FastAPI',
@@ -147,7 +147,7 @@ export const PROJECTS: Project[] = [
       'Monte Carlo',
       'Sports analytics',
     ],
-    screenshots: ['hero.jpg'],
+    screenshots: ['hero.png'],
   },
   {
     slug: 'knowledge-mesh',
@@ -254,7 +254,7 @@ export const PROJECTS: Project[] = [
     github: 'https://github.com/mohazab2006/data-store-app',
     demo: '',
     description:
-      'Full-stack CRUD lab: Spring Boot + JDBC + MySQL API with a Vite React TypeScript UI—built to master low-level SQL before comparing ORM approaches.\n\n---\n\nMonorepo with a Spring Boot backend and a Vite + React + TypeScript frontend. The REST API exposes user resources with proper HTTP status handling; the backend uses JDBC with prepared statements for create/read/update/delete against MySQL, plus validation and CORS for local dev. Axios drives the UI; Tailwind styles the forms and lists.\n\nDeliberately JDBC-first to understand how requests map to SQL and connections; README outlines a future Hibernate pass for contrast. Good for demonstrating solid Java/SQL fundamentals, API design, and a clean split between client and server.',
+      'CRUD the old-fashioned way first—raw JDBC to MySQL, React on top, so ORMs make sense when you add them.\n\n---\n\nMonorepo with a Spring Boot backend and a Vite + React + TypeScript frontend. The REST API exposes user resources with proper HTTP status handling; the backend uses JDBC with prepared statements for create/read/update/delete against MySQL, plus validation and CORS for local dev. Axios drives the UI; Tailwind styles the forms and lists.\n\nDeliberately JDBC-first to understand how requests map to SQL and connections; README outlines a future Hibernate pass for contrast. Good for demonstrating solid Java/SQL fundamentals, API design, and a clean split between client and server.',
     stack: [
       'Spring Boot',
       'Java',
@@ -267,7 +267,7 @@ export const PROJECTS: Project[] = [
       'Axios',
       'REST API',
     ],
-    screenshots: ['hero.jpg'],
+    screenshots: ['hero.png'],
   },
 ]
 

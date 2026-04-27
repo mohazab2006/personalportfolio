@@ -1,148 +1,78 @@
 <div align="center">
 
-# 🚀 Mohamed Azab — Personal Portfolio
+# Mohamed Azab — Portfolio
 
-[![Live Site](https://img.shields.io/badge/🌐_Live_Site-mohamedazab.dev-8B5CF6?style=for-the-badge&labelColor=2D1B69)](https://mohamedazab.dev)
-[![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
-[![AI Powered](https://img.shields.io/badge/AI-Groq_LLaMA_3.3-blueviolet?style=for-the-badge&logo=robot)](https://groq.com/)
-[![Supabase](https://img.shields.io/badge/Database-Supabase-3ECF8E?style=for-the-badge&logo=supabase)](https://supabase.com/)
+[**mohamedazab.dev**](https://mohamedazab.dev)
 
-**An interactive portfolio built to be an experience — featuring a real-time AI assistant, 3D WebGL visuals, and a cross-browser optimized UI built for performance on every device.**
-
-[View Live](https://mohamedazab.dev) · [Report Bug](https://github.com/mohazab2006/personalportfolio/issues) · [Request Feature](https://github.com/mohazab2006/personalportfolio/issues)
+*An interactive portfolio meant to feel like a product—not a PDF on the web.*
 
 </div>
 
 ---
 
-## ✨ Features
+## What it does
 
-### 🤖 **Snaggy — Personal AI Assistant**
-- Real-time AI chatbot powered by **Groq (LLaMA 3.3 70B)** for sub-100ms inference
-- Context-aware responses built on a structured system prompt covering projects, skills, background, and experience
-- **Streaming chat interface** — responses appear word-by-word for a natural feel
-- Fullscreen chat mode with a smooth overlay experience
-- Handles conversational queries about my journey, tech stack, and work — no scripted answers
+This site is my **public home on the internet**: visitors can browse **projects**, **experience**, and **education**, get a sense of **how I work**, and reach out—all in one flow. Instead of static blocks of text, the UI is built to **reward exploration**: motion, depth, and a conversational layer so people can ask questions in natural language instead of hunting through every section.
+
+**Snaggy**, the embedded assistant, answers questions about my background, projects, and stack using **streaming replies**—so chatting feels immediate, not like filling out a form. Project content can be backed by **Supabase** when configured, so the showcase can stay fresh without redeploying for every tweak.
 
 ---
 
-### 🎨 **Advanced UI/UX Engineering**
-- Custom **magnetic cursor system** with ripple click effects
-- **3D animated orbs** rendered via React Three Fiber + Three.js (WebGL)
-- **Interactive particle background** with mouse-reactive physics using Canvas 2D
-- **Holographic project cards** with glossy reflection overlays and sweep animations
-- **Split timeline** for experience and education — responsive column reorder on mobile
-- Smooth page scrolling powered by **Lenis**
-- Entrance animations via **Framer Motion** with scroll-triggered reveals
-- Dark/light mode support
+## Why I built it this way
+
+- **Experience first** — Recruiters and collaborators often skim on phones or inside in-app browsers. The layout, scroll behavior, and animations are tuned so the site stays readable and stable where those environments are picky (touch, observers, embedded WebViews).
+
+- **Conversation as an interface** — A portfolio should answer “who is this person?” quickly. Snaggy adds a second path: ask in your own words instead of parsing every section.
+
+- **Craft without clutter** — 3D orbs, particles, and magnetic cursor details are there to signal care and technical range—not to distract. Heavy pieces load **lazily** so the first paint stays fast.
+
+- **One codebase, real patterns** — Next.js App Router, typed content in `lib/data.ts`, API routes for the assistant, and optional Supabase for project data—the same kinds of choices I’d make on a client-facing product.
 
 ---
 
-### ⚡ **Performance & Architecture**
-- **Next.js App Router** with server-side rendering
-- Lazy loading and code splitting via `React.lazy` + `Suspense`
-- `next/dynamic` with `ssr: false` for heavy 3D/animation components
-- Image optimization with `next/image` (blur placeholders, responsive `sizes`)
-- In-memory project cache (1hr TTL) backed by **Supabase PostgreSQL**
-- **90+ Lighthouse score** across all metrics
+## What you’ll find on the site
+
+| Area | Purpose |
+|------|---------|
+| **Hero & story** | Who I am and what I focus on |
+| **Projects** | Selected work with stack and links |
+| **Experience & education** | Timeline-style history |
+| **Snaggy** | Ask about my path, projects, or tools |
+| **Contact** | Ways to reach me |
+
+Featured builds (among others): client and nonprofit sites, ML/security-oriented work, and infra I run myself—details live on the live site.
 
 ---
 
-### 📱 **Cross-Browser & Mobile Reliability**
-- IntersectionObserver fallbacks for **LinkedIn in-app browser** (silent callback swallowing)
-- `getBoundingClientRect` sync check for **Safari** (doesn't fire observer for already-in-viewport elements)
-- 1.5s timer safety net in case all observer callbacks fail
-- `whileHover` disabled on touch devices — no tap-triggered animation jumps on iOS
-- Tested and stable on Safari, Chrome, Firefox, and LinkedIn/social in-app browsers
+## Run it locally *(short)*
 
----
+**Requirements:** Node **≥ 18.17**
 
-## 🗂️ Projects
-
-| Project | Stack | Live |
-|---|---|---|
-| **SentinelStack AI** | Next.js, FastAPI, scikit-learn, OpenAI API, Docker, PostgreSQL | — |
-| **HT Clean Website** | Next.js, TypeScript, Tailwind, Supabase, Docker | [htclean.ca](https://htclean.ca/) |
-| **Empower Orphans V2** | Next.js, TypeScript, Supabase, RBAC, Docker | [empowerorphans.com](https://empowerorphans.com/) |
-| **Rami The Barber** | Next.js, TypeScript, Tailwind, Supabase, Square | [ramithebarber.com](https://ramithebarber.com) |
-| **School Library System** | Python, Django, Supabase, QR/OCR, RBAC | — |
-| **Personal Home Server** | Ubuntu, Docker, Nginx, VPN, Bash, Python | — |
-
----
-
-## 🛠️ Tech Stack
-
-### **Frontend**
-- Next.js 16 (App Router)
-- TypeScript
-- Tailwind CSS
-- Framer Motion
-- React Three Fiber / Three.js
-- Lenis (smooth scroll)
-
-### **Backend**
-- Next.js API Routes
-- Groq API (LLaMA 3.3 70B — LLM inference)
-- Python / FastAPI (SentinelStack AI)
-
-### **Database & Storage**
-- Supabase (PostgreSQL + object storage)
-
-### **DevOps & Infrastructure**
-- Docker & NGINX
-- Vercel (portfolio deployment)
-- Self-hosted home server (Ubuntu, Let's Encrypt SSL)
-
----
-
-## 🎯 System Design
-
-**AI Chat Flow:**
-```
-User Input → Chat UI → Next.js API Route → Groq API → Streaming Response → UI Render
+```bash
+npm install
+npm run dev
 ```
 
-**Project Data Flow:**
+Open **http://localhost:3000**.
+
+**Environment:** Create `.env.local` with:
+
+- `GROQ_API_KEY` — powers Snaggy (Groq API)
+- `NEXT_PUBLIC_SUPABASE_URL` & `NEXT_PUBLIC_SUPABASE_ANON_KEY` — optional; project listing from Supabase when set
+
+Without Supabase keys, the app can still run using bundled/local project data depending on your setup; without `GROQ_API_KEY`, the chat route won’t work until you add a key.
+
+```bash
+npm run build   # production build
+npm run start   # serve production build
 ```
-Page Load → In-Memory Cache Check → Supabase Query (on miss) → Transform → Render
-```
-
-**Key Concepts:**
-- Prompt engineering with full biographical context
-- Streaming UI updates for perceived performance
-- Serverless backend with edge-friendly API routes
-- Observer-pattern scroll animations with multi-browser fallbacks
 
 ---
 
-## 🧑‍💻 About Me
+## Contact
 
-CS student at **Carleton University** specializing in **AI & Machine Learning** with a focus on **Cybersecurity**. Upcoming **Junior DevOps Specialist co-op at CIRA** (Canadian Internet Registration Authority — Canada's .CA domain registry).
-
-Co-President of **Empower Orphans Foundation** (Carleton chapter) and Youth Program Director at **Salam Society**.
+**Mohamed Azab** — [mohamedazab.dev](https://mohamedazab.dev) · mohazab2006@gmail.com · [LinkedIn](https://www.linkedin.com/in/mohamedazabca/) · [GitHub](https://github.com/mohazab2006)
 
 ---
 
-## 📬 Contact
-
-**Mohamed Azab**
-
-- Portfolio: https://mohamedazab.dev
-- Email: mohazab2006@gmail.com
-- LinkedIn: https://www.linkedin.com/in/mohamedazabca/
-- GitHub: https://github.com/mohazab2006
-
----
-
-## 🙏 Acknowledgments
-
-- Next.js · Vercel · Groq · Supabase · Framer Motion · React Three Fiber · Lenis · Tailwind CSS
-
----
-
-<div align="center">
-
-⭐ If you found this interesting, consider giving it a star!
-
-</div>
+Built with Next.js, TypeScript, Tailwind, Framer Motion, R3F/Three.js, Lenis, Groq, and Supabase.
