@@ -171,12 +171,12 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: 'StudynFlow',
-    title: 'Cadence',
-    github: 'https://github.com/mohazab2006/Cadence-Desktop',
+    title: 'StudynFlow',
+    github: 'https://github.com/mohazab2006/StudynFlow',
     demo: '',
     description:
-      'Cross-platform AI desktop planner for students: weighted grade tracking, syllabus extraction, and focus suggestions driven by your actual performance—not just deadlines.\n\n---\n\nCadence (formerly StudynFlow) is a local-first Tauri 2 + Rust desktop app with a React, TypeScript, and Tailwind frontend. All data lives on device in SQLite via the Tauri SQL plugin—no accounts or cloud sync.\n\nAcademic planning covers weighted grades with drop-lowest rules and final-grade planning that calculates the scores needed on remaining assessments. AI features include syllabus extraction (Tesseract.js OCR on PDFs or images pulls out assignments, dates, and weights), smart suggestions that flag at-risk courses from grade trends, natural-language task creation, and voice input. Separate School and Life workspaces, recurring tasks, a home dashboard with weather and a mini calendar, and a Ctrl+K command center round it out.',
-    stack: ['Tauri 2', 'Rust', 'React', 'TypeScript', 'Tailwind', 'Vite', 'SQLite', 'TanStack Query', 'Zod', 'Tesseract.js', 'OpenAI API'],
+      'Local-first desktop productivity app for students, combining School/Life workspaces, recurring templates, weather + calendar dashboard, AI-powered syllabus parsing, and flexible grade tracking with RapidTables-like calculations.',
+    stack: ['Tauri', 'Rust', 'React', 'OpenAi', 'TypeScript', 'Tailwind', 'SQLite', 'TanStack Query', 'React Router', 'Zod'],
     screenshots: ['hero.jpg', 'screen-1.jpg', 'screen-2.jpg'],
   },
   {
@@ -202,10 +202,10 @@ export const PROJECTS: Project[] = [
   {
     slug: 'gainables',
     title: 'Gainables — Ride for Mental Health',
-    github: 'https://github.com/mohazab2006/gainables',
+    github: '',
     demo: '',
     description:
-      'Campaign site for Gainables\' Montréal → Ottawa Ride for Mental Health: live GPS on a Mapbox tracker, a GSAP-driven biker timeline, donation totals, sponsors, and Supabase-backed content with an email-allowlisted admin.\n\n---\n\nBuilt with Next.js and Tailwind v4. Real-time rider positions flow from the Overland mobile app into a Supabase Edge Function (ingest-position), then Mapbox GL JS renders the route, checkpoints, and animated rider marker; the landing page centers a bold hero and scroll-driven timeline, donation strip with live goal progress, mission and sponsor strips, email signup (optional Resend), and FAQ. Admin covers ride content, media links, sponsors, subscribers, donations configuration, and exports — all grounded in Supabase Auth/Postgres with cache-friendly server rendering.',
+      'Campaign site for Gainables\' Ottawa → Montreal Ride for Mental Health: live GPS on a Mapbox tracker, a GSAP-driven biker timeline, donation totals, sponsors, and Supabase-backed content with an email-allowlisted admin.\n\n---\n\nBuilt with Next.js and Tailwind v4. Real-time rider positions flow from the Overland mobile app into a Supabase Edge Function (ingest-position), then Mapbox GL JS renders the route, checkpoints, and animated rider marker; the landing page centers a bold hero and scroll-driven timeline, donation strip with live goal progress, mission and sponsor strips, email signup (optional Resend), and FAQ. Admin covers ride content, media links, sponsors, subscribers, donations configuration, and exports — all grounded in Supabase Auth/Postgres with cache-friendly server rendering.',
     stack: [
       'Mapbox live map',
       'GPS + Overland ingest',
