@@ -249,26 +249,6 @@ export const PROJECTS: Project[] = [
     screenshots: ['hero.jpg'],
   },
   {
-    slug: 'salam-society',
-    title: 'Salam Society Platform',
-    github: 'https://github.com/mohazab2006/salam-society',
-    demo: 'https://salam-society.vercel.app',
-    description:
-      'Custom bilingual (EN/FR) web platform and admin CMS for Salam Society, an Ottawa Muslim community organization—built to replace a traditional CMS.\n\n---\n\nPublic site covers events (upcoming and past), programs and initiatives, a community gallery, partners, and a contact form with real email delivery via Nodemailer. A private admin dashboard lets non-technical organizers create, edit, publish, and delete content and upload media, with server actions and cache revalidation so changes appear instantly.\n\nBuilt on the Next.js App Router with server components, Supabase Postgres and Storage, and row-level security policies for safe public vs. admin access. Tested with Vitest and Testing Library; deployed on Vercel.',
-    stack: ['Next.js', 'TypeScript', 'Supabase', 'PostgreSQL', 'Row-Level Security', 'Tailwind CSS', 'Framer Motion', 'Nodemailer', 'Vitest', 'i18n (EN/FR)', 'Vercel'],
-    screenshots: ['hero.png'],
-  },
-  {
-    slug: 'mymovies',
-    title: 'myMovies',
-    github: 'https://github.com/mohazab2006/myMovies',
-    demo: '',
-    description:
-      'AI movie discovery: describe what you are in the mood for in plain English and get ranked picks, each with a short explanation of why it fits.\n\n---\n\nA Next.js + TypeScript app that turns a natural-language request into structured preferences with OpenAI (gpt-4o-mini), queries TMDB using genre, rating, runtime, and release-year filters, then has the model rank candidates and explain each match. When a query is too narrow, an AI-driven broadening step suggests alternative genres and keywords instead of falling back to plain text search.\n\nAlso includes movie search, trending titles, seasonal picks (Halloween in October, holiday films in December), detail pages, and a browser-stored watchlist. API clients for OpenAI and TMDB are covered by a Jest test suite.',
-    stack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'OpenAI API', 'TMDB API', 'Jest', 'Prompt engineering'],
-    screenshots: ['hero.png'],
-  },
-  {
     slug: 'data-store-app',
     title: 'Data Store App',
     github: 'https://github.com/mohazab2006/data-store-app',
