@@ -171,12 +171,12 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: 'StudynFlow',
-    title: 'StudynFlow',
-    github: 'https://github.com/mohazab2006/StudynFlow',
+    title: 'Cadence',
+    github: 'https://github.com/mohazab2006/Cadence-Desktop',
     demo: '',
     description:
-      'Local-first desktop productivity app for students, combining School/Life workspaces, recurring templates, weather + calendar dashboard, AI-powered syllabus parsing, and flexible grade tracking with RapidTables-like calculations.',
-    stack: ['Tauri', 'Rust', 'React', 'OpenAi', 'TypeScript', 'Tailwind', 'SQLite', 'TanStack Query', 'React Router', 'Zod'],
+      'Cross-platform AI desktop planner for students: weighted grade tracking, syllabus extraction, and focus suggestions driven by your actual performance—not just deadlines.\n\n---\n\nCadence (formerly StudynFlow) is a local-first Tauri 2 + Rust desktop app with a React, TypeScript, and Tailwind frontend. All data lives on device in SQLite via the Tauri SQL plugin—no accounts or cloud sync.\n\nAcademic planning covers weighted grades with drop-lowest rules and final-grade planning that calculates the scores needed on remaining assessments. AI features include syllabus extraction (Tesseract.js OCR on PDFs or images pulls out assignments, dates, and weights), smart suggestions that flag at-risk courses from grade trends, natural-language task creation, and voice input. Separate School and Life workspaces, recurring tasks, a home dashboard with weather and a mini calendar, and a Ctrl+K command center round it out.',
+    stack: ['Tauri 2', 'Rust', 'React', 'TypeScript', 'Tailwind', 'Vite', 'SQLite', 'TanStack Query', 'Zod', 'Tesseract.js', 'OpenAI API'],
     screenshots: ['hero.jpg', 'screen-1.jpg', 'screen-2.jpg'],
   },
   {
@@ -202,10 +202,10 @@ export const PROJECTS: Project[] = [
   {
     slug: 'gainables',
     title: 'Gainables — Ride for Mental Health',
-    github: '',
+    github: 'https://github.com/mohazab2006/gainables',
     demo: '',
     description:
-      'Campaign site for Gainables\' Ottawa → Montreal Ride for Mental Health: live GPS on a Mapbox tracker, a GSAP-driven biker timeline, donation totals, sponsors, and Supabase-backed content with an email-allowlisted admin.\n\n---\n\nBuilt with Next.js and Tailwind v4. Real-time rider positions flow from the Overland mobile app into a Supabase Edge Function (ingest-position), then Mapbox GL JS renders the route, checkpoints, and animated rider marker; the landing page centers a bold hero and scroll-driven timeline, donation strip with live goal progress, mission and sponsor strips, email signup (optional Resend), and FAQ. Admin covers ride content, media links, sponsors, subscribers, donations configuration, and exports — all grounded in Supabase Auth/Postgres with cache-friendly server rendering.',
+      'Campaign site for Gainables\' Montréal → Ottawa Ride for Mental Health: live GPS on a Mapbox tracker, a GSAP-driven biker timeline, donation totals, sponsors, and Supabase-backed content with an email-allowlisted admin.\n\n---\n\nBuilt with Next.js and Tailwind v4. Real-time rider positions flow from the Overland mobile app into a Supabase Edge Function (ingest-position), then Mapbox GL JS renders the route, checkpoints, and animated rider marker; the landing page centers a bold hero and scroll-driven timeline, donation strip with live goal progress, mission and sponsor strips, email signup (optional Resend), and FAQ. Admin covers ride content, media links, sponsors, subscribers, donations configuration, and exports — all grounded in Supabase Auth/Postgres with cache-friendly server rendering.',
     stack: [
       'Mapbox live map',
       'GPS + Overland ingest',
@@ -249,6 +249,26 @@ export const PROJECTS: Project[] = [
     screenshots: ['hero.jpg'],
   },
   {
+    slug: 'salam-society',
+    title: 'Salam Society Platform',
+    github: 'https://github.com/mohazab2006/salam-society',
+    demo: 'https://salam-society.vercel.app',
+    description:
+      'Custom bilingual (EN/FR) web platform and admin CMS for Salam Society, an Ottawa Muslim community organization—built to replace a traditional CMS.\n\n---\n\nPublic site covers events (upcoming and past), programs and initiatives, a community gallery, partners, and a contact form with real email delivery via Nodemailer. A private admin dashboard lets non-technical organizers create, edit, publish, and delete content and upload media, with server actions and cache revalidation so changes appear instantly.\n\nBuilt on the Next.js App Router with server components, Supabase Postgres and Storage, and row-level security policies for safe public vs. admin access. Tested with Vitest and Testing Library; deployed on Vercel.',
+    stack: ['Next.js', 'TypeScript', 'Supabase', 'PostgreSQL', 'Row-Level Security', 'Tailwind CSS', 'Framer Motion', 'Nodemailer', 'Vitest', 'i18n (EN/FR)', 'Vercel'],
+    screenshots: ['hero.png'],
+  },
+  {
+    slug: 'mymovies',
+    title: 'myMovies',
+    github: 'https://github.com/mohazab2006/myMovies',
+    demo: '',
+    description:
+      'AI movie discovery: describe what you are in the mood for in plain English and get ranked picks, each with a short explanation of why it fits.\n\n---\n\nA Next.js + TypeScript app that turns a natural-language request into structured preferences with OpenAI (gpt-4o-mini), queries TMDB using genre, rating, runtime, and release-year filters, then has the model rank candidates and explain each match. When a query is too narrow, an AI-driven broadening step suggests alternative genres and keywords instead of falling back to plain text search.\n\nAlso includes movie search, trending titles, seasonal picks (Halloween in October, holiday films in December), detail pages, and a browser-stored watchlist. API clients for OpenAI and TMDB are covered by a Jest test suite.',
+    stack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'OpenAI API', 'TMDB API', 'Jest', 'Prompt engineering'],
+    screenshots: ['hero.png'],
+  },
+  {
     slug: 'data-store-app',
     title: 'Data Store App',
     github: 'https://github.com/mohazab2006/data-store-app',
@@ -274,17 +294,28 @@ export const PROJECTS: Project[] = [
 // Work Experience
 export const EXPERIENCE: ExperienceItem[] = [
   {
+    role: 'Co-op — Winter 2027 (Incoming)',
+    org: 'RBC (Royal Bank of Canada)',
+    dates: 'January 2027 – April 2027 (Expected)',
+    bullets: [
+      'Incoming co-op for the Winter 2027 term at RBC in Toronto, Ontario.',
+      'Starting January 2027; four-month term expected to run through April 2027.',
+    ],
+    tags: ['Toronto, ON', 'Co-op', 'Winter 2027', 'Upcoming'],
+    logo: '/logos/rbc.png',
+    upcoming: true,
+  },
+  {
     role: 'Junior DevOps Specialist — Co-op',
     org: 'CIRA (Canadian Internet Registration Authority)',
     dates: 'May 2026 – August 2026',
     bullets: [
-      'Upcoming co-op position focusing on DevOps practices and infrastructure automation.',
-      'Will contribute to CI/CD pipelines, cloud infrastructure, and deployment workflows.',
-      'Joining the team managing Canada\'s .CA domain registry infrastructure.',
+      'Completed a Summer 2026 DevOps co-op term (May – August 28, 2026).',
+      'Worked on DevOps practices and infrastructure automation.',
+      'Part of the team behind Canada\'s .CA domain registry infrastructure.',
     ],
-    tags: ['DevOps', 'CI/CD', 'Cloud', 'Infrastructure', 'Automation', '.CA Registry', 'Upcoming'],
+    tags: ['DevOps', 'Infrastructure', 'Automation', '.CA Registry', 'Summer 2026'],
     logo: '/logos/cira.png',
-    upcoming: true,
   },
   {
     role: 'Co-Founder & Developer',

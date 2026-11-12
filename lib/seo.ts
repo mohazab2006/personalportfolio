@@ -7,7 +7,7 @@ export const SITE_ICON_PATH = '/icon.svg?v=6'
 export const siteConfig = {
   name: PERSONAL.name,
   description:
-    'Computer Science student at Carleton University specializing in AI & Machine Learning. Portfolio featuring Snaggy, an AI chatbot assistant. Passionate about building modern web applications, machine learning, and cybersecurity.',
+    'Computer Science student at Carleton University specializing in AI & Machine Learning and Cybersecurity. Former DevOps co-op at CIRA and incoming co-op at RBC. Projects span full-stack apps, ML, security tooling, and infrastructure.',
   url: 'https://mohamedazab.dev', // Your actual domain
   /** Bump when replacing `public/og-image.jpg` so link previews refetch. */
   ogImage: '/og-image.jpg?v=3',
@@ -101,7 +101,7 @@ export function generatePersonSchema() {
     name: PERSONAL.name,
     email: PERSONAL.email,
     url: siteConfig.url,
-    jobTitle: 'Computer Science Student & Web Developer',
+    jobTitle: 'Computer Science Student & Software Developer',
     affiliation: {
       '@type': 'EducationalOrganization',
       name: PERSONAL.university,

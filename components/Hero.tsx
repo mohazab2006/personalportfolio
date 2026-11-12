@@ -97,6 +97,9 @@ export default function Hero() {
             Computer Science at{' '}
             <span className="text-dark-accent font-medium">Carleton University</span>{' '}
             — focused on AI, cybersecurity, and infrastructure.
+            <span className="mt-2 block font-mono text-xs tracking-wide text-dark-muted sm:text-sm">
+              DevOps co-op @ CIRA (Summer 2026) · Incoming co-op @ RBC (Winter 2027)
+            </span>
           </motion.p>
 
           {/* CTAs */}
