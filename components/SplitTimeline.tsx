@@ -67,6 +67,11 @@ function TimelineCard({ entry }: { entry: TimelineEntry }) {
             <span className="rounded-md border border-white/[0.08] bg-white/[0.04] px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-white/50">
               {TYPE_LABEL[entry.kind]}
             </span>
+            {'upcoming' in entry && entry.upcoming && (
+              <span className="rounded-md border border-emerald-400/30 bg-emerald-500/[0.1] px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-emerald-300/90">
+                Upcoming
+              </span>
+            )}
             <span className="text-xs text-white/45">{period}</span>
           </div>
           <h3 className="font-display text-lg font-semibold tracking-tight text-white sm:text-xl">{title}</h3>

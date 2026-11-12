@@ -274,17 +274,28 @@ export const PROJECTS: Project[] = [
 // Work Experience
 export const EXPERIENCE: ExperienceItem[] = [
   {
+    role: 'Co-op — Winter 2027 (Incoming)',
+    org: 'RBC (Royal Bank of Canada)',
+    dates: 'January 2027 – April 2027 (Expected)',
+    bullets: [
+      'Incoming co-op for the Winter 2027 term at RBC in Toronto, Ontario.',
+      'Starting January 2027; four-month term expected to run through April 2027.',
+    ],
+    tags: ['Toronto, ON', 'Co-op', 'Winter 2027', 'Upcoming'],
+    logo: '/logos/rbc.png',
+    upcoming: true,
+  },
+  {
     role: 'Junior DevOps Specialist — Co-op',
     org: 'CIRA (Canadian Internet Registration Authority)',
     dates: 'May 2026 – August 2026',
     bullets: [
-      'Upcoming co-op position focusing on DevOps practices and infrastructure automation.',
-      'Will contribute to CI/CD pipelines, cloud infrastructure, and deployment workflows.',
-      'Joining the team managing Canada\'s .CA domain registry infrastructure.',
+      'Completed a Summer 2026 DevOps co-op term (May – August 28, 2026).',
+      'Worked on DevOps practices and infrastructure automation.',
+      'Part of the team behind Canada\'s .CA domain registry infrastructure.',
     ],
-    tags: ['DevOps', 'CI/CD', 'Cloud', 'Infrastructure', 'Automation', '.CA Registry', 'Upcoming'],
+    tags: ['DevOps', 'Infrastructure', 'Automation', '.CA Registry', 'Summer 2026'],
     logo: '/logos/cira.png',
-    upcoming: true,
   },
   {
     role: 'Co-Founder & Developer',
