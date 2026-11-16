@@ -1,5 +1,5 @@
-import type { Metadata } from 'next'
-import { Inter, Unbounded } from 'next/font/google'
+import type { Metadata, Viewport } from 'next'
+import { IBM_Plex_Sans, JetBrains_Mono } from 'next/font/google'
 import {
   generateMetadata as generateSEOMetadata,
   generatePersonSchema,
@@ -7,27 +7,41 @@ import {
 } from '@/lib/seo'
 import Providers from '@/components/Providers'
 import SocialRail from '@/components/SocialRail'
+import { THEME_BOOT_SCRIPT } from '@/lib/themeConfig'
 import '@/styles/globals.css'
 
 export const metadata: Metadata = generateSEOMetadata()
 
-const inter = Inter({
+/** Dark browser chrome (Safari toolbar, Android status bar) that matches the page. Zoom stays enabled for accessibility. */
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#0A0B08',
+  colorScheme: 'dark',
+}
+
+// Display + UI: a monospace with real weight at hero sizes.
+const jetbrains = JetBrains_Mono({
   subsets: ['latin'],
-  variable: '--font-inter',
+  weight: ['400', '500', '700', '800'],
+  variable: '--font-jetbrains',
   display: 'swap',
 })
 
-const logoFont = Unbounded({
+// Reading text: an industrial sans that pairs with the mono.
+const plex = IBM_Plex_Sans({
   subsets: ['latin'],
-  weight: ['400', '600', '700'],
-  variable: '--font-logo',
+  weight: ['400', '500', '600'],
+  variable: '--font-plex',
   display: 'swap',
 })
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`dark ${inter.variable} ${logoFont.variable}`}>
+    <html lang="en" className={`dark ${jetbrains.variable} ${plex.variable}`} suppressHydrationWarning>
       <head>
+        {/* Apply the saved phosphor theme before paint (no colour flash) */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_BOOT_SCRIPT }} />
         <link rel="icon" href={SITE_ICON_PATH} type="image/svg+xml" sizes="any" />
         <link rel="shortcut icon" href={SITE_ICON_PATH} />
         <link rel="apple-touch-icon" href={SITE_ICON_PATH} />
@@ -38,25 +52,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="dns-prefetch" href="https://supabase.co" />
         <link rel="preconnect" href="https://supabase.co" />
       </head>
-      <body className="font-sans min-h-screen bg-[#070708] text-dark-text">
-        <div
-          className="pointer-events-none fixed inset-0 z-0 overflow-hidden"
-          aria-hidden
-        >
-          {/* Soft top “sky” — pulls the page out of flat black */}
-          <div className="absolute inset-x-0 top-0 h-[min(72vh,640px)] bg-[radial-gradient(ellipse_75%_55%_at_50%_0%,rgba(45,212,191,0.11),transparent_62%)]" />
-          {/* Center wash — readable mid-tone */}
-          <div className="absolute left-1/2 top-[38%] h-[min(90vh,820px)] w-[min(110vw,1200px)] -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.045),transparent_68%)]" />
-          {/* Left accent pool */}
-          <div className="absolute -left-[22%] -top-[12%] h-[min(58vw,560px)] w-[min(58vw,560px)] rounded-full bg-dark-accent/[0.12] blur-[130px]" />
-          {/* Right cool counter-balance */}
-          <div className="absolute -right-[16%] top-[18%] h-[min(48vw,460px)] w-[min(48vw,460px)] rounded-full bg-cyan-300/[0.075] blur-[115px]" />
-          {/* Lower lift */}
-          <div className="absolute bottom-[-12%] left-1/2 h-[min(48vw,420px)] w-[min(78vw,680px)] -translate-x-1/2 rounded-full bg-white/[0.055] blur-[105px]" />
-          <div className="absolute bottom-[-8%] right-[-5%] h-[min(38vw,360px)] w-[min(38vw,360px)] rounded-full bg-teal-200/[0.04] blur-[90px]" />
-          {/* Light edge framing — keeps focus mid-page without killing the glows */}
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_100%_90%_at_50%_42%,transparent_32%,rgba(5,5,5,0.28)_100%)]" />
+      <body className="font-sans min-h-screen bg-dark-bg text-dark-text">
+        {/* Backdrop: engineering grid + a low amber bloom, like a monitor warming up */}
+        <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden>
+          <div className="ops-grid absolute inset-0" />
+          <div className="absolute inset-x-0 top-0 h-[min(70vh,620px)] bg-[radial-gradient(ellipse_70%_55%_at_30%_0%,rgb(var(--accent)/0.09),transparent_65%)]" />
+          <div className="absolute -right-[10%] top-[25%] h-[min(80vw,720px)] w-[min(80vw,720px)] bg-[radial-gradient(circle,rgba(124,228,149,0.045),transparent_65%)]" />
         </div>
+        {/* i — only visible in the page source */}
+        <div hidden aria-hidden dangerouslySetInnerHTML={{ __html: '<!-- i :: a3Jvbm9yaXVt -->' }} />
+        {/* CRT scanlines + vignette sit above everything but never catch clicks */}
+        <div className="crt-overlay pointer-events-none fixed inset-0 z-[90] opacity-60" aria-hidden />
+        <div className="crt-vignette pointer-events-none fixed inset-0 z-[89]" aria-hidden />
         <Providers>
           {children}
           <SocialRail />

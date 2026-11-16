@@ -14,6 +14,7 @@ import { Project, PROJECTS as LOCAL_PROJECTS, FEATURED_SLUGS_ORDERED } from '@/l
 import Section from './Section'
 import ProjectStorageImage from './ProjectStorageImage'
 import ProjectLinks from './ProjectLinks'
+import { useLatency } from '@/lib/health'
 
 /** Grid cards shown below the hero on narrow viewports; rest link to /projects */
 const MOBILE_GRID_VISIBLE = 4
@@ -21,23 +22,61 @@ const MOBILE_GRID_VISIBLE = 4
 const HERO_SLUG = FEATURED_SLUGS_ORDERED[0]
 
 const cardHover =
-  'transition-[transform,box-shadow,border-color] duration-300 ease-out hover:-translate-y-1 hover:border-white/[0.11] hover:shadow-[0_28px_56px_-20px_rgba(0,0,0,0.65),0_0_0_1px_rgba(45,212,191,0.05)]'
+  'transition-[border-color,box-shadow] duration-300 ease-out hover:border-dark-accent/45 hover:shadow-[0_0_0_1px_rgb(var(--accent)/0.12),0_28px_56px_-24px_rgba(0,0,0,0.8),0_0_40px_-18px_rgb(var(--accent)/0.35)]'
 
 const tagClass =
-  'rounded-md border border-white/[0.07] bg-white/[0.025] px-2.5 py-1 text-xs font-medium leading-tight tracking-wide text-dark-muted'
+  'border border-ops-line bg-dark-bg/40 px-2 py-0.5 font-mono text-[11.5px] lowercase leading-snug text-dark-muted'
+
+/** Honest status derived from what actually exists: a live URL, a public repo, or neither. */
+function serviceStatus(project: Project) {
+  if (project.demo)
+    return { label: 'live', dot: 'bg-ops-ok shadow-[0_0_8px_rgba(124,228,149,0.8)]', text: 'text-ops-ok' }
+  if (project.github) return { label: 'source', dot: 'bg-dark-accent', text: 'text-dark-accent' }
+  return { label: 'private', dot: 'bg-ops-dim', text: 'text-ops-dim' }
+}
+
+function PanelHead({ project, index }: { project: Project; index: number }) {
+  const status = serviceStatus(project)
+  const latency = useLatency(project.demo)
+  return (
+    <div className="ops-head">
+      <span className={`flex items-center gap-1.5 ${status.text}`}>
+        <span className={`status-dot ${status.dot} ${status.label === 'live' ? 'animate-status-pulse' : ''}`} />
+        {status.label}
+        {latency !== null && <span className="tabular-nums text-ops-dim">{latency}ms</span>}
+      </span>
+      <span className="text-ops-dim">│</span>
+      <span className="truncate text-dark-text/70">svc/{project.slug}</span>
+      <span className="ml-auto tabular-nums text-ops-dim">[{String(index + 1).padStart(2, '0')}]</span>
+    </div>
+  )
+}
+
+/** Screenshot treatment: slightly desaturated + scanlines at rest, full colour on hover. */
+const imageClass =
+  'object-cover grayscale-[40%] sepia-[15%] transition-[transform,filter] duration-500 ease-out group-hover:scale-[1.02] group-hover:grayscale-0 group-hover:sepia-0'
+
+function ImageScanlines() {
+  return (
+    <div
+      className="pointer-events-none absolute inset-0 bg-[repeating-linear-gradient(to_bottom,transparent_0px,transparent_2px,rgba(0,0,0,0.18)_3px)] opacity-70 transition-opacity duration-500 group-hover:opacity-20"
+      aria-hidden
+    />
+  )
+}
 
 function ProjectsSkeleton() {
   return (
     <div className="space-y-10 lg:space-y-12">
-      <div className="overflow-hidden rounded-2xl border border-white/[0.06] bg-dark-surface lg:grid lg:grid-cols-[1.15fr_1fr]">
-        <div className="aspect-[16/10] min-h-[220px] bg-white/[0.04] motion-safe:animate-pulse lg:min-h-[380px]" />
+      <div className="overflow-hidden ops-panel lg:grid lg:grid-cols-[1.15fr_1fr]">
+        <div className="aspect-[16/10] bg-white/[0.04] motion-safe:animate-pulse lg:aspect-auto lg:min-h-[380px]" />
         <div className="flex flex-col justify-center space-y-4 p-6 lg:p-10">
-          <div className="h-9 w-2/3 max-w-xs rounded-md bg-white/[0.06] motion-safe:animate-pulse" />
-          <div className="h-3.5 w-full rounded bg-white/[0.04] motion-safe:animate-pulse" />
-          <div className="h-3.5 w-[92%] rounded bg-white/[0.04] motion-safe:animate-pulse" />
+          <div className="h-9 w-2/3 max-w-xs bg-white/[0.06] motion-safe:animate-pulse" />
+          <div className="h-3.5 w-full bg-white/[0.04] motion-safe:animate-pulse" />
+          <div className="h-3.5 w-[92%] bg-white/[0.04] motion-safe:animate-pulse" />
           <div className="flex flex-wrap gap-2 pt-2">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="h-7 w-16 rounded-md bg-white/[0.05] motion-safe:animate-pulse" />
+              <div key={i} className="h-7 w-16 bg-white/[0.05] motion-safe:animate-pulse" />
             ))}
           </div>
         </div>
@@ -46,13 +85,13 @@ function ProjectsSkeleton() {
         {[1, 2, 3, 4, 5, 6].map((i) => (
           <div
             key={i}
-            className="overflow-hidden rounded-2xl border border-white/[0.06] bg-dark-surface"
+            className="overflow-hidden ops-panel"
           >
             <div className="aspect-[16/10] bg-white/[0.04] motion-safe:animate-pulse" />
             <div className="space-y-3 p-6">
-              <div className="h-5 w-4/5 rounded bg-white/[0.06] motion-safe:animate-pulse" />
-              <div className="h-3 w-full rounded bg-white/[0.04] motion-safe:animate-pulse" />
-              <div className="h-3 w-5/6 rounded bg-white/[0.04] motion-safe:animate-pulse" />
+              <div className="h-5 w-4/5 bg-white/[0.06] motion-safe:animate-pulse" />
+              <div className="h-3 w-full bg-white/[0.04] motion-safe:animate-pulse" />
+              <div className="h-3 w-5/6 bg-white/[0.04] motion-safe:animate-pulse" />
             </div>
           </div>
         ))}
@@ -67,36 +106,42 @@ function FeaturedHeroCard({ project }: { project: Project }) {
 
   return (
     <motion.div
-      className={`group relative overflow-hidden rounded-2xl border border-white/[0.09] bg-dark-surface shadow-[0_32px_64px_-28px_rgba(0,0,0,0.75)] ring-1 ring-inset ring-white/[0.03] ${cardHover}`}
+      className={`ops-panel ops-ticks group overflow-hidden ${cardHover}`}
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.15 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="grid lg:grid-cols-[1.15fr_1fr]">
-        <div className="relative aspect-[16/10] min-h-[220px] overflow-hidden bg-[#0a0a0c] lg:aspect-auto lg:min-h-[380px]">
+      <PanelHead project={project} index={0} />
+      <div className="grid lg:grid-cols-[1.2fr_1fr]">
+        <div className="relative aspect-[16/10] overflow-hidden border-b border-ops-line bg-dark-bg lg:aspect-auto lg:min-h-[400px] lg:border-b-0 lg:border-r">
           <ProjectStorageImage
             slug={project.slug}
             tryList={heroImageTryList(project.screenshots)}
             alt={`${project.title} preview`}
-            className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+            className={imageClass}
             sizes="(max-width: 1024px) 100vw, 58vw"
             priority
             placeholder="blur"
             blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgZmlsbD0iIzExMTExNCIvPjwvc3ZnPg=="
           />
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-dark-surface/50 hidden lg:block" />
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-dark-surface via-dark-surface/15 to-transparent lg:hidden" />
+          <ImageScanlines />
+          <span className="absolute left-3 top-3 bg-dark-accent px-2 py-0.5 font-mono text-[11px] font-bold uppercase tracking-wider text-dark-bg">
+            featured
+          </span>
         </div>
 
-        <div className="relative flex flex-col justify-center p-6 sm:p-8 lg:p-10 lg:pl-8 xl:pl-12">
-          <h3 className="mb-3 text-2xl font-bold tracking-tight text-white lg:text-3xl xl:text-4xl">
+        <div className="relative flex flex-col justify-center p-6 sm:p-8 lg:p-10">
+          <p className="mb-3 font-mono text-xs text-ops-dim">
+            <span className="text-ops-ok">$</span> cat ./{project.slug}/README.md
+          </p>
+          <h3 className="phosphor-soft mb-4 font-display text-3xl font-extrabold tracking-tight text-dark-text lg:text-4xl xl:text-5xl">
             {project.title}
           </h3>
-          <p className="mb-7 max-w-prose text-sm leading-relaxed text-dark-muted lg:text-base lg:leading-relaxed line-clamp-4 lg:line-clamp-5">
+          <p className="mb-7 max-w-prose text-[15px] leading-relaxed text-dark-text/70 line-clamp-4 lg:text-base lg:line-clamp-5">
             {line}
           </p>
-          <div className="mb-7 flex flex-wrap gap-2">
+          <div className="mb-7 flex flex-wrap gap-1.5">
             {project.stack.slice(0, 8).map((tech) => (
               <span key={tech} className={tagClass}>
                 {tech}
@@ -116,36 +161,39 @@ export function ProjectGridCard({ project, index }: { project: Project; index: n
 
   return (
     <motion.article
-      className={`group flex h-full flex-col overflow-hidden rounded-2xl border border-white/[0.07] bg-dark-surface ring-1 ring-inset ring-white/[0.02] ${cardHover}`}
+      className={`ops-panel group flex h-full flex-col overflow-hidden ${cardHover}`}
       initial={{ opacity: 0, y: 18 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.1 }}
-      transition={{ duration: 0.45, delay: Math.min(index * 0.04, 0.36) }}
+      transition={{ duration: 0.45, delay: Math.max(0, Math.min(index * 0.04, 0.36)) }}
     >
-      <div className="relative aspect-[16/10] overflow-hidden bg-[#0a0a0c]">
+      <PanelHead project={project} index={index + 1} />
+      <div className="relative aspect-[16/10] overflow-hidden border-b border-ops-line bg-dark-bg">
         <ProjectStorageImage
           slug={project.slug}
           tryList={heroImageTryList(project.screenshots)}
           alt={`${project.title} preview`}
-          className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+          className={imageClass}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           placeholder="blur"
           blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgZmlsbD0iIzExMTExNCIvPjwvc3ZnPg=="
         />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-dark-surface via-transparent to-transparent opacity-85" />
+        <ImageScanlines />
       </div>
 
-      <div className="flex flex-1 flex-col px-6 pb-6 pt-5">
-        <h3 className="mb-2 text-lg font-semibold tracking-tight text-white">{project.title}</h3>
-        <p className="mb-5 line-clamp-2 text-sm leading-relaxed text-dark-muted">{line}</p>
-        <div className="mb-5 flex flex-wrap gap-2">
-          {project.stack.slice(0, 7).map((tech) => (
+      <div className="flex flex-1 flex-col px-5 pb-5 pt-5">
+        <h3 className="mb-2 font-display text-xl font-bold tracking-tight text-dark-text transition-colors group-hover:text-dark-accent">
+          {project.title}
+        </h3>
+        <p className="mb-5 line-clamp-2 text-sm leading-relaxed text-dark-text/65">{line}</p>
+        <div className="mb-5 flex flex-wrap gap-1.5">
+          {project.stack.slice(0, 6).map((tech) => (
             <span key={tech} className={tagClass}>
               {tech}
             </span>
           ))}
         </div>
-        <div className="mt-auto border-t border-white/[0.06] pt-5">
+        <div className="mt-auto border-t border-dashed border-ops-line pt-4">
           <ProjectLinks project={project} variant="grid" />
         </div>
       </div>
@@ -180,8 +228,10 @@ export default function FeaturedWork() {
     return (
       <Section
         id="projects"
+        index="01"
+        command="ls ./projects --sort=impact"
         title="Projects"
-        subtitle="Selected work — systems, products, and client builds."
+        subtitle="selected work — systems, products, and client builds."
       >
         <ProjectsSkeleton />
       </Section>
@@ -195,8 +245,10 @@ export default function FeaturedWork() {
   return (
     <Section
       id="projects"
+      index="01"
+      command="ls ./projects --sort=impact"
       title="Projects"
-      subtitle="Selected work — systems, products, and client builds."
+      subtitle="selected work — systems, products, and client builds."
     >
       <div className="space-y-10 lg:space-y-14">
         {hero && <FeaturedHeroCard project={hero} />}
@@ -204,7 +256,7 @@ export default function FeaturedWork() {
           <div
             className={
               hero
-                ? 'border-t border-white/[0.06] pt-10 lg:pt-14'
+                ? 'border-t border-dashed border-ops-line pt-10 lg:pt-14'
                 : ''
             }
           >
@@ -222,10 +274,10 @@ export default function FeaturedWork() {
               <div className="mt-8 flex justify-center lg:hidden">
                 <Link
                   href="/projects"
-                  className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-xl border border-white/[0.12] bg-white/[0.04] px-6 py-3 text-sm font-semibold text-white transition-colors hover:border-dark-accent/35 hover:bg-dark-accent/10 hover:text-dark-accent"
+                  className="ops-btn"
                 >
-                  More projects
-                  <span className="text-dark-muted">({mobileMoreCount})</span>
+                  ls ./projects --all
+                  <span className="text-dark-muted">(+{mobileMoreCount})</span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"

@@ -6,47 +6,53 @@ import { PERSONAL, NAV_LINKS } from '@/lib/data'
 import { scrollToElement } from '@/lib/utils'
 import { MobileMenuSocialRow } from '@/components/SocialRail'
 
-const navLinkClass =
-  'rounded-full px-4 py-2 text-sm font-medium text-white/62 transition-colors duration-200 hover:bg-white/[0.07] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dark-accent/35 focus-visible:ring-offset-2 focus-visible:ring-offset-[#070708]'
+/** Track which section is on screen so the matching "window" tab lights up, tmux-style. */
+function useActiveSection(ids: string[]) {
+  const [active, setActive] = useState<string | null>(null)
 
-const resumeDocIconClass = 'h-4 w-4 shrink-0 text-[#050508]/85'
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
+        if (visible) setActive(visible.target.id)
+      },
+      { rootMargin: '-35% 0px -55% 0px', threshold: [0, 0.25, 0.5] }
+    )
 
-/** Outline document (text lines) — reads as “résumé file,” not download. */
-function ResumeDocumentIcon() {
-  return (
-    <svg
-      className={resumeDocIconClass}
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={2}
-      stroke="currentColor"
-      aria-hidden
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
-      />
-      <path strokeLinecap="round" strokeLinejoin="round" d="M13 3v6h6" />
-      <path strokeLinecap="round" strokeLinejoin="round" d="M9 13h6M9 17h4" />
-    </svg>
-  )
+    // Sections are lazy-loaded; retry briefly until they exist.
+    let tries = 0
+    const attach = () => {
+      let found = 0
+      ids.forEach((id) => {
+        const el = document.getElementById(id)
+        if (el) {
+          observer.observe(el)
+          found++
+        }
+      })
+      if (found < ids.length && tries++ < 20) window.setTimeout(attach, 400)
+    }
+    attach()
+
+    return () => observer.disconnect()
+  }, [ids])
+
+  return active
 }
 
-const resumeDesktopClass =
-  'group inline-flex min-h-[42px] items-center gap-2 rounded-full bg-dark-accent px-5 py-2 text-sm font-semibold tracking-tight text-[#050508] shadow-[0_1px_0_rgba(255,255,255,0.22)_inset] transition-[background-color,box-shadow,transform] duration-200 hover:bg-dark-accent-hover hover:shadow-[0_1px_0_rgba(255,255,255,0.28)_inset] active:scale-[0.98] [@media(hover:hover)]:hover:shadow-[0_8px_28px_-8px_rgba(45,212,191,0.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dark-accent/55 focus-visible:ring-offset-2 focus-visible:ring-offset-[#070708]'
-
-const resumeMobileClass =
-  'group inline-flex min-h-[52px] w-full max-w-sm items-center justify-center gap-2.5 rounded-2xl bg-dark-accent px-6 py-3.5 text-base font-semibold tracking-tight text-[#050508] shadow-[0_1px_0_rgba(255,255,255,0.22)_inset] transition-[background-color,transform] duration-200 hover:bg-dark-accent-hover active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dark-accent/55 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505]'
+const SECTION_IDS = NAV_LINKS.map((l) => l.toLowerCase())
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const active = useActiveSection(SECTION_IDS)
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20)
-    window.addEventListener('scroll', handleScroll)
+    handleScroll()
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
@@ -58,86 +64,87 @@ export default function Navbar() {
   }, [isMobileMenuOpen])
 
   const handleNavClick = (link: string) => {
-    const id = link.toLowerCase()
-    scrollToElement(id)
+    scrollToElement(link.toLowerCase())
     setIsMobileMenuOpen(false)
   }
 
   return (
     <>
       <motion.nav
-        className={`fixed left-0 right-0 top-0 z-50 transition-[padding,background-color,border-color,box-shadow] duration-300 ${
-          isScrolled
-            ? 'border-b border-white/[0.06] bg-[#050505]/82 py-3.5 shadow-[0_8px_32px_rgba(0,0,0,0.35)] backdrop-blur-xl backdrop-saturate-150'
-            : 'border-b border-transparent bg-transparent py-5 sm:py-6'
+        className={`fixed left-0 right-0 top-0 z-50 font-mono transition-[background-color,border-color] duration-300 ${
+          isScrolled || isMobileMenuOpen
+            ? 'border-b border-ops-line bg-dark-bg/95 lg:bg-dark-bg/85 lg:backdrop-blur-md'
+            : 'border-b border-transparent bg-transparent'
         }`}
-        initial={{ y: -100, opacity: 0 }}
+        initial={{ y: -60, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        aria-label="Primary"
       >
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-4 px-4 sm:h-16 sm:px-6 lg:px-8">
           <button
             type="button"
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="rounded-lg px-3 py-2 text-sm font-bold tracking-[0.12em] text-white transition-colors hover:bg-white/[0.05] hover:text-dark-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dark-accent/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#070708] sm:-ml-1"
-            style={{ fontFamily: 'var(--font-logo)' }}
+            onClick={() => {
+              window.scrollTo({ top: 0, behavior: 'smooth' })
+              window.dispatchEvent(new Event('azab-logo-tap')) // 7 quick taps: phone-friendly konami
+            }}
+            className="group flex items-center gap-2 text-[13px] text-dark-text"
+            aria-label="Back to top"
           >
-            {PERSONAL.name.toUpperCase()}
+            <span className="bg-dark-accent px-1.5 py-0.5 font-bold text-dark-bg">MA</span>
+            <span className="text-ops-ok">azab</span>
+            <span className="text-ops-dim">@</span>
+            <span className="text-dark-text/80 transition-colors group-hover:text-dark-accent">ottawa</span>
           </button>
 
-          <div className="hidden items-center gap-3 lg:flex">
-            <div
-              className="flex items-center gap-0.5 rounded-full border border-white/[0.09] bg-white/[0.04] p-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
-              role="presentation"
-            >
-              {NAV_LINKS.map((link) => (
+          <div className="hidden items-center gap-1 lg:flex">
+            {NAV_LINKS.map((link, i) => {
+              const id = link.toLowerCase()
+              const isActive = active === id
+              return (
                 <button
                   key={link}
                   type="button"
                   onClick={() => handleNavClick(link)}
-                  className={navLinkClass}
+                  className={`relative px-3 py-2 text-[13px] lowercase transition-colors ${
+                    isActive ? 'text-dark-accent' : 'text-dark-muted hover:text-dark-text'
+                  }`}
+                  aria-current={isActive ? 'true' : undefined}
                 >
-                  {link}
+                  <span className={isActive ? 'text-dark-accent' : 'text-ops-dim'}>{i + 1}:</span>
+                  {id}
+                  {isActive && <span className="text-dark-accent">*</span>}
+                  {isActive && (
+                    <motion.span
+                      layoutId="nav-active"
+                      className="absolute inset-x-3 -bottom-px h-px bg-dark-accent shadow-[0_0_8px_rgb(var(--accent)/0.8)]"
+                    />
+                  )}
                 </button>
-              ))}
-            </div>
+              )
+            })}
+          </div>
 
+          <div className="hidden items-center gap-3 lg:flex">
             <a
               href={PERSONAL.resumePdf}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Open résumé in a new tab"
-              className={resumeDesktopClass}
+              className="ops-btn ops-btn-primary min-h-[36px] px-3.5 py-1.5 text-[12.5px]"
             >
-              <ResumeDocumentIcon />
-              <span>Resume</span>
+              resume.pdf ↗
             </a>
           </div>
 
           <button
             type="button"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="relative flex h-11 w-11 items-center justify-center rounded-xl border border-white/[0.1] bg-white/[0.04] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition-colors hover:border-white/[0.14] hover:bg-white/[0.07] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dark-accent/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#070708] lg:hidden"
+            className="flex h-11 items-center gap-2 border border-ops-line-strong px-3.5 text-[12px] text-dark-text transition-colors hover:border-dark-accent/60 hover:text-dark-accent lg:hidden"
             aria-expanded={isMobileMenuOpen}
             aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
           >
-            <div className="relative flex h-5 w-5 items-center justify-center">
-              <motion.span
-                className="absolute h-0.5 w-[1.125rem] rounded-full bg-current"
-                animate={isMobileMenuOpen ? { rotate: 45, y: 0 } : { rotate: 0, y: -5 }}
-                transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-              />
-              <motion.span
-                className="absolute h-0.5 w-[1.125rem] rounded-full bg-current"
-                animate={isMobileMenuOpen ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }}
-                transition={{ duration: 0.18 }}
-              />
-              <motion.span
-                className="absolute h-0.5 w-[1.125rem] rounded-full bg-current"
-                animate={isMobileMenuOpen ? { rotate: -45, y: 0 } : { rotate: 0, y: 5 }}
-                transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-              />
-            </div>
+            {isMobileMenuOpen ? '[ x ] close' : '[ ≡ ] menu'}
           </button>
         </div>
       </motion.nav>
@@ -145,44 +152,49 @@ export default function Navbar() {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            className="fixed inset-0 z-[45] bg-[#050505]/96 backdrop-blur-xl lg:hidden"
+            className="fixed inset-0 z-[45] overflow-y-auto overscroll-contain bg-dark-bg font-mono lg:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.22 }}
+            transition={{ duration: 0.18 }}
           >
-            <div className="flex h-full flex-col px-5 pb-[max(1rem,env(safe-area-inset-bottom))] pt-[calc(4.5rem+env(safe-area-inset-top))]">
-              <div className="flex flex-1 flex-col items-stretch justify-center gap-2 sm:max-w-sm sm:mx-auto sm:w-full">
+            <div className="flex h-full flex-col px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-[calc(5rem+env(safe-area-inset-top))]">
+              <p className="mb-4 text-xs text-ops-dim">
+                <span className="text-ops-ok">$</span> ls ./sections
+              </p>
+              <ul className="flex flex-1 flex-col border-t border-ops-line">
                 {NAV_LINKS.map((link, index) => (
-                  <motion.button
+                  <motion.li
                     key={link}
-                    type="button"
-                    onClick={() => handleNavClick(link)}
-                    className="rounded-2xl border border-white/[0.07] bg-white/[0.03] px-5 py-4 text-left text-lg font-semibold tracking-tight text-white transition-colors hover:border-white/[0.12] hover:bg-white/[0.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dark-accent/40"
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.32, delay: index * 0.05, ease: [0.16, 1, 0.3, 1] }}
+                    initial={{ opacity: 0, x: -8 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.25, delay: index * 0.04 }}
                   >
-                    {link}
-                  </motion.button>
+                    <button
+                      type="button"
+                      onClick={() => handleNavClick(link)}
+                      className="flex w-full items-center gap-4 border-b border-ops-line py-4 text-left text-xl lowercase text-dark-text transition-colors hover:text-dark-accent"
+                    >
+                      <span className="text-sm text-dark-accent">0{index + 1}</span>
+                      {link}
+                      <span className="ml-auto text-ops-dim">→</span>
+                    </button>
+                  </motion.li>
                 ))}
-              </div>
+              </ul>
 
-              <div className="mt-8 flex flex-col items-center gap-4 sm:mt-10">
+              <div className="mt-8 flex flex-col items-center gap-5">
                 <a
                   href={PERSONAL.resumePdf}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Open résumé in a new tab"
-                  className={resumeMobileClass}
+                  className="ops-btn ops-btn-primary w-full max-w-sm"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  <ResumeDocumentIcon />
-                  <span>Resume</span>
+                  cat resume.pdf
                 </a>
-                <div className="flex justify-center">
-                  <MobileMenuSocialRow onNavigate={() => setIsMobileMenuOpen(false)} />
-                </div>
+                <MobileMenuSocialRow onNavigate={() => setIsMobileMenuOpen(false)} />
               </div>
             </div>
           </motion.div>

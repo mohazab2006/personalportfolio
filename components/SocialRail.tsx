@@ -4,7 +4,7 @@ import { motion, useReducedMotion } from 'framer-motion'
 import { PERSONAL } from '@/lib/data'
 
 export const socialRailBtnClass =
-  'magnetic-button flex h-11 w-11 shrink-0 items-center justify-center rounded-[10px] border border-white/[0.1] bg-dark-surface text-white/85 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition-[color,background-color,border-color,transform] duration-200 hover:border-white/[0.16] hover:bg-[#18181b] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dark-accent/40 focus-visible:ring-offset-2 focus-visible:ring-offset-dark-bg active:scale-[0.97]'
+  'flex h-11 w-11 shrink-0 items-center justify-center border border-ops-line-strong bg-ops-panel text-dark-text/80 transition-[color,background-color,border-color,box-shadow] duration-200 hover:border-dark-accent/60 hover:bg-dark-accent/[0.06] hover:text-dark-accent hover:shadow-[0_0_16px_-4px_rgb(var(--accent)/0.5)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dark-accent/40 focus-visible:ring-offset-2 focus-visible:ring-offset-dark-bg active:translate-y-px'
 
 const iconClass = 'h-[1.125rem] w-[1.125rem]'
 

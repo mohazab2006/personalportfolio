@@ -3,69 +3,58 @@
 import { useMemo } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { TECH_STACK } from '@/lib/data'
+import Section from '@/components/Section'
 
 type Category = keyof typeof TECH_STACK
 
 const viewport = { once: true, amount: 0.2, margin: '0px 0px -8% 0px' } as const
 const easeSmooth = [0.16, 1, 0.3, 1] as const
 
-const chipClass =
-  'rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-1.5 text-[13px] font-medium leading-snug text-white/78 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]'
-
+/** Installed-packages listing: one panel per category, each tool as a package line. */
 export default function TechStack() {
   const reduceMotion = useReducedMotion()
   const categories = useMemo(() => Object.keys(TECH_STACK) as Category[], [])
+  const total = useMemo(() => categories.reduce((n, c) => n + TECH_STACK[c].length, 0), [categories])
 
   return (
-    <section className="relative border-t border-white/[0.06] py-16 sm:py-24" id="stack">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <motion.header
-          className="mb-12 text-center sm:mb-14"
-          initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: reduceMotion ? 0 : 0.48, ease: easeSmooth }}
-          viewport={viewport}
-        >
-          <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-emerald-400/80">Stack</p>
-          <h2 className="font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-            Technologies
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-white/48">
-            Grouped for quick scanning — tools I use regularly in class, client work, and personal projects.
-          </p>
-        </motion.header>
-
-        <div className="grid gap-10 sm:grid-cols-2 xl:gap-x-12 xl:gap-y-12">
-          {categories.map((category, catIndex) => (
-            <motion.div
-              key={category}
-              initial={
-                reduceMotion
-                  ? { opacity: 1, y: 0 }
-                  : { opacity: 0, y: 20 }
-              }
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: reduceMotion ? 0 : 0.5,
-                delay: reduceMotion ? 0 : catIndex * 0.06,
-                ease: easeSmooth,
-              }}
-              viewport={viewport}
-            >
-              <h3 className="mb-3.5 border-b border-white/[0.06] pb-2.5 font-mono text-[11px] font-medium uppercase tracking-[0.2em] text-white/40">
-                {category}
-              </h3>
-              <ul className="flex flex-wrap gap-2">
-                {TECH_STACK[category].map((tech) => (
-                  <li key={tech} className={chipClass}>
-                    {tech}
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          ))}
-        </div>
+    <Section
+      id="stack"
+      index="04"
+      command="which --all"
+      title="Stack"
+      subtitle={`${total} tools installed across ${categories.length} groups — what I reach for in class, client work, and side projects.`}
+    >
+      <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+        {categories.map((category, catIndex) => (
+          <motion.div
+            key={category}
+            className="ops-panel"
+            initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: reduceMotion ? 0 : 0.45,
+              delay: reduceMotion ? 0 : catIndex * 0.05,
+              ease: easeSmooth,
+            }}
+            viewport={viewport}
+          >
+            <div className="ops-head">
+              <span className="text-dark-accent">/usr/{category.toLowerCase().replace(/[^a-z0-9]+/g, '-')}</span>
+              <span className="ml-auto tabular-nums text-ops-dim">{TECH_STACK[category].length} pkgs</span>
+            </div>
+            <ul className="flex flex-wrap gap-1.5 p-4">
+              {TECH_STACK[category].map((tech) => (
+                <li
+                  key={tech}
+                  className="border border-ops-line bg-dark-bg/40 px-2 py-1 font-mono text-[12.5px] text-dark-text/80 transition-colors hover:border-dark-accent/50 hover:text-dark-accent"
+                >
+                  {tech}
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        ))}
       </div>
-    </section>
+    </Section>
   )
 }
