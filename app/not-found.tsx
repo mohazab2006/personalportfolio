@@ -1,34 +1,46 @@
 import Link from 'next/link'
+import { Poneglyph } from '@/components/fx/QuestBits'
 
+/** 404 — "where lost travellers end up". Carries the fifth key and a poneglyph. */
 export default function NotFound() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-light-bg dark:bg-dark-bg">
-      <div className="text-center">
-        <h1 className="mb-4 text-6xl font-bold text-white">404</h1>
-        <h2 className="mb-4 text-3xl font-bold text-light-text dark:text-dark-text">
-          Page Not Found
-        </h2>
-        <p className="mb-8 text-light-text/70 dark:text-dark-text/70">
-          The page you're looking for doesn't exist.
+    <main className="relative z-[1] flex min-h-screen items-center px-4 font-mono sm:px-6">
+      <div className="mx-auto w-full max-w-2xl">
+        <p className="text-xs text-ops-dim sm:text-[13px]">
+          <span className="text-ops-ok">visitor@azab</span>
+          <span className="text-ops-dim">:</span>
+          <span className="text-dark-accent">~</span>
+          <span className="text-ops-dim">$ </span>
+          <span className="text-dark-text">cd ./this-page</span>
         </p>
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 font-medium text-black transition-all hover:bg-dark-accent hover:text-black active:bg-white active:text-black"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={2}
-            stroke="currentColor"
-            className="h-5 w-5"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-          </svg>
-          Go Home
-        </Link>
+        <h1 className="phosphor mt-6 text-7xl font-extrabold tracking-tight text-dark-accent sm:text-8xl">404</h1>
+        <p className="mt-3 text-sm text-dark-text/80 sm:text-base">cd: no such file or directory</p>
+        <p className="mt-2 max-w-md font-sans text-[15px] leading-relaxed text-dark-text/60">
+          Whatever was here has moved, or never existed. The rest of the site is right where you left it.
+        </p>
+
+        <div className="mt-8 flex flex-wrap gap-2.5">
+          <Link href="/" className="ops-btn ops-btn-primary">
+            cd ~
+          </Link>
+          <Link href="/projects" className="ops-btn">
+            ls ./projects
+          </Link>
+        </div>
+
+        {/* v — the transmission lost travellers pick up */}
+        <div className="mt-14 border-t border-dashed border-ops-line pt-5 text-[11.5px] text-ops-dim">
+          <p className="flex items-center gap-2">
+            <span className="status-dot animate-status-pulse bg-ops-err/80" aria-hidden />
+            weak signal on this frequency
+          </p>
+          <p className="mt-2 tracking-[0.2em] text-dark-text/50">v :: .--. .-. .. -- .. ...</p>
+          <p className="mt-6 flex items-center gap-2">
+            <Poneglyph index={3} />
+            <span className="opacity-0">.</span>
+          </p>
+        </div>
       </div>
-    </div>
+    </main>
   )
 }
-

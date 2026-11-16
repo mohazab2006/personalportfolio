@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { buildSnaggySystemPrompt } from '@/lib/snaggyContext'
 
+/**
+ * Groq retires models periodically (llama-3.3-70b-versatile was pulled), so the model is
+ * configurable. Override with GROQ_MODEL in the environment without touching code.
+ */
+const MODEL = process.env.GROQ_MODEL?.trim() || 'openai/gpt-oss-120b'
+
 export async function POST(req: NextRequest) {
   try {
     const { messages } = await req.json()
@@ -13,10 +19,13 @@ export async function POST(req: NextRequest) {
         Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
       },
       body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile',
+        model: MODEL,
         messages: [{ role: 'system', content: systemPrompt }, ...messages],
         temperature: 0.58,
-        max_tokens: 420,
+        // gpt-oss is a reasoning model: keep thinking short, and leave headroom so reasoning
+        // tokens never eat the whole budget and return an empty answer.
+        ...(MODEL.startsWith('openai/gpt-oss') ? { reasoning_effort: 'low' } : {}),
+        max_completion_tokens: 900,
       }),
     })
 

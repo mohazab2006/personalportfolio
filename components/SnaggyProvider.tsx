@@ -1,9 +1,10 @@
 'use client'
 
-import { createContext, useCallback, useContext, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import ChatBot from './ChatBot'
-import SnaggyMark from './SnaggyMark'
+import GlobalFx from './fx/GlobalFx'
+import Incident from './fx/Incident'
 
 type SnaggyContextValue = {
   open: () => void
@@ -32,35 +33,50 @@ function SnaggyLauncher() {
     <motion.button
       type="button"
       onClick={open}
-      className="group fixed z-[44] flex items-center gap-2 rounded-xl border border-white/[0.12] bg-[#0a0b0c]/92 py-2 pl-2 pr-2.5 shadow-[0_8px_28px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.07)] backdrop-blur-xl transition-[border-color,box-shadow,background-color] duration-200 hover:border-emerald-400/22 hover:shadow-[0_12px_36px_rgba(0,0,0,0.5),0_0_0_1px_rgba(45,212,191,0.07),inset_0_1px_0_rgba(255,255,255,0.09)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dark-accent/45 focus-visible:ring-offset-2 focus-visible:ring-offset-[#070708] sm:gap-2.5 sm:pl-2.5 sm:pr-3.5 sm:py-2.5"
+      className="group fixed z-[44] flex items-center gap-3 border border-ops-line-strong min-h-[44px] bg-[#0D0F0B] py-2.5 pl-3 pr-2.5 font-mono text-[13px] shadow-[0_12px_36px_-8px_rgba(0,0,0,0.7)] transition-[border-color,box-shadow] duration-200 hover:border-dark-accent/60 hover:shadow-[0_12px_36px_-8px_rgba(0,0,0,0.7),0_0_28px_-6px_rgb(var(--accent)/0.45)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dark-accent/45 focus-visible:ring-offset-2 focus-visible:ring-offset-dark-bg"
       style={{
         bottom: 'max(1.1rem, env(safe-area-inset-bottom))',
         right: 'max(0.85rem, env(safe-area-inset-right))',
       }}
-      initial={reduceMotion ? false : { opacity: 0, y: 14, scale: 0.97 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
+      initial={reduceMotion ? false : { opacity: 0, y: 14 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.38, delay: reduceMotion ? 0 : 0.75, ease: [0.16, 1, 0.3, 1] }}
-      whileHover={reduceMotion ? undefined : { scale: 1.015 }}
-      whileTap={reduceMotion ? undefined : { scale: 0.98 }}
-      aria-label="Open Snaggy — AI assistant about Mohamed’s work"
-      title="Snaggy · Ask about my background"
+      aria-label="Open Snaggy, the AI assistant about Mohamed's work (shortcut: /)"
+      title="Ask Snaggy  ( / or Ctrl+K )"
     >
-      <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/[0.1] bg-gradient-to-b from-white/[0.07] to-white/[0.02] shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] sm:h-10 sm:w-10 sm:rounded-xl">
-        <SnaggyMark className="h-5 w-5 sm:h-[1.35rem] sm:w-[1.35rem]" />
-      </div>
-      <span className="flex flex-col items-start pr-0.5">
+      <span className="status-dot animate-status-pulse bg-ops-ok shadow-[0_0_8px_rgba(124,228,149,0.8)]" aria-hidden />
+      <span className="flex items-center text-dark-text">
+        <span className="mr-1.5 text-dark-accent">›</span>
+        snaggy
         <span
-          className="text-sm font-semibold leading-tight tracking-tight text-white sm:text-[15px]"
-          style={{ fontFamily: 'var(--font-logo)' }}
-        >
-          Snaggy
-        </span>
-        <span className="hidden text-[10px] font-medium tracking-wide text-white/45 sm:block">
-          AI assistant
-        </span>
+          className="terminal-cursor ml-1 text-dark-accent opacity-0 transition-opacity group-hover:opacity-100"
+          aria-hidden
+        />
       </span>
+      <kbd className="hidden border border-ops-line-strong px-1.5 py-0.5 text-[11px] text-ops-dim transition-colors group-hover:border-dark-accent/50 group-hover:text-dark-accent sm:inline-block">
+        /
+      </kbd>
     </motion.button>
   )
+}
+
+/** "/" or Ctrl/Cmd+K opens Snaggy from anywhere, unless the visitor is typing in a field. */
+function useSnaggyShortcut(open: () => void, isOpen: boolean) {
+  useEffect(() => {
+    if (isOpen) return
+    const onKey = (e: KeyboardEvent) => {
+      const t = e.target as HTMLElement | null
+      const typing = !!t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))
+      const isSlash = e.key === '/' && !e.metaKey && !e.ctrlKey && !e.altKey
+      const isCmdK = (e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k'
+      if ((isSlash && !typing) || isCmdK) {
+        e.preventDefault()
+        open()
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [open, isOpen])
 }
 
 export function SnaggyProvider({ children }: { children: React.ReactNode }) {
@@ -68,12 +84,15 @@ export function SnaggyProvider({ children }: { children: React.ReactNode }) {
 
   const open = useCallback(() => setIsOpen(true), [])
   const close = useCallback(() => setIsOpen(false), [])
+  useSnaggyShortcut(open, isOpen)
 
   return (
     <SnaggyContext.Provider value={{ open, close, isOpen }}>
       {children}
       <SnaggyLauncher />
       <ChatBot isOpen={isOpen} onClose={close} />
+      <GlobalFx />
+      <Incident />
     </SnaggyContext.Provider>
   )
 }

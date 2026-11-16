@@ -2,6 +2,67 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Phosphor themes ─────────────────────────────
+   Space-separated RGB so Tailwind can apply alpha: rgb(var(--accent) / 0.5).
+   Switch with <html data-theme="green|cyan|magenta">; amber is the default. */
+:root {
+  --accent: 255 181 71;
+  --accent-hover: 255 199 113;
+  --accent-light: 255 226 174;
+  --accent-deep: 199 125 20;
+}
+:root[data-theme='green'] {
+  --accent: 124 228 149;
+  --accent-hover: 158 240 178;
+  --accent-light: 205 250 215;
+  --accent-deep: 46 140 80;
+}
+:root[data-theme='cyan'] {
+  --accent: 103 222 240;
+  --accent-hover: 145 233 247;
+  --accent-light: 206 246 252;
+  --accent-deep: 22 140 160;
+}
+:root[data-theme='magenta'] {
+  --accent: 255 120 200;
+  --accent-hover: 255 155 215;
+  --accent-light: 255 214 238;
+  --accent-deep: 180 50 130;
+}
+/* Earned themes (easter egg rewards) */
+:root[data-theme='ice'] {
+  --accent: 190 225 255;
+  --accent-hover: 215 237 255;
+  --accent-light: 236 246 255;
+  --accent-deep: 90 140 190;
+}
+:root[data-theme='aether'] {
+  --accent: 176 130 255;
+  --accent-hover: 198 164 255;
+  --accent-light: 228 212 255;
+  --accent-deep: 100 50 190;
+}
+:root[data-theme='grandline'] {
+  --accent: 70 160 255;
+  --accent-hover: 110 182 255;
+  --accent-light: 200 228 255;
+  --accent-deep: 20 90 180;
+}
+:root[data-theme='erdtree'] {
+  --accent: 240 200 90;
+  --accent-hover: 248 218 130;
+  --accent-light: 252 238 196;
+  --accent-deep: 170 130 30;
+}
+
+/* Unlocked only by the sealed root egg */
+:root[data-theme='root'] {
+  --accent: 255 72 88;
+  --accent-hover: 255 112 125;
+  --accent-light: 255 200 205;
+  --accent-deep: 160 20 35;
+}
+
 * {
   box-sizing: border-box;
   padding: 0;
@@ -15,6 +76,16 @@ body {
 }
 
 html {
+  /* Legacy alias: older components still reference --font-logo */
+  --font-logo: var(--font-jetbrains);
+  /* Same colour as the page so iOS rubber-band overscroll and Safari's edges never flash a different shade */
+  background-color: #0a0b08;
+  color-scheme: dark;
+  /* Stop iOS from inflating text in landscape */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  /* No grey flash on tap; every control has its own pressed/focus state */
+  -webkit-tap-highlight-color: transparent;
   scroll-behavior: smooth;
   overflow-x: hidden;
   scroll-padding-top: 100px;
@@ -38,9 +109,291 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
   max-width: 100vw;
-  /* Slight vertical lift so the canvas isn’t pure flat #050505 */
-  background-color: #070708;
-  background-image: linear-gradient(180deg, #0c0c11 0%, #070708 28%, #050505 100%);
+  background-color: #0a0b08;
+}
+
+@layer components {
+/* ── Ops console: CRT overlays ───────────────────── */
+
+/* Fine horizontal scanlines + a faint amber bloom at the top of the screen. */
+.crt-overlay {
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 0px,
+      rgba(0, 0, 0, 0) 2px,
+      rgba(0, 0, 0, 0.22) 3px
+    );
+  mix-blend-mode: multiply;
+}
+
+/* A full-screen blended layer forces phones to recomposite every scroll frame. Touch devices skip it. */
+@media (hover: none), (max-width: 767px) {
+  .crt-overlay {
+    display: none;
+  }
+}
+
+/* Full-height that survives mobile browser chrome: 100vh fallback, then the dynamic viewport unit. */
+.min-h-screen-dvh {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.crt-vignette {
+  background: radial-gradient(ellipse 120% 90% at 50% 40%, transparent 55%, rgba(0, 0, 0, 0.55) 100%);
+}
+
+/* Engineering grid that fades out toward the bottom of the viewport. */
+.ops-grid {
+  background-image:
+    linear-gradient(rgba(236, 232, 218, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(236, 232, 218, 0.035) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.5) 45%, transparent 85%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.5) 45%, transparent 85%);
+}
+
+/* Phosphor glow for amber text. */
+.phosphor {
+  text-shadow:
+    0 0 1px rgb(var(--accent) / 0.6),
+    0 0 14px rgb(var(--accent) / 0.28);
+}
+
+.phosphor-soft {
+  text-shadow: 0 0 18px rgba(236, 232, 218, 0.12);
+}
+
+/* Square "window" used for every block on the page. */
+.ops-panel {
+  position: relative;
+  border: 1px solid #2a2e24;
+  background: linear-gradient(180deg, rgba(23, 26, 20, 0.92) 0%, rgba(17, 19, 15, 0.92) 100%);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.4),
+    0 24px 48px -28px rgba(0, 0, 0, 0.8);
+}
+
+/* Corner ticks on panels, like registration marks. */
+.ops-ticks::before,
+.ops-ticks::after {
+  content: '';
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  pointer-events: none;
+  border-color: rgb(var(--accent) / 0.55);
+  border-style: solid;
+}
+.ops-ticks::before {
+  top: -1px;
+  left: -1px;
+  border-width: 1px 0 0 1px;
+}
+.ops-ticks::after {
+  right: -1px;
+  bottom: -1px;
+  border-width: 0 1px 1px 0;
+}
+
+.ops-head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-bottom: 1px solid #2a2e24;
+  background: #171a14;
+  padding: 0.55rem 0.9rem;
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+  color: #8e9182;
+}
+
+/* Command-style button: [ label ] */
+.ops-btn {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+  border: 1px solid #3a3f32;
+  background: rgba(236, 232, 218, 0.03);
+  padding: 0.6rem 1.1rem;
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 500;
+  color: #ece8da;
+  transition: background-color 0.18s, border-color 0.18s, color 0.18s, box-shadow 0.18s;
+}
+@media (hover: hover) {
+  .ops-btn:hover {
+    border-color: rgb(var(--accent) / 0.6);
+    color: rgb(var(--accent));
+    background: rgb(var(--accent) / 0.06);
+  }
+}
+.ops-btn:active {
+  transform: translateY(1px);
+}
+.ops-btn-primary {
+  border-color: rgb(var(--accent));
+  background: rgb(var(--accent));
+  color: #0a0b08;
+  box-shadow: 0 0 24px -6px rgb(var(--accent) / 0.55);
+}
+@media (hover: hover) {
+  .ops-btn-primary:hover {
+    background: rgb(var(--accent-hover));
+    border-color: rgb(var(--accent-hover));
+    color: #0a0b08;
+    box-shadow: 0 0 32px -4px rgb(var(--accent) / 0.7);
+  }
+}
+/* Pressed feedback for touch, where there is no hover */
+.ops-btn-primary:active {
+  background: rgb(var(--accent-hover));
+}
+
+.status-dot {
+  display: inline-block;
+  height: 7px;
+  width: 7px;
+  flex-shrink: 0;
+  border-radius: 9999px;
+}
+}
+
+/* ── Glitch (RGB split) ──────────────────────────
+   Used sparingly for "incident" moments. Mostly still; tears for a split second every few seconds. */
+.glitch {
+  position: relative;
+  display: inline-block;
+}
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  clip-path: inset(0 0 100% 0);
+}
+.glitch::before {
+  color: #ff3b5c;
+  animation: glitch-a 2.6s infinite steps(1);
+}
+.glitch::after {
+  color: #39e1ff;
+  animation: glitch-b 2.1s infinite steps(1);
+}
+/* One-shot, stronger tear for reveals */
+.glitch-burst::before {
+  animation: glitch-a 0.12s 6 steps(1);
+}
+.glitch-burst::after {
+  animation: glitch-b 0.1s 7 steps(1);
+}
+@keyframes glitch-a {
+  0%, 86%, 100% { clip-path: inset(0 0 100% 0); transform: none; }
+  88% { clip-path: inset(12% 0 58% 0); transform: translate(-3px, 1px); }
+  91% { clip-path: inset(62% 0 10% 0); transform: translate(3px, -1px); }
+  94% { clip-path: inset(35% 0 40% 0); transform: translate(-2px, 0); }
+}
+@keyframes glitch-b {
+  0%, 82%, 100% { clip-path: inset(0 0 100% 0); transform: none; }
+  84% { clip-path: inset(48% 0 30% 0); transform: translate(3px, 0); }
+  88% { clip-path: inset(8% 0 75% 0); transform: translate(-3px, 1px); }
+  92% { clip-path: inset(70% 0 5% 0); transform: translate(2px, -1px); }
+}
+
+/* Full-screen tear used by the Konami code and the root egg */
+@keyframes screen-tear {
+  0% { opacity: 1; transform: translateX(0); }
+  20% { transform: translateX(-12px); }
+  40% { transform: translateX(10px); }
+  60% { transform: translateX(-6px); }
+  100% { opacity: 0; transform: translateX(0); }
+}
+.screen-tear {
+  animation: screen-tear 0.55s steps(6) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glitch::before,
+  .glitch::after {
+    display: none;
+  }
+}
+
+/* ── Incident mode ────────────────────────────────
+   While the visitor's "attack" is in progress the whole site bleeds red and every green light fails. */
+:root[data-incident] {
+  --accent: 255 72 88;
+  --accent-hover: 255 112 125;
+  --accent-light: 255 200 205;
+  --accent-deep: 160 20 35;
+}
+:root[data-incident] .bg-ops-ok {
+  background-color: rgb(255 107 91) !important;
+}
+:root[data-incident] .text-ops-ok {
+  color: rgb(255 107 91) !important;
+}
+@keyframes incident-shake {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(-2px, 1px); }
+  50% { transform: translate(2px, -1px); }
+  75% { transform: translate(-1px, -1px); }
+}
+:root[data-incident='degrading'] main {
+  animation: incident-shake 0.16s steps(2) infinite;
+  filter: saturate(1.5) contrast(1.08);
+}
+@keyframes packet-pop {
+  0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(1.8); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root[data-incident='degrading'] main {
+    animation: none;
+  }
+}
+
+/* ── CRT tube mode (reward: `crt`) ─────────────── */
+:root[data-crt] .crt-overlay {
+  display: block !important;
+  opacity: 1 !important;
+  background: repeating-linear-gradient(to bottom, transparent 0, transparent 1px, rgba(0, 0, 0, 0.32) 2px, transparent 3px);
+}
+:root[data-crt] .crt-vignette {
+  background: radial-gradient(ellipse 115% 100% at 50% 50%, transparent 45%, rgba(0, 0, 0, 0.85) 100%);
+}
+:root[data-crt] body {
+  text-shadow: 0 0 2px rgb(var(--accent) / 0.35);
+}
+
+/* ── Film grain (desktop / pointer devices) ──────── */
+.film-grain {
+  display: none;
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .film-grain {
+    display: block;
+    inset: -50%;
+    opacity: 0.06;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    animation: grain 0.9s steps(5) infinite;
+  }
+}
+@keyframes grain {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-3%, 2%); }
+  40% { transform: translate(2%, -3%); }
+  60% { transform: translate(-2%, -1%); }
+  80% { transform: translate(3%, 2%); }
+  100% { transform: translate(0, 0); }
 }
 
 /* ── Terminal cursor ─────────────────────────────── */
@@ -52,8 +405,8 @@ body {
 
 .terminal-cursor {
   display: inline-block;
-  width: 0.35em;
-  height: 0.7em;
+  width: 0.5em;
+  height: 0.78em;
   background-color: currentColor;
   margin-left: 0.22em;
   animation: terminal-blink 1s step-end infinite;
@@ -62,14 +415,14 @@ body {
 /* ── Selection ───────────────────────────────────── */
 
 ::selection {
-  background-color: rgba(45, 212, 191, 0.3);
-  color: inherit;
+  background-color: rgb(var(--accent));
+  color: #0a0b08;
 }
 
 /* ── Focus visible ───────────────────────────────── */
 
 *:focus-visible {
-  outline: 2px solid #2DD4BF;
+  outline: 2px solid rgb(var(--accent));
   outline-offset: 2px;
 }
 

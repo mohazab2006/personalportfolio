@@ -58,6 +58,7 @@ Open **http://localhost:3000**.
 **Environment:** Create `.env.local` with:
 
 - `GROQ_API_KEY` — powers Snaggy (Groq API)
+- `GROQ_MODEL` *(optional)* — Groq model for Snaggy; defaults to `openai/gpt-oss-120b`. Set this if Groq retires the default.
 - `NEXT_PUBLIC_SUPABASE_URL` & `NEXT_PUBLIC_SUPABASE_ANON_KEY` — optional; project listing from Supabase when set
 
 Without Supabase keys, the app can still run using bundled/local project data depending on your setup; without `GROQ_API_KEY`, the chat route won’t work until you add a key.

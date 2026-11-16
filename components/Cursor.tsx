@@ -93,7 +93,7 @@ export default function Cursor() {
 
   const dotSize = clicking ? 5 : hovering ? 7 : 6
   const ringSize = hovering ? 52 : 40
-  const ringBorder = hovering ? 'rgba(45, 212, 191, 0.55)' : 'rgba(255, 255, 255, 0.18)'
+  const ringBorder = hovering ? 'rgb(var(--accent)/0.7)' : 'rgba(236, 232, 218, 0.22)'
 
   return (
     <>
@@ -125,7 +125,7 @@ export default function Cursor() {
             height: 72,
             marginLeft: -36,
             marginTop: -36,
-            background: 'radial-gradient(circle, rgba(45,212,191,0.22) 0%, transparent 68%)',
+            background: 'radial-gradient(circle, rgb(var(--accent)/0.2) 0%, transparent 68%)',
             filter: 'blur(6px)',
           }}
         />
@@ -141,7 +141,7 @@ export default function Cursor() {
         }}
       >
         <div
-          className="rounded-full"
+          className=""
           style={{
             width: clicking ? ringSize * 0.85 : ringSize,
             height: clicking ? ringSize * 0.85 : ringSize,
@@ -150,7 +150,7 @@ export default function Cursor() {
             border: `1.5px solid ${ringBorder}`,
             backgroundColor: 'transparent',
             boxShadow: hovering
-              ? '0 0 0 1px rgba(45,212,191,0.1)'
+              ? '0 0 12px -2px rgb(var(--accent)/0.45)'
               : 'none',
             transition:
               'width 0.22s cubic-bezier(0.16,1,0.3,1), height 0.22s cubic-bezier(0.16,1,0.3,1), margin 0.22s cubic-bezier(0.16,1,0.3,1), border-color 0.2s, box-shadow 0.2s',
@@ -174,9 +174,9 @@ export default function Cursor() {
             height: dotSize,
             marginLeft: -dotSize / 2,
             marginTop: -dotSize / 2,
-            background: 'radial-gradient(circle at 35% 30%, #ecfeff 0%, #2dd4bf 45%, #0d9488 100%)',
+            background: 'radial-gradient(circle at 35% 30%, rgb(var(--accent-light)) 0%, rgb(var(--accent)) 50%, rgb(var(--accent-deep)) 100%)',
             boxShadow:
-              '0 0 10px 1px rgba(45,212,191,0.45), 0 0 3px rgba(255,255,255,0.9) inset',
+              '0 0 10px 1px rgb(var(--accent)/0.55), 0 0 3px rgba(255,255,255,0.9) inset',
             transition:
               'width 0.15s cubic-bezier(0.16,1,0.3,1), height 0.15s cubic-bezier(0.16,1,0.3,1), margin 0.15s cubic-bezier(0.16,1,0.3,1)',
           }}

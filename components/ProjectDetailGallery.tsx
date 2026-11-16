@@ -63,11 +63,11 @@ export default function ProjectDetailGallery({ slug, title, shots }: Props) {
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.35, delay: Math.min(index * 0.04, 0.2) }}
           >
-            <figure className="overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0a0a0c] ring-1 ring-inset ring-white/[0.04]">
+            <figure className="ops-panel overflow-hidden">
               <button
                 type="button"
                 onClick={() => setLightbox(index)}
-                className="group relative block w-full cursor-zoom-in text-left transition-colors duration-200 hover:border-white/[0.12] focus:outline-none focus-visible:ring-2 focus-visible:ring-dark-accent/45 focus-visible:ring-offset-2 focus-visible:ring-offset-[#070708]"
+                className="group relative block w-full cursor-zoom-in text-left transition-colors duration-200 hover:border-white/[0.12] focus:outline-none focus-visible:ring-2 focus-visible:ring-dark-accent/45 focus-visible:ring-offset-2 focus-visible:ring-offset-dark-bg"
                 aria-label={`Open fullscreen: ${title}, image ${index + 1} of ${shots.length}`}
               >
                 <div className="relative aspect-video w-full bg-[#0a0a0c]">
@@ -81,11 +81,11 @@ export default function ProjectDetailGallery({ slug, title, shots }: Props) {
                     blurDataURL={BLUR}
                   />
                 </div>
-                <figcaption className="flex flex-col gap-1 border-t border-white/[0.06] px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+                <figcaption className="flex flex-col gap-1 border-t border-ops-line px-4 py-3 font-mono sm:flex-row sm:items-center sm:justify-between sm:gap-4">
                   <span className="font-mono text-xs tracking-wide text-dark-muted">
                     {index + 1} / {shots.length}
                   </span>
-                  <span className="text-xs text-white/40">Tap to view full size</span>
+                  <span className="text-xs text-ops-dim">[ tap to enlarge ]</span>
                 </figcaption>
               </button>
             </figure>
@@ -99,7 +99,7 @@ export default function ProjectDetailGallery({ slug, title, shots }: Props) {
             role="dialog"
             aria-modal="true"
             aria-label={`${title} gallery`}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/88 p-4 backdrop-blur-sm"
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -110,7 +110,7 @@ export default function ProjectDetailGallery({ slug, title, shots }: Props) {
               ref={closeRef}
               type="button"
               onClick={close}
-              className="absolute right-4 top-[max(1rem,env(safe-area-inset-top))] z-[102] rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-dark-accent/50"
+              className="absolute right-4 top-[max(1rem,env(safe-area-inset-top))] z-[102] border border-ops-line-strong bg-dark-bg/80 font-mono px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-dark-accent/50"
             >
               Close
             </button>
@@ -124,7 +124,7 @@ export default function ProjectDetailGallery({ slug, title, shots }: Props) {
                       e.stopPropagation()
                       goPrev()
                     }}
-                    className="rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-sm text-white transition-colors hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-dark-accent/50"
+                    className="border border-ops-line-strong bg-dark-bg/80 font-mono px-4 py-3 text-sm text-white transition-colors hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-dark-accent/50"
                     aria-label="Previous image"
                   >
                     Previous
@@ -135,7 +135,7 @@ export default function ProjectDetailGallery({ slug, title, shots }: Props) {
                       e.stopPropagation()
                       goNext()
                     }}
-                    className="rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-sm text-white transition-colors hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-dark-accent/50"
+                    className="border border-ops-line-strong bg-dark-bg/80 font-mono px-4 py-3 text-sm text-white transition-colors hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-dark-accent/50"
                     aria-label="Next image"
                   >
                     Next
@@ -147,7 +147,7 @@ export default function ProjectDetailGallery({ slug, title, shots }: Props) {
                     e.stopPropagation()
                     goPrev()
                   }}
-                  className="absolute left-2 top-1/2 z-[102] hidden -translate-y-1/2 rounded-lg border border-white/15 bg-white/5 p-3 text-white transition-colors hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-dark-accent/50 sm:left-4 md:block"
+                  className="absolute left-2 top-1/2 z-[102] hidden -translate-y-1/2 border border-ops-line-strong bg-dark-bg/80 font-mono p-3 text-white transition-colors hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-dark-accent/50 sm:left-4 md:block"
                   aria-label="Previous image"
                 >
                   <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -160,7 +160,7 @@ export default function ProjectDetailGallery({ slug, title, shots }: Props) {
                     e.stopPropagation()
                     goNext()
                   }}
-                  className="absolute right-2 top-1/2 z-[102] hidden -translate-y-1/2 rounded-lg border border-white/15 bg-white/5 p-3 text-white transition-colors hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-dark-accent/50 sm:right-4 md:block"
+                  className="absolute right-2 top-1/2 z-[102] hidden -translate-y-1/2 border border-ops-line-strong bg-dark-bg/80 font-mono p-3 text-white transition-colors hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-dark-accent/50 sm:right-4 md:block"
                   aria-label="Next image"
                 >
                   <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -178,7 +178,7 @@ export default function ProjectDetailGallery({ slug, title, shots }: Props) {
               transition={{ duration: 0.2 }}
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-white/10 bg-[#0a0a0c] shadow-2xl">
+              <div className="relative aspect-video w-full overflow-hidden border border-ops-line-strong bg-dark-bg shadow-2xl">
                 <ProjectStorageImage
                   slug={slug}
                   tryList={imageTryListForSlot(shots[lightbox]!)}

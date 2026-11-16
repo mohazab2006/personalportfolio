@@ -62,7 +62,7 @@ export const PERSONAL = {
 }
 
 // Navigation Links (matches docs/information-architecture.md)
-export const NAV_LINKS = ['Projects', 'Experience', 'Education', 'Stack', 'Contact']
+export const NAV_LINKS = ['Projects', 'Experience', 'Education', 'Stack', 'Offline', 'Play', 'Contact']
 
 // About Section
 export const ABOUT_TEXT = `I'm Mohamed Azab, a Computer Science student at Carleton University specializing in AI & Machine Learning with a focus on Cybersecurity. I'm passionate about building modern, performant web applications and exploring the intersection of software engineering, artificial intelligence, and security.
@@ -109,7 +109,7 @@ export const EDUCATION: EducationItem[] = [
       'Probability Models',
       'Algorithms',
     ],
-    logo: '/logos/carleton.png',
+    logo: '/logos/carleton-dark.png',
     tags: ['AI & Machine Learning', 'Cybersecurity', 'Business Minor', 'Honours', 'Ottawa'],
   },
 ]
@@ -301,7 +301,7 @@ export const EXPERIENCE: ExperienceItem[] = [
     role: 'Co-Founder & Developer',
     org: 'KOVA',
     dates: 'October 2023 – Present',
-    logo: '/logos/kova.jpg',
+    logo: '/logos/kova-mark.png',
     bullets: [
       'Production web apps for clients—scalable architecture, auth, RBAC dashboards, and API integrations.',
       'AI-driven features: chatbots, automation, and data pipelines.',

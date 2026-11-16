@@ -1,37 +1,39 @@
 'use client'
 
-import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { getProjects, mergeProjectsWithLocal } from '@/lib/projects'
-import { PERSONAL, Project, PROJECTS as LOCAL_PROJECTS } from '@/lib/data'
+import { Project, PROJECTS as LOCAL_PROJECTS } from '@/lib/data'
 import { ProjectGridCard } from '@/components/FeaturedWork'
+import ProjectPageHeader from '@/components/ProjectPageHeader'
+import { SectionHeader } from '@/components/Section'
+import SiteFooter from '@/components/SiteFooter'
 
 function ProjectsIndexSkeleton() {
   return (
-    <div className="mx-auto max-w-7xl px-4 pb-16 pt-10 sm:px-6 lg:px-8">
-      <div className="mb-10 h-10 max-w-sm animate-pulse rounded-lg bg-white/[0.06]" />
-      <div className="grid gap-6 sm:grid-cols-2 sm:gap-7 xl:grid-cols-3 xl:gap-8">
-        {[1, 2, 3, 4, 5, 6].map((i) => (
-          <div
-            key={i}
-            className="overflow-hidden rounded-2xl border border-white/[0.06] bg-dark-surface"
-          >
-            <div className="aspect-[16/10] animate-pulse bg-white/[0.04]" />
-            <div className="space-y-3 p-6">
-              <div className="h-5 w-4/5 animate-pulse rounded bg-white/[0.06]" />
-              <div className="h-3 w-full animate-pulse rounded bg-white/[0.04]" />
-            </div>
+    <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+      {[1, 2, 3, 4, 5, 6].map((i) => (
+        <div key={i} className="ops-panel">
+          <div className="ops-head">
+            <span className="h-2 w-24 animate-pulse bg-white/[0.08]" />
           </div>
-        ))}
-      </div>
+          <div className="aspect-[16/10] animate-pulse bg-white/[0.04]" />
+          <div className="space-y-3 p-5">
+            <div className="h-5 w-4/5 animate-pulse bg-white/[0.06]" />
+            <div className="h-3 w-full animate-pulse bg-white/[0.04]" />
+          </div>
+        </div>
+      ))}
     </div>
   )
 }
 
+type Filter = 'all' | 'live' | 'source'
+
 export default function ProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
+  const [filter, setFilter] = useState<Filter>('all')
 
   useEffect(() => {
     async function fetchProjects() {
@@ -47,73 +49,60 @@ export default function ProjectsPage() {
     fetchProjects()
   }, [])
 
+  const visible = projects.filter((p) => (filter === 'all' ? true : filter === 'live' ? !!p.demo : !p.demo))
+  const counts = { all: projects.length, live: projects.filter((p) => p.demo).length, source: projects.filter((p) => !p.demo).length }
+
   return (
-    <div className="relative min-h-screen text-dark-text">
-      <header className="sticky top-0 z-[42] border-b border-white/[0.06] bg-[#070708]/88 py-3 backdrop-blur-xl backdrop-saturate-150 supports-[backdrop-filter]:bg-[#070708]/76">
-        <div className="mx-auto flex max-w-7xl items-center gap-2 px-3 sm:gap-3 sm:px-6 lg:px-8">
-          <Link
-            href="/#projects"
-            className="inline-flex min-h-[44px] shrink-0 items-center gap-1.5 rounded-lg px-2 py-2 text-sm font-medium text-dark-accent transition-colors hover:text-white sm:gap-2 sm:px-2.5"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2}
-              stroke="currentColor"
-              className="h-5 w-5 shrink-0"
-              aria-hidden
+    <div className="relative z-[1] min-h-screen text-dark-text">
+      <ProjectPageHeader />
+
+      <main className="mx-auto max-w-7xl px-4 pb-16 pt-10 sm:px-6 sm:pb-20 sm:pt-14 lg:px-8">
+        <SectionHeader
+          index="01"
+          command="ls -l ~/projects"
+          title="All projects"
+          subtitle="everything i've shipped, same order as the home page."
+        />
+
+        {/* Filter, as flags */}
+        <div className="-mt-4 mb-8 flex flex-wrap gap-2 font-mono text-[12.5px]" role="group" aria-label="Filter projects">
+          {(['all', 'live', 'source'] as Filter[]).map((f) => (
+            <button
+              key={f}
+              type="button"
+              onClick={() => setFilter(f)}
+              aria-pressed={filter === f}
+              className={`min-h-[40px] border px-3 transition-colors ${
+                filter === f
+                  ? 'border-dark-accent bg-dark-accent/10 text-dark-accent'
+                  : 'border-ops-line-strong text-dark-text/70 hover:border-dark-accent/50 hover:text-dark-accent'
+              }`}
             >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-            </svg>
-            <span>Back</span>
-          </Link>
-          <span className="h-5 w-px shrink-0 bg-white/[0.12]" aria-hidden />
-          <Link
-            href="/"
-            className="min-w-0 shrink truncate rounded-md px-1.5 py-1.5 text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-white/78 transition-colors hover:text-dark-accent sm:px-2 sm:text-xs"
-            style={{ fontFamily: 'var(--font-logo)' }}
-          >
-            {PERSONAL.name}
-          </Link>
-          <span className="shrink-0 text-white/20" aria-hidden>
-            /
-          </span>
-          <span className="min-w-0 truncate text-sm font-medium text-white/90">Projects</span>
+              --{f} <span className="text-ops-dim">({counts[f]})</span>
+            </button>
+          ))}
         </div>
-      </header>
 
-      {loading ? (
-        <ProjectsIndexSkeleton />
-      ) : (
-        <motion.main
-          className="mx-auto max-w-7xl px-4 pb-16 pt-10 sm:px-6 sm:pb-20 sm:pt-12 lg:px-8"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.35 }}
-        >
-          <h1 className="mb-3 text-3xl font-bold tracking-tight text-white sm:text-4xl">All projects</h1>
-          <p className="mb-10 max-w-2xl text-sm leading-relaxed text-dark-muted sm:text-base">
-            Full list of work — same order as on the home page.
-          </p>
-          {projects.length === 0 ? (
-            <p className="text-dark-muted">No projects to show.</p>
-          ) : (
-            <div className="grid gap-6 sm:grid-cols-2 sm:gap-7 xl:grid-cols-3 xl:gap-8">
-              {projects.map((project, i) => (
-                <ProjectGridCard key={project.slug} project={project} index={i} />
-              ))}
-            </div>
-          )}
-        </motion.main>
-      )}
+        {loading ? (
+          <ProjectsIndexSkeleton />
+        ) : visible.length === 0 ? (
+          <p className="font-mono text-sm text-ops-dim">ls: no matches</p>
+        ) : (
+          <motion.div
+            key={filter}
+            className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.25 }}
+          >
+            {visible.map((project, i) => (
+              <ProjectGridCard key={project.slug} project={project} index={i - 1} /* no featured card here, so start at [01] */ />
+            ))}
+          </motion.div>
+        )}
+      </main>
 
-      <footer className="border-t border-white/5 pb-[max(2.5rem,env(safe-area-inset-bottom,0px)+1rem)] pt-10 text-center">
-        <p className="text-xs text-white/35">© 2026 Mohamed Azab</p>
-        <Link href="/" className="mt-2 inline-block text-xs text-dark-accent hover:text-white">
-          ← Back to home
-        </Link>
-      </footer>
+      <SiteFooter />
     </div>
   )
 }

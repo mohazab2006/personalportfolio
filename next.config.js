@@ -11,6 +11,11 @@ const nextConfig = {
   async headers() {
     return [
       {
+        // Something rides along with every response. (iii)
+        source: '/:path*',
+        headers: [{ key: 'x-iii', value: '7374617273636f75726765' }],
+      },
+      {
         source: '/logos/:path*',
         headers: [
           {
@@ -48,7 +53,8 @@ const nextConfig = {
   },
   // Enable compiler optimizations
   compiler: {
-    removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error', 'warn'] } : false,
+    // console.info survives on purpose: the site mutters something to whoever opens the console.
+    removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error', 'warn', 'info'] } : false,
   },
   // Performance optimizations
   poweredByHeader: false,
