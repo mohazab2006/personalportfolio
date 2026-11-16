@@ -4,49 +4,66 @@
 
 [**mohamedazab.dev**](https://mohamedazab.dev)
 
-*An interactive portfolio meant to feel like a product—not a PDF on the web.*
+*A portfolio that runs like a server you're logged into.*
 
 </div>
 
 ---
 
-## What it does
+## What it is
 
-This site is my **public home on the internet**: visitors can browse **projects**, **experience**, and **education**, get a sense of **how I work**, and reach out—all in one flow. Instead of static blocks of text, the UI is built to **reward exploration**: motion, depth, and a conversational layer so people can ask questions in natural language instead of hunting through every section.
+My public home on the internet, built as an **ops console**: an amber-phosphor terminal that boots up, reports its own status, and hosts my work as if it were a fleet of running services.
 
-**Snaggy**, the embedded assistant, answers questions about my background, projects, and stack using **streaming replies**—so chatting feels immediate, not like filling out a form. Project content can be backed by **Supabase** when configured, so the showcase can stay fresh without redeploying for every tweak.
+If you're here to see what I've built, it gets out of your way: projects, experience, education, stack, and contact are all one scroll, readable on a phone, and nothing interactive ever blocks you.
 
----
-
-## Why I built it this way
-
-- **Experience first** — Recruiters and collaborators often skim on phones or inside in-app browsers. The layout, scroll behavior, and animations are tuned so the site stays readable and stable where those environments are picky (touch, observers, embedded WebViews).
-
-- **Conversation as an interface** — A portfolio should answer “who is this person?” quickly. Snaggy adds a second path: ask in your own words instead of parsing every section.
-
-- **Craft without clutter** — 3D orbs, particles, and magnetic cursor details are there to signal care and technical range—not to distract. Heavy pieces load **lazily** so the first paint stays fast.
-
-- **One codebase, real patterns** — Next.js App Router, typed content in `lib/data.ts`, API routes for the assistant, and optional Supabase for project data—the same kinds of choices I’d make on a client-facing product.
+If you're here to explore, it goes a lot deeper than that.
 
 ---
 
-## What you’ll find on the site
+## What you'll find
 
-| Area | Purpose |
-|------|---------|
-| **Hero & story** | Who I am and what I focus on |
-| **Projects** | Selected work with stack and links |
-| **Experience & education** | Timeline-style history |
-| **Snaggy** | Ask about my path, projects, or tools |
-| **Contact** | Ways to reach me |
-
-Featured builds (among others): client and nonprofit sites, ML/security-oriented work, and infra I run myself—details live on the live site.
+| Area | What it does |
+|------|--------------|
+| **Boot sequence** | Services come up one by one, then `whoami`. Skippable, and it plays once per visit. |
+| **Projects** | Each project is a "service": live ones show a real response time, pinged from your browser. |
+| **Experience & education** | Read like logs, because that's what they are. |
+| **Offline** | The person behind the work: how I play games (seriously), and what I nerd out on. |
+| **Play** | **On-Call**: you hold the pager for a 45-second shift. Keep the fleet up. |
+| **Snaggy** | Press `/` anywhere. A real shell over the portfolio (`ls`, `cd`, `cat`, `neofetch`) with an AI behind it for plain-English questions. |
+| **Incidents** | You can take the whole site down. You'll then have to bring it back. |
 
 ---
 
-## Run it locally *(short)*
+## Things worth finding
 
-**Requirements:** Node **≥ 18.17**
+There are **twelve easter eggs** on this site, in three tiers.
+
+- **Easy** ones are hinted plainly. Open Snaggy and type `eggs`.
+- **Medium** ones need a little lateral thinking.
+- **Hard** ones are quests: a switch that's been left off, four stones that don't belong, a fight you're supposed to lose first.
+
+Every one of them unlocks something real: a colour, a command, a file, a harder game mode. Find enough and your clearance goes up.
+
+And then there's the thirteenth, which isn't on the list. It isn't hinted at in `eggs`, and the answer is not in this repository. If you go looking, start where a shell keeps the files it doesn't want you to see, and read everything. Browsers keep more secrets than people think.
+
+*If you solve it, email me and tell me how you found the first key.*
+
+---
+
+## How it's built
+
+- **Next.js (App Router) + TypeScript + Tailwind**, typed content in `lib/data.ts`, optional **Supabase** for project data.
+- **Snaggy**: a small virtual filesystem and command set in `lib/shell.ts`; anything that isn't a command goes to `/api/chat` (Groq).
+- **Theming**: one CSS variable (`--accent`) drives the whole palette, so themes are a single attribute swap with no flash on load.
+- **Motion with restraint**: Framer Motion for choreography, everything honours `prefers-reduced-motion`, and heavy effects are skipped on touch devices.
+- **Mobile first-class**: 16px inputs (no iOS zoom), a keyboard-aware chat sheet, 44px tap targets, and no horizontal overflow from 320px up.
+- **The sealed egg** is AES-GCM with a PBKDF2-derived key. The site stores no passphrase and no hash, only ciphertext.
+
+---
+
+## Run it locally
+
+**Requirements:** Node **22.x**
 
 ```bash
 npm install
@@ -55,13 +72,13 @@ npm run dev
 
 Open **http://localhost:3000**.
 
-**Environment:** Create `.env.local` with:
+**Environment:** create `.env.local` with:
 
-- `GROQ_API_KEY` — powers Snaggy (Groq API)
-- `GROQ_MODEL` *(optional)* — Groq model for Snaggy; defaults to `openai/gpt-oss-120b`. Set this if Groq retires the default.
-- `NEXT_PUBLIC_SUPABASE_URL` & `NEXT_PUBLIC_SUPABASE_ANON_KEY` — optional; project listing from Supabase when set
+- `GROQ_API_KEY`: powers Snaggy's AI answers (Groq)
+- `GROQ_MODEL` *(optional)*: Groq model for Snaggy; defaults to `openai/gpt-oss-120b`. Set this if Groq retires the default.
+- `NEXT_PUBLIC_SUPABASE_URL` & `NEXT_PUBLIC_SUPABASE_ANON_KEY` *(optional)*: project listing from Supabase when set
 
-Without Supabase keys, the app can still run using bundled/local project data depending on your setup; without `GROQ_API_KEY`, the chat route won’t work until you add a key.
+Without Supabase keys the site uses the bundled project data. Without `GROQ_API_KEY` the shell still works; only the AI answers won't.
 
 ```bash
 npm run build   # production build
@@ -72,8 +89,8 @@ npm run start   # serve production build
 
 ## Contact
 
-**Mohamed Azab** — [mohamedazab.dev](https://mohamedazab.dev) · mohazab2006@gmail.com · [LinkedIn](https://www.linkedin.com/in/mohamedazabca/) · [GitHub](https://github.com/mohazab2006)
+**Mohamed Azab** · [mohamedazab.dev](https://mohamedazab.dev) · mohazab2006@gmail.com · [LinkedIn](https://www.linkedin.com/in/mohamedazabca/) · [GitHub](https://github.com/mohazab2006)
 
 ---
 
-Built with Next.js, TypeScript, Tailwind, Framer Motion, R3F/Three.js, Lenis, Groq, and Supabase.
+Built with Next.js, TypeScript, Tailwind CSS, Framer Motion, Groq, and Supabase.
