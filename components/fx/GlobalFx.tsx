@@ -37,6 +37,42 @@ export default function GlobalFx() {
     if (!findEgg('konami')) toast({ title: 'player 2 is already here', sub: 'konami: found earlier' })
   }
 
+  // Tab icon follows the phosphor: theme changes, egg unlocks, incidents (red). Chrome/Edge/Firefox
+  // pick it up live; Safari mostly keeps the cached /icon.svg, which is fine.
+  useEffect(() => {
+    const root = document.documentElement
+    let last = ''
+    const apply = (force = false) => {
+      const rgb = getComputedStyle(root).getPropertyValue('--accent').trim() || '255 181 71'
+      if (rgb === last && !force) return
+      last = rgb
+      const c = `rgb(${rgb.split(/\s+/).join(',')})`
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="#0A0B08"/><rect x="0.5" y="0.5" width="31" height="31" rx="5.5" fill="none" stroke="${c}" stroke-opacity="0.35"/><path d="M8 10.5 13.5 16 8 21.5" fill="none" stroke="${c}" stroke-width="2.6" stroke-linecap="square"/><rect x="16.5" y="19" width="7.5" height="3" fill="${c}"/></svg>`
+      const href = `data:image/svg+xml,${encodeURIComponent(svg)}`
+      // Recolour Next's own icon links in place (React owns them, so never remove them) and keep one
+      // of ours last in <head>, which browsers prefer.
+      document.querySelectorAll<HTMLLinkElement>('link[rel~="icon"]').forEach((l) => (l.href = href))
+      let ours = document.getElementById('theme-favicon') as HTMLLinkElement | null
+      if (!ours) {
+        ours = document.createElement('link')
+        ours.id = 'theme-favicon'
+        ours.rel = 'icon'
+        ours.type = 'image/svg+xml'
+      }
+      ours.href = href
+      document.head.appendChild(ours)
+    }
+    apply()
+    // Next can insert its metadata icon links after hydration; catch those too.
+    const late = window.setTimeout(() => apply(true), 1500)
+    const mo = new MutationObserver(() => apply())
+    mo.observe(root, { attributes: true, attributeFilter: ['data-theme', 'data-incident'] })
+    return () => {
+      window.clearTimeout(late)
+      mo.disconnect()
+    }
+  }, [])
+
   // ii — for whoever opens the console.
   useEffect(() => {
     const w = window as unknown as { __azabMuttered?: boolean }
