@@ -48,6 +48,8 @@ export function availableThemes(): ThemeName[] {
   } catch {
     /* ignore */
   }
+  // Opening the vault unlocks every colour.
+  if (root) return [...THEMES, 'root']
   const earned = unlocked().themes as ThemeName[]
   return [...FREE_THEMES, ...THEMES.filter((t) => earned.includes(t) && !(FREE_THEMES as readonly string[]).includes(t)), ...(root ? (['root'] as ThemeName[]) : [])]
 }

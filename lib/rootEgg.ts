@@ -7,6 +7,7 @@ export type VaultContent = {
   letter: string[]
   dossier: { k: string; v: string }[]
   log: string[]
+  prize?: string
 }
 export type RootPayload = { sealedAt: string; lines: string[]; vault?: VaultContent }
 

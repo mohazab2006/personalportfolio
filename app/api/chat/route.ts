@@ -29,14 +29,34 @@ export async function POST(req: NextRequest) {
       }),
     })
 
+    // Free-plan rate limit (tokens/min or requests/day). Not an error on our side: tell the
+    // client how long to wait so Snaggy can say so plainly instead of "connection dropped".
+    if (response.status === 429) {
+      const retryAfter = Math.ceil(Number(response.headers.get('retry-after')) || 30)
+      console.warn(`Groq rate limited; retry after ${retryAfter}s`)
+      return NextResponse.json(
+        { error: 'rate_limited', retryAfter },
+        { status: 429, headers: { 'Retry-After': String(retryAfter) } }
+      )
+    }
+
     if (!response.ok) {
-      const errorData = await response.json()
+      const errorData = await response.json().catch(() => ({}))
       console.error('Groq API error details:', errorData)
       throw new Error(`Groq API error: ${JSON.stringify(errorData)}`)
     }
 
     const data = await response.json()
-    const message = data.choices[0]?.message?.content || 'Sorry, I could not generate a response.'
+    const raw: string = data.choices[0]?.message?.content || 'Sorry, I could not generate a response.'
+    // Safety net for a plain-text terminal: strip any markdown the model slips in.
+    const message = raw
+      .replace(/\*\*(.+?)\*\*/g, '$1')
+      .replace(/__(.+?)__/g, '$1')
+      .replace(/(^|\s)\*(\S.*?\S|\S)\*(?=\s|[.,!?]|$)/g, '$1$2')
+      .replace(/^#{1,6}\s+/gm, '')
+      .replace(/^\s*[-*•]\s+/gm, '')
+      .replace(/`([^`]+)`/g, '$1')
+      .trim()
 
     return NextResponse.json({ message })
   } catch (error) {

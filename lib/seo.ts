@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import { PERSONAL } from './data'
 
 /** Bump when replacing the mark so browsers refetch (tab icons are cached aggressively). */
-export const SITE_ICON_PATH = '/icon.svg?v=6'
+export const SITE_ICON_PATH = '/icon.svg?v=7'
 
 export const siteConfig = {
   name: PERSONAL.name,

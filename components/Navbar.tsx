@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { PERSONAL, NAV_LINKS } from '@/lib/data'
 import { scrollToElement } from '@/lib/utils'
 import { MobileMenuSocialRow } from '@/components/SocialRail'
+import ThemePalette from '@/components/ThemePalette'
+import { useRef } from 'react'
 
 /** Track which section is on screen so the matching "window" tab lights up, tmux-style. */
 function useActiveSection(ids: string[]) {
@@ -43,6 +45,47 @@ function useActiveSection(ids: string[]) {
 }
 
 const SECTION_IDS = NAV_LINKS.map((l) => l.toLowerCase())
+
+/** Desktop: a swatch of the current phosphor that opens the palette, clearance and XP. */
+function PaletteButton() {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    if (!open) return
+    const onDown = (e: PointerEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false)
+    window.addEventListener('pointerdown', onDown)
+    window.addEventListener('keydown', onKey)
+    return () => {
+      window.removeEventListener('pointerdown', onDown)
+      window.removeEventListener('keydown', onKey)
+    }
+  }, [open])
+  return (
+    <div ref={ref} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        aria-label="Colour theme and easter egg progress"
+        className="flex min-h-[36px] items-center gap-2 border border-ops-line-strong px-2.5 text-[12px] text-dark-text/80 transition-colors hover:border-dark-accent/60 hover:text-dark-accent"
+      >
+        <span className="h-3 w-3 bg-dark-accent shadow-[0_0_8px_rgb(var(--accent)/0.8)]" aria-hidden />
+        theme
+      </button>
+      {open && (
+        <div className="ops-panel absolute right-0 top-[calc(100%+8px)] z-50 w-[290px] p-4">
+          <p className="mb-3 text-[11px] text-ops-dim">
+            <span className="text-ops-ok">$</span> theme <span className="text-ops-dim">· earn more by finding easter eggs</span>
+          </p>
+          <ThemePalette size="sm" />
+        </div>
+      )}
+    </div>
+  )
+}
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -126,6 +169,7 @@ export default function Navbar() {
           </div>
 
           <div className="hidden items-center gap-3 lg:flex">
+            <PaletteButton />
             <a
               href={PERSONAL.resumePdf}
               target="_blank"
@@ -183,7 +227,14 @@ export default function Navbar() {
                 ))}
               </ul>
 
-              <div className="mt-8 flex flex-col items-center gap-5">
+              <div className="mt-6 border border-ops-line p-4">
+                <p className="mb-3 text-xs text-ops-dim">
+                  <span className="text-ops-ok">$</span> theme
+                </p>
+                <ThemePalette />
+              </div>
+
+              <div className="mt-6 flex flex-col items-center gap-5">
                 <a
                   href={PERSONAL.resumePdf}
                   target="_blank"

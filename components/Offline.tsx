@@ -1,6 +1,7 @@
 'use client'
 
-import { motion, useReducedMotion } from 'framer-motion'
+import { animate, motion, useInView, useReducedMotion } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
 import Section from '@/components/Section'
 
 /**
@@ -29,7 +30,7 @@ function Card({
   const reduce = useReducedMotion()
   return (
     <motion.article
-      className="ops-panel group flex flex-col transition-colors hover:border-dark-accent/40"
+      className="ops-panel group flex w-[84vw] max-w-[360px] shrink-0 snap-start flex-col transition-colors hover:border-dark-accent/40 sm:w-auto sm:max-w-none"
       initial={reduce ? false : { opacity: 0, y: 18 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={view}
@@ -99,58 +100,97 @@ function AttemptPips() {
   )
 }
 
-/** Round-counter tally. */
-function Tally() {
+
+
+/** Five games, every main-quest easter egg: chips tick on one by one. */
+function ZombiesChecklist() {
   const reduce = useReducedMotion()
-  const groups = 3
+  const games = ['bo1', 'bo2', 'bo3', 'bo6', 'bo7']
   return (
-    <div className="flex items-end gap-4" aria-hidden>
-      {Array.from({ length: groups }, (_, g) => (
-        <div key={g} className="relative flex h-9 gap-[5px]">
-          {Array.from({ length: 4 }, (_, i) => (
-            <motion.span
-              key={i}
-              className="w-[3px] bg-[#c0392b]"
-              initial={reduce ? false : { scaleY: 0 }}
-              whileInView={{ scaleY: 1 }}
-              viewport={view}
-              style={{ originY: 1 }}
-              transition={{ duration: 0.18, delay: reduce ? 0 : 0.3 + (g * 5 + i) * 0.05 }}
-            />
-          ))}
-          <motion.span
-            className="absolute left-[-4px] top-1/2 h-[3px] w-[34px] -rotate-[28deg] bg-[#c0392b]"
-            initial={reduce ? false : { scaleX: 0 }}
-            whileInView={{ scaleX: 1 }}
-            viewport={view}
-            style={{ originX: 0 }}
-            transition={{ duration: 0.2, delay: reduce ? 0 : 0.3 + (g * 5 + 4) * 0.05 }}
-          />
-        </div>
+    <div className="flex flex-wrap gap-1.5" role="img" aria-label="Every main-quest easter egg completed in Black Ops 1, 2, 3, 6 and 7">
+      {games.map((g, i) => (
+        <motion.span
+          key={g}
+          className="border border-[#c0392b]/70 bg-[#c0392b]/10 px-2 py-1 font-mono text-[11px] uppercase text-[#ff6b5b]"
+          initial={reduce ? false : { opacity: 0.25 }}
+          whileInView={{ opacity: 1 }}
+          viewport={view}
+          transition={{ duration: 0.2, delay: reduce ? 0 : 0.3 + i * 0.18 }}
+        >
+          ✓ {g}
+        </motion.span>
       ))}
-      <span className="font-mono text-[11px] text-ops-dim">and counting</span>
     </div>
   )
 }
 
-/** A log pose: the needle hunts, then settles. */
-function LogPose() {
+/** Hours counter that rolls up when the card arrives. */
+function HoursCounter({ to }: { to: number }) {
+  const reduce = useReducedMotion()
+  const ref = useRef<HTMLSpanElement>(null)
+  const inView = useInView(ref, { once: true, amount: 0.6 })
+  const [n, setN] = useState(reduce ? to : 0)
+  useEffect(() => {
+    if (!inView || reduce) return
+    const c = animate(0, to, { duration: 1.6, ease: 'easeOut', onUpdate: (v) => setN(Math.round(v)) })
+    return () => c.stop()
+  }, [inView, reduce, to])
+  return (
+    <div>
+      <span ref={ref} className="font-mono text-4xl font-extrabold tabular-nums text-[#7ad36b]">
+        {n.toLocaleString()}+
+      </span>
+      <span className="ml-2 font-mono text-[11px] text-ops-dim">hrs · gta v</span>
+    </div>
+  )
+}
+
+/** Five nights, five games: every clock reached 6 AM. */
+function SixAM() {
   const reduce = useReducedMotion()
   return (
-    <div className="flex items-center gap-4">
-      <div className="relative h-14 w-14 rounded-full border border-ops-line-strong" aria-hidden>
-        <div className="absolute inset-[5px] rounded-full border border-dashed border-ops-line" />
-        <motion.div
-          className="absolute left-1/2 top-1/2 h-[46%] w-[2px] -translate-x-1/2 origin-bottom bg-gradient-to-t from-transparent to-[#46a0ff]"
-          style={{ translateY: '-100%' }}
-          initial={reduce ? false : { rotate: -120 }}
-          whileInView={{ rotate: [-120, 70, -30, 25, 8] }}
+    <div className="flex flex-wrap gap-1.5" role="img" aria-label="Five Nights at Freddy's 1 to 5, all finished">
+      {[1, 2, 3, 4, 5].map((g, i) => (
+        <motion.span
+          key={g}
+          className="flex flex-col items-center border border-ops-line-strong px-2 py-1 font-mono"
+          initial={reduce ? false : { opacity: 0.2 }}
+          whileInView={{ opacity: 1 }}
           viewport={view}
-          transition={{ duration: 2.2, delay: reduce ? 0 : 0.4, ease: 'easeOut' }}
-        />
-        <div className="absolute left-1/2 top-1/2 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-dark-text/70" />
+          transition={{ duration: 0.25, delay: reduce ? 0 : 0.3 + i * 0.15 }}
+        >
+          <span className="text-[13px] font-bold text-[#ffd84a]">6AM</span>
+          <span className="text-[9.5px] text-ops-dim">fnaf {g}</span>
+        </motion.span>
+      ))}
+    </div>
+  )
+}
+
+/** Saga progress: caught up, still reading. */
+function SagaProgress() {
+  const reduce = useReducedMotion()
+  const sagas = ['east blue', 'alabasta', 'sky island', 'water 7', 'thriller bark', 'summit war', 'fish-man', 'dressrosa', 'four emperors', 'final saga']
+  return (
+    <div>
+      <div className="flex gap-[3px]" aria-hidden>
+        {sagas.map((s, i) => (
+          <motion.span
+            key={s}
+            title={s}
+            className={`h-2 flex-1 ${i === sagas.length - 1 ? 'animate-status-pulse bg-[#46a0ff]' : 'bg-[#46a0ff]/70'}`}
+            initial={reduce ? false : { scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={view}
+            style={{ originX: 0 }}
+            transition={{ duration: 0.2, delay: reduce ? 0 : 0.25 + i * 0.07 }}
+          />
+        ))}
       </div>
-      <span className="font-mono text-[11px] text-ops-dim">bearing locked</span>
+      <div className="mt-2 flex justify-between font-mono text-[10.5px] text-ops-dim">
+        <span>east blue</span>
+        <span className="text-[#46a0ff]">final saga · caught up</span>
+      </div>
     </div>
   )
 }
@@ -169,44 +209,64 @@ export default function Offline() {
         the same loop I use on a new stack.
       </p>
 
-      <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+      {/* Phones: swipe sideways instead of a long scroll. Larger screens: a grid. */}
+      <div className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-3 [scrollbar-width:none] sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 sm:pb-0 xl:grid-cols-3 [&::-webkit-scrollbar]:hidden">
         <Card
-          label="rainbow six siege"
-          status="ranked"
-          title="Emerald III"
-          body="A game about information: drones, sound, angles, timing. The same reason security clicks for me."
+          label="call of duty zombies"
+          status="every main quest"
+          title="Every easter egg, five games"
+          body="Black Ops 1, 2, 3, 6 and 7, every main-quest egg. Favourite storyline in games, and the reason this site has easter eggs."
           delay={0}
         >
-          <RankLadder />
+          <ZombiesChecklist />
         </Card>
         <Card
           label="elden ring"
           status="multiple runs"
           title="Consort Radahn, six tries"
           body="The first five were research. Learn the moveset, not the panic roll."
-          delay={0.08}
+          delay={0.06}
         >
           <AttemptPips />
         </Card>
         <Card
-          label="treyarch zombies"
-          status="lore archivist"
-          title="Element 115 to the Dark Aether"
-          body="Favourite storyline in games. Eight-hour lore breakdowns in one sitting, and the reason this site has easter eggs."
-          delay={0.16}
+          label="rainbow six siege"
+          status="ranked"
+          title="Emerald III"
+          body="A game about information: drones, sound, angles, timing. The same reason security clicks for me."
+          delay={0.12}
         >
-          <Tally />
+          <RankLadder />
+        </Card>
+        <Card
+          label="grand theft auto"
+          status="every game, finished"
+          title="1,500+ hours in GTA V"
+          body="Played and finished every GTA. Los Santos is basically a second hometown at this point."
+          delay={0.18}
+        >
+          <HoursCounter to={1500} />
+        </Card>
+        <Card
+          label="five nights at freddy's"
+          status="1 through 5"
+          title="Survived every night"
+          body="All five games, every night to 6 AM. Pattern recognition under pressure is a transferable skill."
+          delay={0.24}
+        >
+          <SixAM />
         </Card>
         <Card
           label="one piece"
-          status="still sailing"
-          title="The long game"
-          body="The best setup-to-payoff in fiction: threads that land a thousand chapters later."
-          delay={0.24}
+          status="caught up"
+          title="Reading every chapter"
+          body="The best long game in fiction: setups planted a thousand chapters before they pay off. Four road poneglyphs are hidden on this site, too."
+          delay={0.3}
         >
-          <LogPose />
+          <SagaProgress />
         </Card>
       </div>
+      <p className="mt-2 text-center font-mono text-[11px] text-ops-dim sm:hidden">swipe for more →</p>
     </Section>
   )
 }

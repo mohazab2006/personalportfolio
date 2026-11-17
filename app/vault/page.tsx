@@ -8,6 +8,8 @@ import { readVault, type RootPayload, type VaultContent } from '@/lib/rootEgg'
 import { EGGS, clearance, useEggs } from '@/lib/eggs'
 import { useIncidentStats } from '@/lib/incident'
 import { setTheme } from '@/lib/theme'
+import { useUsername } from '@/lib/username'
+import { PERSONAL } from '@/lib/data'
 
 /**
  * /vault — exists only for whoever opened the sealed root egg. Its content was never in the
@@ -20,12 +22,30 @@ export default function VaultPage() {
   const eggs = useEggs()
   const incidents = useIncidentStats()
   const [scores, setScores] = useState<{ oncall: string | null; wpm: string | null }>({ oncall: null, wpm: null })
+  const username = useUsername()
+  const [cert, setCert] = useState<{ id: string; date: string } | null>(null)
 
   useEffect(() => {
     const v = readVault()
     setData(v)
     setState(v ? 'open' : 'denied')
-    if (v) setTheme('root')
+    if (v) {
+      setTheme('root')
+      // First time the vault was opened on this device: the certificate's issue date.
+      let opened = localStorage.getItem('azab-vault-opened')
+      if (!opened) {
+        opened = new Date().toISOString()
+        localStorage.setItem('azab-vault-opened', opened)
+      }
+      const name = localStorage.getItem('azab-username') ?? 'anonymous'
+      crypto.subtle
+        .digest('SHA-256', new TextEncoder().encode(`${name}|${opened}|${v.sealedAt}`))
+        .then((buf) => {
+          const hex = Array.from(new Uint8Array(buf), (b) => b.toString(16).padStart(2, '0')).join('').toUpperCase()
+          setCert({ id: `${hex.slice(0, 4)}-${hex.slice(4, 8)}-${hex.slice(8, 12)}`, date: opened!.slice(0, 10) })
+        })
+        .catch(() => setCert({ id: 'ROOT-0000-0000', date: opened!.slice(0, 10) }))
+    }
     try {
       setScores({ oncall: localStorage.getItem('azab-oncall-best'), wpm: localStorage.getItem('azab-type-best') })
     } catch {
@@ -165,6 +185,41 @@ export default function VaultPage() {
             </ol>
           </motion.section>
         </div>
+
+        {/* Certificate: screenshot it, email it, claim the prize */}
+        <motion.section className="ops-panel ops-ticks mt-5 border-ops-err/50" {...stage(2.3)}>
+          <div className="ops-head text-ops-err">
+            <span>certificate of root</span>
+            <span className="ml-auto">{v.prize ?? 'solver'}</span>
+          </div>
+          <div className="grid gap-6 p-6 sm:grid-cols-[1fr_auto] sm:items-end sm:p-8">
+            <div>
+              <p className="text-xs text-ops-dim">this certifies that</p>
+              <p className="mt-1 text-3xl font-extrabold tracking-tight text-dark-text sm:text-4xl">
+                <GlitchText text={username ?? 'anonymous'} />
+              </p>
+              <p className="mt-2 font-sans text-[15px] text-dark-text/75">
+                found all five keys and opened the vault on azab.dev{username ? '' : '. (set a name first: login <name> in snaggy, then reload)'}
+              </p>
+              <p className="mt-4 text-[12px] text-ops-dim">
+                issued {cert?.date ?? '…'} · id <span className="tabular-nums text-ops-err">{cert?.id ?? '····-····-····'}</span> · every colour unlocked
+              </p>
+            </div>
+            <a
+              href={`mailto:${PERSONAL.email}?subject=${encodeURIComponent('I opened the vault')}&body=${encodeURIComponent(
+                `certificate ${cert?.id ?? ''} (${username ?? 'anonymous'})
+
+the phrase: 
+
+how I found the first key: 
+`
+              )}`}
+              className="ops-btn ops-btn-primary whitespace-nowrap"
+            >
+              claim it ↗
+            </a>
+          </div>
+        </motion.section>
 
         <motion.div className="mt-10 flex flex-wrap gap-2.5" {...stage(2.5)}>
           <Link href="/" className="ops-btn ops-btn-primary">

@@ -274,10 +274,9 @@ export default function FeaturedWork() {
               <div className="mt-8 flex justify-center lg:hidden">
                 <Link
                   href="/projects"
-                  className="ops-btn"
+                  className="ops-btn w-full border-dashed"
                 >
-                  ls ./projects --all
-                  <span className="text-dark-muted">(+{mobileMoreCount})</span>
+                  [ show all ({mobileMoreCount} more) ]
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"

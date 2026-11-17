@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import {
   buildLeadershipTimeline,
@@ -12,6 +12,7 @@ import {
 import { logoUrl } from '@/lib/logoUrl'
 import { SectionHeader } from '@/components/Section'
 import { PowerSwitch } from '@/components/fx/QuestBits'
+import ShowMore, { collapsible } from '@/components/ShowMore'
 
 const viewport = { once: true, amount: 0.22, margin: '0px 0px -12% 0px' } as const
 
@@ -154,18 +155,21 @@ function Column({
   entries: TimelineEntry[]
   side: 'left' | 'right'
 }) {
+  const [all, setAll] = useState(false)
+  const LIMIT = 2 // phones: the two most recent, the rest behind "show all"
   return (
     <div className="relative min-w-0">
       <ColumnHeader label={label} subtitle={subtitle} />
       <ul className="flex flex-col gap-8 sm:gap-9">
         {entries.map((entry, index) => (
-          <li key={timelineKey(entry, index)}>
+          <li key={timelineKey(entry, index)} className={collapsible(index, LIMIT, all)}>
             <TimelineReveal side={side} index={index}>
               <TimelineCard entry={entry} />
             </TimelineReveal>
           </li>
         ))}
       </ul>
+      <ShowMore expanded={all} hidden={Math.max(0, entries.length - LIMIT)} onToggle={() => setAll((v) => !v)} className="mt-6" />
     </div>
   )
 }

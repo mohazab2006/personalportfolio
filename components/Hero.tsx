@@ -7,6 +7,7 @@ import { PERSONAL, PROJECTS } from '@/lib/data'
 import { scrollToElement } from '@/lib/utils'
 import { useSnaggy } from '@/components/SnaggyProvider'
 import { triggerIncident, useIncidentStats } from '@/lib/incident'
+import { EGGS, clearance, useEggs } from '@/lib/eggs'
 
 const NAME_LINES = ['MOHAMED', 'AZAB'] as const
 
@@ -179,6 +180,9 @@ function StatusRow({ k, children }: { k: string; children: React.ReactNode }) {
 function StatusPanel({ show, delay, onAsk }: { show: boolean; delay: number; onAsk: () => void }) {
   const time = useOttawaClock()
   const incidents = useIncidentStats()
+  const eggs = useEggs()
+  const { run } = useSnaggy()
+  const cl = clearance(eggs)
 
   return (
     <motion.aside
@@ -224,6 +228,18 @@ function StatusPanel({ show, delay, onAsk }: { show: boolean; delay: number; onA
             <span className="text-ops-dim transition-colors group-hover:text-dark-accent">[ ask → ]</span>
           </button>
         </StatusRow>
+        <StatusRow k="easter eggs">
+          <button type="button" onClick={() => run('eggs')} className="group inline-flex flex-wrap items-center gap-x-2 text-left">
+            <span>
+              <span className="text-dark-accent">{eggs.length}</span>/{EGGS.length}
+              <span className="text-ops-dim">
+                {' '}
+                · {cl.title} · {cl.xp} xp
+              </span>
+            </span>
+            <span className="text-ops-dim transition-colors group-hover:text-dark-accent">[ hints → ]</span>
+          </button>
+        </StatusRow>
         <StatusRow k="incidents">
           {incidents.survived ? (
             <span>
@@ -243,7 +259,7 @@ function StatusPanel({ show, delay, onAsk }: { show: boolean; delay: number; onA
         <button
           type="button"
           onClick={() => triggerIncident('button')}
-          className="min-h-[40px] border border-ops-err/60 px-3 text-[12px] text-ops-err transition-[background-color,box-shadow] hover:bg-ops-err/10 hover:shadow-[0_0_18px_-4px_rgba(255,107,91,0.7)] active:bg-ops-err/20"
+          className="min-h-[40px] shrink-0 whitespace-nowrap border border-ops-err/60 px-3 text-[12px] text-ops-err transition-[background-color,box-shadow] hover:bg-ops-err/10 hover:shadow-[0_0_18px_-4px_rgba(255,107,91,0.7)] active:bg-ops-err/20"
         >
           [ do not press ]
         </button>

@@ -6,6 +6,8 @@ import { EDUCATION } from '@/lib/data'
 import { logoUrl } from '@/lib/logoUrl'
 import Section from '@/components/Section'
 import { Poneglyph } from '@/components/fx/QuestBits'
+import ShowMore from '@/components/ShowMore'
+import { useState } from 'react'
 
 function KeyRow({ k, children }: { k: string; children: React.ReactNode }) {
   return (
@@ -18,6 +20,8 @@ function KeyRow({ k, children }: { k: string; children: React.ReactNode }) {
 
 export default function Education() {
   const reduceMotion = useReducedMotion()
+  const [allCourses, setAllCourses] = useState(false)
+  const COURSE_LIMIT = 5
 
   return (
     <Section
@@ -98,8 +102,8 @@ export default function Education() {
                     className="mt-4 grid gap-x-6 gap-y-1.5 font-mono text-[13px] text-dark-text/75 sm:grid-cols-2 lg:grid-cols-3"
                     aria-label="Related coursework"
                   >
-                    {edu.courses.map((course) => (
-                      <li key={course} className="flex gap-2">
+                    {edu.courses.map((course, ci) => (
+                      <li key={course} className={`gap-2 ${!allCourses && ci >= COURSE_LIMIT ? 'hidden lg:flex' : 'flex'}`}>
                         <span className="text-ops-dim" aria-hidden>
                           -
                         </span>
@@ -107,6 +111,12 @@ export default function Education() {
                       </li>
                     ))}
                   </ul>
+                  <ShowMore
+                    expanded={allCourses}
+                    hidden={Math.max(0, edu.courses.length - COURSE_LIMIT)}
+                    onToggle={() => setAllCourses((v) => !v)}
+                    className="mt-4"
+                  />
                 </div>
               ) : null}
             </motion.article>

@@ -1,0 +1,21 @@
+{
+  "lines": [
+    "shown in the terminal when the phrase is accepted"
+  ],
+  "vault": {
+    "title": "the vault",
+    "letter": [
+      "your letter to the solver, one paragraph per line"
+    ],
+    "prize": "optional prize line",
+    "dossier": [
+      {
+        "k": "label",
+        "v": "value"
+      }
+    ],
+    "log": [
+      "v1  something"
+    ]
+  }
+}
