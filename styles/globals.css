@@ -361,17 +361,87 @@ body {
   }
 }
 
-/* ── CRT tube mode (reward: `crt`) ─────────────── */
+/* ── CRT tube mode (reward: `crt`) ───────────────
+   Has to read on a near-black page, so the lines are phosphor-tinted (visible on the background,
+   not just over text), the glass has rounded corners, and turning it on plays a power-on flash. */
 :root[data-crt] .crt-overlay {
   display: block !important;
   opacity: 1 !important;
-  background: repeating-linear-gradient(to bottom, transparent 0, transparent 1px, rgba(0, 0, 0, 0.32) 2px, transparent 3px);
+  mix-blend-mode: normal;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgb(var(--accent) / 0.045) 0px,
+      rgb(var(--accent) / 0.045) 1px,
+      rgba(0, 0, 0, 0.42) 2px,
+      rgba(0, 0, 0, 0.42) 3px
+    ),
+    repeating-linear-gradient(
+      to right,
+      rgba(255, 40, 40, 0.035) 0px,
+      rgba(40, 255, 80, 0.035) 1px,
+      rgba(60, 90, 255, 0.035) 2px
+    );
+  animation: crt-flicker 0.12s steps(2) infinite;
 }
+/* rolling refresh band */
+:root[data-crt] .crt-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  height: 22vh;
+  background: linear-gradient(to bottom, transparent, rgb(var(--accent) / 0.06), transparent);
+  animation: crt-roll 7s linear infinite;
+}
+/* power-on flash: plays every time the mode is switched on */
+:root[data-crt] .crt-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgb(var(--accent) / 0.9);
+  transform-origin: center;
+  opacity: 0;
+  animation: crt-on 0.55s ease-out 1;
+}
+/* inset slightly so the outer shadow paints rounded black "glass" corners inside the viewport */
 :root[data-crt] .crt-vignette {
-  background: radial-gradient(ellipse 115% 100% at 50% 50%, transparent 45%, rgba(0, 0, 0, 0.85) 100%);
+  inset: 3px !important;
+  border-radius: 28px;
+  box-shadow:
+    0 0 0 60px #000,
+    inset 0 0 140px rgba(0, 0, 0, 0.9);
+  background: radial-gradient(ellipse 110% 100% at 50% 50%, transparent 50%, rgba(0, 0, 0, 0.7) 100%);
 }
 :root[data-crt] body {
-  text-shadow: 0 0 2px rgb(var(--accent) / 0.35);
+  text-shadow:
+    0 0 1px rgb(var(--accent) / 0.55),
+    0 0 7px rgb(var(--accent) / 0.35),
+    0.6px 0 0 rgba(255, 50, 50, 0.25),
+    -0.6px 0 0 rgba(50, 160, 255, 0.25);
+}
+@keyframes crt-flicker {
+  0% { opacity: 1; }
+  100% { opacity: 0.93; }
+}
+@keyframes crt-roll {
+  from { transform: translateY(-25vh); }
+  to { transform: translateY(105vh); }
+}
+@keyframes crt-on {
+  0% { opacity: 1; transform: scale(1, 0.004); }
+  35% { opacity: 1; transform: scale(1, 0.004); }
+  60% { opacity: 0.7; transform: scale(1, 1); }
+  100% { opacity: 0; transform: scale(1, 1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root[data-crt] .crt-overlay,
+  :root[data-crt] .crt-overlay::after,
+  :root[data-crt] .crt-overlay::before {
+    animation: none;
+  }
+  :root[data-crt] .crt-overlay::after {
+    display: none;
+  }
 }
 
 /* ── Film grain (desktop / pointer devices) ──────── */
