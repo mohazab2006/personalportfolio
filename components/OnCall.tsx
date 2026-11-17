@@ -6,6 +6,7 @@ import Section from '@/components/Section'
 import { START_ONCALL_EVENT } from '@/lib/events'
 import { triggerIncident } from '@/lib/incident'
 import { findEgg, readQuests, writeQuests, useEggs, unlocked } from '@/lib/eggs'
+import { useSnaggy } from '@/components/SnaggyProvider'
 
 /**
  * ON-CALL — an original mini-game: you hold the pager for a 45s shift.
@@ -64,6 +65,37 @@ function rank(uptime: number) {
 }
 
 const freshFleet = (): FleetNode[] => FLEET.map((name) => ({ name, state: 'up', until: 0, window: 0 }))
+
+/** The other games, so nobody has to know the terminal commands to find them. */
+function GameStrip() {
+  const { run } = useSnaggy()
+  const games = [
+    { name: 'on-call', what: 'keep 12 servers alive for 45s', cta: 'below ↓', act: () => sectionTop() },
+    { name: 'typing test', what: 'dev words, wpm + accuracy, personal best', cta: 'play →', act: () => run('play typing') },
+    { name: 'outage drill', what: 'take the site down, then bring it back', cta: 'start →', act: () => triggerIncident('button') },
+    { name: 'easter eggs', what: '12 hidden, each unlocks something', cta: 'hints →', act: () => run('eggs') },
+  ]
+  return (
+    <div className="mb-5 grid grid-cols-2 gap-2 font-mono sm:gap-3 lg:grid-cols-4">
+      {games.map((g) => (
+        <button
+          key={g.name}
+          type="button"
+          onClick={g.act}
+          className="ops-panel group flex min-h-[88px] flex-col justify-between p-3 text-left transition-colors hover:border-dark-accent/50 sm:p-4"
+        >
+          <span className="text-[13px] font-bold text-dark-text">{g.name}</span>
+          <span className="mt-1 text-[11px] leading-snug text-ops-dim">{g.what}</span>
+          <span className="mt-2 text-[11px] text-dark-accent opacity-80 transition-opacity group-hover:opacity-100">{g.cta}</span>
+        </button>
+      ))}
+    </div>
+  )
+}
+
+function sectionTop() {
+  document.getElementById('oncall-board')?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+}
 
 export default function OnCall() {
   const reduce = useReducedMotion()
@@ -245,9 +277,11 @@ export default function OnCall() {
       index="06"
       command="./oncall.sh --shift 45s"
       title="Play"
-      subtitle="you're on call. servers will start failing. tap the degraded ones before they go down."
+      subtitle="games, hidden in a portfolio. start with on-call: tap the degraded servers before they go down."
     >
-      <div ref={sectionRef} className="ops-panel ops-ticks select-none font-mono">
+      <GameStrip />
+
+      <div ref={sectionRef} id="oncall-board" className="ops-panel ops-ticks select-none font-mono">
         {/* Header / HUD */}
         <div className="ops-head flex-wrap gap-y-1">
           <span className="text-dark-text/80">

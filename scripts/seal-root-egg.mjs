@@ -11,7 +11,7 @@
  * Pick something long and personal (4+ words). Normalisation: trimmed, lower-cased, spaces collapsed.
  */
 import { webcrypto as crypto } from 'node:crypto'
-import { writeFileSync } from 'node:fs'
+import { writeFileSync, readFileSync, existsSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 
@@ -25,38 +25,18 @@ if (!passphrase || passphrase.trim().length < 12) {
 
 const normalize = (s) => s.trim().toLowerCase().replace(/\s+/g, ' ')
 
+// The vault's words live in a local, git-ignored file so they never appear in the public repo.
+// Copy scripts/vault-content.example.json → scripts/vault-content.local.json and edit it.
+const contentPath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'vault-content.local.json')
+if (!existsSync(contentPath)) {
+  console.error('missing scripts/vault-content.local.json (copy vault-content.example.json and fill it in)')
+  process.exit(1)
+}
+const content = JSON.parse(readFileSync(contentPath, 'utf8'))
 const payload = {
   sealedAt: new Date().toISOString().slice(0, 10),
-  // Shown in the terminal the moment the phrase is accepted.
-  lines: lines.length
-    ? lines
-    : ['five keys. five hiding places. five encodings.', 'most people never find the first one. you found all of them.'],
-  // Rendered at /vault. Lives only inside this ciphertext.
-  vault: {
-    title: 'the vault',
-    letter: [
-      'if you are reading this, you either built this site or you solved it.',
-      'the source, the console, the wire, the robots, the lost page. you read all of it.',
-      'that is the exact instinct i look for in the people i work with.',
-      'email me the phrase and tell me how you found the first key. i want to hear it.',
-      '— mohamed',
-    ],
-    dossier: [
-      { k: 'rank', v: 'emerald iii · rainbow six siege' },
-      { k: 'boss', v: 'consort radahn · felled in six tries' },
-      { k: 'runs', v: 'elden ring, more than once' },
-      { k: 'lore', v: 'treyarch zombies, nacht to the dark aether' },
-      { k: 'longest lore video', v: '8h+, single sitting' },
-      { k: 'currently reading', v: 'one piece. still sailing.' },
-      { k: 'playstyle', v: 'learn the meta, then master it' },
-    ],
-    log: [
-      'v1  a dark developer portfolio',
-      'v2  the ops console',
-      'v3  a shell, two games, twelve eggs, an outage you can cause',
-      'v4  this room',
-    ],
-  },
+  lines: lines.length ? lines : content.lines,
+  vault: content.vault,
 }
 
 const enc = new TextEncoder()

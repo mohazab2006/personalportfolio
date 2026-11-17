@@ -1,9 +1,10 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { TECH_STACK } from '@/lib/data'
 import Section from '@/components/Section'
+import ShowMore, { collapsible } from '@/components/ShowMore'
 
 type Category = keyof typeof TECH_STACK
 
@@ -15,6 +16,8 @@ export default function TechStack() {
   const reduceMotion = useReducedMotion()
   const categories = useMemo(() => Object.keys(TECH_STACK) as Category[], [])
   const total = useMemo(() => categories.reduce((n, c) => n + TECH_STACK[c].length, 0), [categories])
+  const [all, setAll] = useState(false)
+  const LIMIT = 3
 
   return (
     <Section
@@ -28,7 +31,7 @@ export default function TechStack() {
         {categories.map((category, catIndex) => (
           <motion.div
             key={category}
-            className="ops-panel"
+            className={`ops-panel ${collapsible(catIndex, LIMIT, all)}`}
             initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{
@@ -55,6 +58,7 @@ export default function TechStack() {
           </motion.div>
         ))}
       </div>
+      <ShowMore expanded={all} hidden={Math.max(0, categories.length - LIMIT)} onToggle={() => setAll((v) => !v)} className="mt-5" />
     </Section>
   )
 }

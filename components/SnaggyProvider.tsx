@@ -5,11 +5,20 @@ import { motion, useReducedMotion } from 'framer-motion'
 import ChatBot from './ChatBot'
 import GlobalFx from './fx/GlobalFx'
 import Incident from './fx/Incident'
+import EggUnlock from './fx/EggUnlock'
+import dynamic from 'next/dynamic'
+
+// Site-wide custom cursor (client-only: it reads pointer media queries on mount)
+const Cursor = dynamic(() => import('./Cursor'), { ssr: false })
+// Background network (canvas, client-only)
+const PacketNet = dynamic(() => import('./fx/PacketNet'), { ssr: false })
 
 type SnaggyContextValue = {
   open: () => void
   close: () => void
   isOpen: boolean
+  /** Open Snaggy and run a command in it (e.g. 'eggs', 'play typing'). */
+  run: (command: string) => void
 }
 
 const SnaggyContext = createContext<SnaggyContextValue | null>(null)
@@ -48,6 +57,7 @@ function SnaggyLauncher() {
       <span className="flex items-center text-dark-text">
         <span className="mr-1.5 text-dark-accent">›</span>
         snaggy
+        <span className="ml-1.5 border border-ops-line-strong px-1 text-[9.5px] leading-[1.4] text-ops-dim">ai</span>
         <span
           className="terminal-cursor ml-1 text-dark-accent opacity-0 transition-opacity group-hover:opacity-100"
           aria-hidden
@@ -81,18 +91,27 @@ function useSnaggyShortcut(open: () => void, isOpen: boolean) {
 
 export function SnaggyProvider({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false)
+  const [queued, setQueued] = useState<string | null>(null)
 
   const open = useCallback(() => setIsOpen(true), [])
   const close = useCallback(() => setIsOpen(false), [])
+  const run = useCallback((command: string) => {
+    setQueued(command)
+    setIsOpen(true)
+  }, [])
+  const consumed = useCallback(() => setQueued(null), [])
   useSnaggyShortcut(open, isOpen)
 
   return (
-    <SnaggyContext.Provider value={{ open, close, isOpen }}>
+    <SnaggyContext.Provider value={{ open, close, isOpen, run }}>
+      <PacketNet />
       {children}
       <SnaggyLauncher />
-      <ChatBot isOpen={isOpen} onClose={close} />
+      <ChatBot isOpen={isOpen} onClose={close} queued={queued} onQueuedRun={consumed} />
+      <Cursor />
       <GlobalFx />
       <Incident />
+      <EggUnlock />
     </SnaggyContext.Provider>
   )
 }

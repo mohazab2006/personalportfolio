@@ -9,6 +9,7 @@ import { setTheme, useTheme, useAvailableThemes } from '@/lib/theme'
 import { tryOpenRoot, hasRoot } from '@/lib/rootEgg'
 import { START_ONCALL_EVENT, SCREEN_GLITCH_EVENT } from '@/lib/events'
 import { triggerIncident } from '@/lib/incident'
+import { useUsername, writeUsername } from '@/lib/username'
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -154,12 +155,24 @@ function pickWords(n: number) {
 
 // ── Terminal ─────────────────────────────────────────────────────────────────
 
-export default function ChatBot({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+export default function ChatBot({
+  isOpen,
+  onClose,
+  queued = null,
+  onQueuedRun,
+}: {
+  isOpen: boolean
+  onClose: () => void
+  /** A command another part of the site asked us to run on open (e.g. "eggs"). */
+  queued?: string | null
+  onQueuedRun?: () => void
+}) {
   const reduceMotion = useReducedMotion()
   const theme = useTheme()
   const eggs = useEggs()
   const quests = useQuests()
   const themes = useAvailableThemes()
+  const username = useUsername()
   const isPhone = useIsPhone()
   const vv = useVisualViewport(isOpen && isPhone)
 
@@ -182,11 +195,13 @@ export default function ChatBot({ isOpen, onClose }: { isOpen: boolean; onClose:
   const timers = useRef<number[]>([])
   const bootedAt = useRef(0)
   const chatLog = useRef<{ role: 'user' | 'assistant'; content: string }[]>([])
+  /** Epoch ms until which the AI is rate-limited (free tier); 0 when available. */
+  const aiCooldownUntil = useRef(0)
   const scrollRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
   const nextId = () => idRef.current++
-  const prompt = `${root ? 'root' : 'visitor'}@azab:${cwd}${root ? '#' : '$'}`
+  const prompt = `${root ? 'root' : username ?? 'visitor'}@azab:${cwd}${root ? '#' : '$'}`
 
   useEffect(() => {
     bootedAt.current = performance.now()
@@ -259,6 +274,7 @@ export default function ChatBot({ isOpen, onClose }: { isOpen: boolean; onClose:
       if (fx.cwd) setCwd(fx.cwd)
       if (fx.theme) setTheme(fx.theme)
       if (fx.mode === 'vim') setVim(true)
+      if (fx.username !== undefined) writeUsername(fx.username)
       if (fx.crt !== undefined) {
         setCrt(fx.crt)
         if (fx.crt) document.documentElement.dataset.crt = '1'
@@ -328,9 +344,30 @@ export default function ChatBot({ isOpen, onClose }: { isOpen: boolean; onClose:
     [pushLines]
   )
 
+  /** Shown when the free AI quota is used up. Calm, specific, and points at what still works. */
+  const atCapacity = (toolId: number, seconds: number) => {
+    const wait = seconds >= 90 ? `${Math.ceil(seconds / 60)} min` : `${seconds}s`
+    setEntries((e) => [
+      ...e.map((x) => (x.id === toolId && x.kind === 'tool' ? { ...x, result: 'at capacity' } : x)),
+      {
+        id: nextId(),
+        kind: 'ai',
+        text: `the ai side of snaggy is at capacity right now (it runs on a free tier shared by everyone on the site). try again in about ${wait}.\n\neverything else still works: help · ls projects · cat about.md · play oncall`,
+      },
+    ])
+  }
+
   const askAi = async (q: string) => {
     const toolId = nextId()
     setEntries((e) => [...e, { id: toolId, kind: 'tool', label: `search portfolio "${keywords(q)}"` }])
+
+    // Still cooling down from a rate limit: answer instantly instead of spending another request.
+    const waitMs = aiCooldownUntil.current - Date.now()
+    if (waitMs > 0) {
+      atCapacity(toolId, Math.ceil(waitMs / 1000))
+      return
+    }
+
     chatLog.current.push({ role: 'user', content: q })
     try {
       const res = await fetch('/api/chat', {
@@ -338,6 +375,14 @@ export default function ChatBot({ isOpen, onClose }: { isOpen: boolean; onClose:
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: chatLog.current.slice(-12) }),
       })
+      if (res.status === 429) {
+        chatLog.current.pop()
+        const body = await res.json().catch(() => ({}))
+        const seconds = Math.max(5, Math.min(3600, Number(body.retryAfter) || 30))
+        aiCooldownUntil.current = Date.now() + seconds * 1000
+        atCapacity(toolId, seconds)
+        return
+      }
       if (!res.ok) throw new Error('bad status')
       const data = await res.json()
       chatLog.current.push({ role: 'assistant', content: data.message })
@@ -418,6 +463,7 @@ export default function ChatBot({ isOpen, onClose }: { isOpen: boolean; onClose:
       files: u.files,
       quests,
       crt,
+      username,
     })
     if (result) {
       pushLines(result.lines)
@@ -480,6 +526,18 @@ export default function ChatBot({ isOpen, onClose }: { isOpen: boolean; onClose:
     setHistoryPos(null)
   }
 
+  // Commands queued from elsewhere on the site (hint buttons, game cards, locked swatches)
+  const submitRef = useRef<(raw: string) => void>(() => {})
+  submitRef.current = submit
+  useEffect(() => {
+    if (!isOpen || !queued) return
+    const id = window.setTimeout(() => {
+      submitRef.current(queued)
+      onQueuedRun?.()
+    }, 250)
+    return () => window.clearTimeout(id)
+  }, [isOpen, queued, onQueuedRun])
+
   // Esc: leave a mode first, then full screen, then close.
   useEffect(() => {
     if (!isOpen) return
@@ -499,7 +557,7 @@ export default function ChatBot({ isOpen, onClose }: { isOpen: boolean; onClose:
   }, [isOpen, isFullScreen, onClose, typing, vim, pushLines])
 
   const width = isFullScreen ? 'max-w-3xl' : ''
-  const placeholder = typing ? 'type the words above…' : vim ? ':q to quit' : busy ? 'working…' : 'try "help", or ask anything'
+  const placeholder = typing ? 'type the words above…' : vim ? ':q to quit' : busy ? 'thinking…' : 'ask me anything, or type help'
 
   return (
     <AnimatePresence>
@@ -595,13 +653,14 @@ export default function ChatBot({ isOpen, onClose }: { isOpen: boolean; onClose:
                   <div className="mb-4 rounded-md border border-dark-accent/40 px-4 py-3">
                     <p>
                       <span className="text-dark-accent">◆</span> <span className="font-bold text-dark-text">snaggy v3{eggs.includes('packapunch') ? ' · pack-a-punched' : ''}</span>
-                      <span className="text-ops-dim"> · mohamed&apos;s portfolio shell</span>
+                      <span className="text-ops-dim"> · ai assistant + shell</span>
                     </p>
                     <p className="mt-1 text-dark-text/70">
-                      type <span className="text-dark-accent">help</span> to look around, or ask me anything in plain english.
+                      i&apos;m an <span className="text-dark-accent">ai</span> that knows mohamed&apos;s work. ask me anything in plain english, or
+                      type <span className="text-dark-accent">help</span> for commands and games.
                     </p>
                     <p className="mt-2 text-[11.5px] text-ops-dim">
-                      cwd {cwd} · eggs {eggs.length}/{EGGS.length} · clearance {clearance(eggs).title} · theme {theme}
+                      {username ? `${username} · ` : 'login <name> to pick a username · '}eggs {eggs.length}/{EGGS.length} · {clearance(eggs).title} ({clearance(eggs).xp} xp)
                     </p>
                   </div>
                 )}

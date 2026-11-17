@@ -6,8 +6,6 @@ import Navbar from '@/components/Navbar'
 import Hero from '@/components/Hero'
 import SiteFooter from '@/components/SiteFooter'
 
-// Client-only: custom cursor (no SSR)
-const Cursor = dynamic(() => import('@/components/Cursor'), { ssr: false })
 const Director = dynamic(() => import('@/components/fx/Director'), { ssr: false })
 
 // Lazy load below-fold sections
@@ -28,7 +26,6 @@ const SectionLoader = () => (
 export default function Home() {
   return (
     <>
-      <Cursor />
       <Director />
       <Navbar />
 

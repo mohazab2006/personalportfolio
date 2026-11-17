@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { EGGS, EGG_EVENT, findEgg, clearance, type EggId } from '@/lib/eggs'
+import { findEgg } from '@/lib/eggs'
 import { TOAST_EVENT } from './QuestBits'
 import { SCREEN_GLITCH_EVENT } from '@/lib/events'
 import GlitchText from './GlitchText'
@@ -33,7 +33,8 @@ export default function GlobalFx() {
 
   const konami = () => {
     if (!reduce) setTearKey((k) => k + 1)
-    if (!findEgg('konami')) toast({ title: 'player 2 has entered the game', sub: 'already unlocked: theme magenta' })
+    // First time: EggUnlock plays the full intrusion. Repeats get a small nod.
+    if (!findEgg('konami')) toast({ title: 'player 2 is already here', sub: 'konami: found earlier' })
   }
 
   // ii — for whoever opens the console.
@@ -68,22 +69,6 @@ export default function GlobalFx() {
     const onGlitch = () => {
       if (!reduce) setTearKey((k) => k + 1)
     }
-    const onEgg = (e: Event) => {
-      const { id, count } = (e as CustomEvent<{ id: EggId; count: number }>).detail
-      const egg = EGGS.find((x) => x.id === id)
-      if (!egg) return
-      let found: EggId[] = []
-      try {
-        found = JSON.parse(localStorage.getItem('azab-eggs') ?? '[]')
-      } catch {
-        /* ignore */
-      }
-      toast({
-        title: `${egg.tier} egg · ${egg.name}`,
-        sub: `unlocked ${egg.reward.label} · ${count}/${EGGS.length} · clearance: ${clearance(found).title}`,
-        special: egg.tier === 'hard' || count === EGGS.length,
-      })
-    }
     const onToast = (e: Event) => {
       const d = (e as CustomEvent<{ title: string; sub: string; special?: boolean }>).detail
       toast(d)
@@ -91,13 +76,11 @@ export default function GlobalFx() {
     window.addEventListener('keydown', onKey)
     window.addEventListener(LOGO_TAP_EVENT, onTap)
     window.addEventListener(SCREEN_GLITCH_EVENT, onGlitch)
-    window.addEventListener(EGG_EVENT, onEgg)
     window.addEventListener(TOAST_EVENT, onToast)
     return () => {
       window.removeEventListener('keydown', onKey)
       window.removeEventListener(LOGO_TAP_EVENT, onTap)
       window.removeEventListener(SCREEN_GLITCH_EVENT, onGlitch)
-      window.removeEventListener(EGG_EVENT, onEgg)
       window.removeEventListener(TOAST_EVENT, onToast)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

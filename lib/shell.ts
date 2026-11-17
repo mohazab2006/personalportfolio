@@ -46,6 +46,8 @@ export type Effects = {
   crt?: boolean
   /** Snaggy has been pack-a-punched */
   pap?: boolean
+  /** Set (string) or clear (null) the visitor's username */
+  username?: string | null
 }
 export type Result = { lines: Line[]; effects?: Effects }
 export type Ctx = {
@@ -60,6 +62,7 @@ export type Ctx = {
   files: string[]
   quests: { power: boolean; poneglyphs: number[] }
   crt: boolean
+  username: string | null
 }
 
 // ── helpers ─────────────────────────────────────────────────────────────────
@@ -104,8 +107,19 @@ const LORE: Record<string, string[]> = {
     'favourite storyline in games, start to finish: element 115, the aether,',
     'the original crew, the timeline that collapses, the dark aether reboot.',
     '',
+    'every main-quest easter egg in black ops 1, 2, 3, 6 and 7: done.',
     'the main-quest easter eggs are the reason this site has easter eggs.',
     'a good one is hinted everywhere and obvious to nobody.',
+  ],
+  'gta.md': [
+    '# grand theft auto',
+    'played and finished every gta.',
+    'gta v: 1,500+ hours. knows los santos better than some real cities.',
+  ],
+  'fnaf.md': [
+    "# five nights at freddy's",
+    'fnaf 1 through 5, every night survived to 6 am.',
+    'it is a game about watching the logs and not panicking. so, on-call.',
   ],
   'one-piece.md': [
     '# one piece',
@@ -143,6 +157,9 @@ const FORTUNES = [
   'beat elden ring more than once. ng+ is just a second draft.',
   'believes the one piece is real. so does this site.',
   'the on-call game was balanced against a bot. the bot scored 92%.',
+  'has finished every main-quest zombies easter egg in bo1, bo2, bo3, bo6 and bo7.',
+  '1,500+ hours in gta v, and every other gta finished.',
+  'survived every night of fnaf 1 through 5. on-call shifts are easier.',
   'every easter egg here is a nod to the zombies main quests he grew up chasing.',
 ]
 
@@ -154,7 +171,9 @@ const PLAYER_PROFILE: Line[] = [
   { text: '' },
   { text: '  r6 siege    emerald iii' },
   { text: '  elden ring  multiple runs · radahn in 6 tries' },
-  { text: '  zombies     lore archivist (treyarch, all of it)' },
+  { text: '  zombies     every main quest · bo1 bo2 bo3 bo6 bo7' },
+  { text: '  gta         every game finished · 1,500+ hrs in v' },
+  { text: '  fnaf        1-5, every night to 6 am' },
   { text: '  one piece   currently sailing' },
   { text: '' },
   { text: '  side effect this site has 12 easter eggs', tone: 'dim' },
@@ -336,7 +355,8 @@ const BASE_COMMANDS: [string, string][] = [
   ['cd <dir>', 'change directory'],
   ['cat <file>', 'print a file (try: cat about.md)'],
   ['open <name>', 'open a project, resume, github, linkedin, email'],
-  ['whoami', 'the short version'],
+  ['whoami', 'who you are, and whose box this is'],
+  ['login <name>', 'pick a username (shows in your prompt)'],
   ['neofetch', 'system info'],
   ['theme [name]', 'switch colour'],
   ['play <game>', 'oncall | typing'],
@@ -352,7 +372,7 @@ const EARNED_COMMANDS: Record<string, string> = {
 
 const COMMAND_NAMES = [
   'help', 'ls', 'cd', 'cat', 'open', 'whoami', 'neofetch', 'theme', 'play', 'eggs', 'history', 'clear', 'date', 'echo', 'pwd', 'exit', 'uptime',
-  'fortune', 'crt', 'chaos', 'bounty', 'pack-a-punch', 'set',
+  'fortune', 'crt', 'chaos', 'bounty', 'pack-a-punch', 'set', 'login', 'logout'
 ]
 
 function fmtUptime(ms: number) {
@@ -576,10 +596,28 @@ export function runCommand(raw: string, ctx: Ctx): Result | null {
       return { lines: [{ text: `open: nothing called "${arg}" (try: ls projects)`, tone: 'err' }] }
     }
 
+    case 'login':
+    case 'name':
+    case 'username': {
+      const name = arg.toLowerCase().replace(/[^a-z0-9_-]/g, '').slice(0, 16)
+      if (!arg) return { lines: [{ text: 'usage: login <name>   (letters, numbers, - and _, up to 16)', tone: 'dim' }] }
+      if (!name) return { lines: [{ text: 'login: that name has no usable characters. try letters or numbers.', tone: 'err' }] }
+      if (name === 'root') return { lines: [{ text: 'login: nice try. root is earned, not typed.', tone: 'err', glitch: true }] }
+      return {
+        lines: [
+          { text: `welcome, ${name}.`, tone: 'ok' },
+          { text: 'your prompt has been updated. it stays on this device.', tone: 'dim' },
+        ],
+        effects: { username: name },
+      }
+    }
+
     case 'whoami':
       return {
         lines: [
-          { text: PERSONAL.name.toLowerCase(), tone: 'accent' },
+          { text: `you: ${ctx.username ?? 'visitor'}${ctx.username ? '' : '   (pick a name: login <name>)'}`, tone: 'dim' },
+          { text: '' },
+          { text: `this box belongs to ${PERSONAL.name.toLowerCase()}`, tone: 'accent' },
           ...plain(
             wrap(
               `computer science at ${PERSONAL.university.toLowerCase()} (ai/ml + cybersecurity, business minor). builds and runs systems across ai, security and infrastructure. based in ottawa. learns things the way he learns games: all the way down.`
@@ -707,15 +745,44 @@ export function runCommand(raw: string, ctx: Ctx): Result | null {
     case 'echo':
       return { lines: [{ text: arg }] }
 
+    case 'logout':
+      return { lines: [{ text: 'logged out. you are a visitor again.', tone: 'dim' }], effects: { username: null } }
+
     case 'exit':
     case 'quit':
-    case 'logout':
       return { lines: [], effects: { close: true } }
   }
 
-  // A single word that isn't a command: behave like a real shell instead of spending an AI call.
-  if (!/\s/.test(input) && !input.endsWith('?') && input.length < 24) {
-    return { lines: [{ text: `snaggy: command not found: ${cmd}  (try help, or ask a full question)`, tone: 'err' }] }
+  // Greetings get an instant, friendly answer (and make it obvious there's an AI here).
+  if (/^(hi+|hey+|hello+|yo+|sup|hiya|howdy|salam|salaam|good (morning|afternoon|evening)|thanks?|thank you|ty)[!.? ]*$/i.test(input)) {
+    const thanks = /^(thanks?|thank you|ty)/i.test(input)
+    return {
+      lines: [
+        {
+          text: thanks
+            ? 'anytime. ask me anything else about mohamed, or type help to look around.'
+            : `hey${ctx.username ? ` ${ctx.username}` : ''}. i'm snaggy, an ai assistant that knows mohamed's work.`,
+          tone: 'default',
+        },
+        ...(thanks
+          ? []
+          : [
+              { text: 'ask me anything in plain english, like "what did he build at cira?" or "what is air property?"', tone: 'dim' as Tone },
+              { text: 'or poke around: help · ls projects · play typing · eggs', tone: 'dim' as Tone },
+            ]),
+      ],
+    }
+  }
+
+  // Only things that really look like shell commands get "command not found"; everything else is a question for the ai.
+  const UNIX = /^(mkdir|touch|rmdir|mv|cp|chmod|chown|ssh|scp|git|npm|npx|yarn|pnpm|pip|python|node|apt|apt-get|brew|curl|wget|ping|top|htop|kill|ps|man|grep|find|tail|head|nano|emacs|cd\.\.|ifconfig|ipconfig|whois|sl)$/i
+  if (!/\s/.test(input) && UNIX.test(cmd)) {
+    return {
+      lines: [
+        { text: `snaggy: ${cmd}: not installed on this box.`, tone: 'err' },
+        { text: "type help for what works here, or just ask me in plain english, i'm an ai.", tone: 'dim' },
+      ],
+    }
   }
   return null
 }

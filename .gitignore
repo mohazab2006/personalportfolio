@@ -39,3 +39,6 @@ next-env.d.ts
 # deployment
 DEPLOYMENT.md
 supabase/migrations/20260402130000_fill_project_summary_description.sql
+
+# Root-egg vault content (sealed into lib/rootEggSeal.ts; never commit the plaintext)
+scripts/vault-content.local.json
